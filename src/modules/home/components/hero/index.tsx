@@ -290,15 +290,34 @@ function ParticleCanvas() {
       const rect = canvas!.getBoundingClientRect()
       const cx = e.clientX - rect.left
       const cy = e.clientY - rect.top
+
       for (const p of particles) {
         const dx = p.x - cx
         const dy = p.y - cy
         const dist = Math.sqrt(dx * dx + dy * dy)
-        if (dist < 250 && dist > 0) {
-          const force = (250 - dist) / 250
-          p.vx += (dx / dist) * force * 10
-          p.vy += (dy / dist) * force * 10
+        if (dist < 300 && dist > 0) {
+          const force = (300 - dist) / 300
+          const angle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.8
+          p.vx += Math.cos(angle) * force * (12 + Math.random() * 8)
+          p.vy += Math.sin(angle) * force * (12 + Math.random() * 8)
         }
+      }
+
+      for (let i = 0; i < 6; i++) {
+        const angle = (Math.PI * 2 / 6) * i + (Math.random() - 0.5) * 0.5
+        const speed = 3 + Math.random() * 4
+        particles.push({
+          x: cx + Math.cos(angle) * 5,
+          y: cy + Math.sin(angle) * 5,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          baseX: cx + Math.cos(angle) * (30 + Math.random() * 40),
+          baseY: cy + Math.sin(angle) * (30 + Math.random() * 40),
+          size: Math.random() * 3 + 2,
+          alpha: 0.6 + Math.random() * 0.4,
+          driftX: 0,
+          driftY: 0,
+        })
       }
     }
 
