@@ -1,6 +1,5 @@
 import Image from "next/image"
 import React from "react"
-import PlaceholderImage from "@modules/common/icons/placeholder-image"
 
 type ThumbnailProps = {
   thumbnail?: string | null
@@ -8,6 +7,7 @@ type ThumbnailProps = {
   size?: "small" | "medium" | "large" | "full" | "square"
   isFeatured?: boolean
   className?: string
+  priority?: boolean
   "data-testid"?: string
 }
 
@@ -17,6 +17,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
   size = "small",
   isFeatured,
   className,
+  priority,
   "data-testid": dataTestid,
 }) => {
   const initialImage = thumbnail || images?.[0]?.url
@@ -40,6 +41,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
           sizes="(max-width: 576px) 280px, (max-width: 768px) 360px, (max-width: 992px) 480px, 800px"
           placeholder="blur"
           blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect fill='%23374151' width='40' height='40'/%3E%3C/svg%3E"
+          priority={priority}
           fill
         />
       ) : (

@@ -9,10 +9,12 @@ export default async function ProductPreview({
   product,
   isFeatured,
   region,
+  priority,
 }: {
   product: HttpTypes.StoreProduct
   isFeatured?: boolean
   region: any
+  priority?: boolean
 }) {
   const { cheapestPrice } = getProductPrice({ product })
 
@@ -29,6 +31,7 @@ export default async function ProductPreview({
             images={product.images}
             size="full"
             isFeatured={isFeatured}
+            priority={priority}
           />
           {/* Badge de oferta si aplica */}
           {cheapestPrice?.price_type === "sale" && (

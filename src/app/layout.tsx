@@ -13,6 +13,13 @@ export const metadata: Metadata = {
   keywords: ["claves digitales", "licencias windows", "office barato", "xbox game pass", "playstation plus", "steam keys", "king keys", "software original"],
   authors: [{ name: "King Keys" }],
   creator: "King Keys",
+  manifest: "/manifest.json",
+  icons: {
+    icon: "/favicon.svg",
+  },
+  other: {
+    "theme-color": "#facc15",
+  },
   openGraph: {
     type: "website",
     locale: "es_ES",

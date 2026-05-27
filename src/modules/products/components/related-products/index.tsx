@@ -18,7 +18,6 @@ export default async function RelatedProducts({
     return null
   }
 
-  // edit this function to define your related products logic
   const queryParams: any = {}
   if (region?.id) {
     queryParams.region_id = region.id
@@ -47,23 +46,18 @@ export default async function RelatedProducts({
   }
 
   return (
-    <div className="product-page-constraint">
-      <div className="flex flex-col items-center text-center mb-16">
-        <span className="text-base-regular text-gray-600 mb-6">
-          Related products
-        </span>
-        <p className="text-2xl-regular text-ui-fg-base max-w-lg">
-          You might also want to check out these products.
-        </p>
-      </div>
-
-      <ul className="grid grid-cols-2 small:grid-cols-3 medium:grid-cols-4 gap-x-6 gap-y-8">
-        {products.map((product) => (
-          <li key={product.id}>
-            <Product region={region} product={product} />
-          </li>
+    <div className="overflow-x-auto scroll-smooth snap-x snap-mandatory -mx-4 px-4 pb-4 hide-scrollbar">
+      <div className="flex gap-4">
+        {products.map((p, i) => (
+          <div key={p.id} className="snap-start shrink-0 w-[72vw] min-w-[240px] max-w-[280px]">
+            <Product region={region} product={p} />
+          </div>
         ))}
-      </ul>
+      </div>
+      <style>{`
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { listCategories } from "@lib/data/categories"
 import { listCollections } from "@lib/data/collections"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import NewsletterSignup from "@components/NewsletterSignup"
 
 export default async function Footer() {
   const { collections } = await listCollections()
@@ -33,6 +34,10 @@ export default async function Footer() {
               <span className="px-3 py-1 bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs rounded-full font-medium">
                 🔒 Pago Seguro
               </span>
+            </div>
+            {/* Newsletter */}
+            <div className="mt-6">
+              <NewsletterSignup />
             </div>
           </div>
 

@@ -47,9 +47,9 @@ export default async function ProductRail({
           className="overflow-x-auto scroll-smooth snap-x snap-mandatory -mx-4 px-4 pb-4 hide-scrollbar"
         >
           <div className="flex gap-4">
-            {pricedProducts.map((product) => (
+            {pricedProducts.map((product, i) => (
               <div key={product.id} className="snap-start shrink-0 w-[72vw] min-w-[240px] max-w-[280px]">
-                <ProductPreview product={product} region={region} isFeatured />
+                <ProductPreview product={product} region={region} isFeatured priority={i === 0} />
               </div>
             ))}
           </div>

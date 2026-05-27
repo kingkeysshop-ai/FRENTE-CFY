@@ -10,7 +10,7 @@ export default function CheckoutLayout({
     <div className="w-full bg-gray-950 relative min-h-screen">
 
       {/* Navbar del checkout */}
-      <div className="h-16 bg-gray-900 border-b border-yellow-400/20">
+      <div className="h-16 bg-gray-900/95 backdrop-blur-md border-b border-yellow-400/20 sticky top-0 z-50">
         <nav className="flex h-full items-center content-container justify-between">
 
           {/* Volver al carrito */}

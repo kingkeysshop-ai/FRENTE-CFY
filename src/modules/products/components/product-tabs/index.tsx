@@ -1,9 +1,5 @@
 "use client"
 
-import Back from "@modules/common/icons/back"
-import FastDelivery from "@modules/common/icons/fast-delivery"
-import Refresh from "@modules/common/icons/refresh"
-
 import Accordion from "./accordion"
 import { HttpTypes } from "@medusajs/types"
 
@@ -14,11 +10,11 @@ type ProductTabsProps = {
 const ProductTabs = ({ product }: ProductTabsProps) => {
   const tabs = [
     {
-      label: "Product Information",
+      label: "Información del Producto",
       component: <ProductInfoTab product={product} />,
     },
     {
-      label: "Shipping & Returns",
+      label: "Envío y Devoluciones",
       component: <ShippingInfoTab />,
     },
   ]
@@ -43,34 +39,34 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
 
 const ProductInfoTab = ({ product }: ProductTabsProps) => {
   return (
-    <div className="text-small-regular py-8">
-      <div className="grid grid-cols-2 gap-x-8">
-        <div className="flex flex-col gap-y-4">
+    <div className="text-sm px-6 py-6">
+      <div className="flex flex-col gap-y-4">
+        <div className="flex items-center gap-3">
+          <span className="text-yellow-400 text-lg">🔑</span>
           <div>
-            <span className="font-semibold">Material</span>
-            <p>{product.material ? product.material : "-"}</p>
-          </div>
-          <div>
-            <span className="font-semibold">Country of origin</span>
-            <p>{product.origin_country ? product.origin_country : "-"}</p>
-          </div>
-          <div>
-            <span className="font-semibold">Type</span>
-            <p>{product.type ? product.type.value : "-"}</p>
+            <p className="text-white font-semibold text-sm">Licencia Digital</p>
+            <p className="text-gray-400 text-xs">Activación inmediata vía email</p>
           </div>
         </div>
-        <div className="flex flex-col gap-y-4">
+        <div className="flex items-center gap-3">
+          <span className="text-yellow-400 text-lg">⚡</span>
           <div>
-            <span className="font-semibold">Weight</span>
-            <p>{product.weight ? `${product.weight} g` : "-"}</p>
+            <p className="text-white font-semibold text-sm">Entrega Instantánea</p>
+            <p className="text-gray-400 text-xs">Recibe tu clave en minutos después del pago</p>
           </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="text-yellow-400 text-lg">🔒</span>
           <div>
-            <span className="font-semibold">Dimensions</span>
-            <p>
-              {product.length && product.width && product.height
-                ? `${product.length}L x ${product.width}W x ${product.height}H`
-                : "-"}
-            </p>
+            <p className="text-white font-semibold text-sm">Pago Seguro</p>
+            <p className="text-gray-400 text-xs">Transacciones protegidas con cifrado SSL</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="text-yellow-400 text-lg">🌍</span>
+          <div>
+            <p className="text-white font-semibold text-sm">Válido Mundialmente</p>
+            <p className="text-gray-400 text-xs">Funciona en cualquier idioma y región</p>
           </div>
         </div>
       </div>
@@ -80,36 +76,32 @@ const ProductInfoTab = ({ product }: ProductTabsProps) => {
 
 const ShippingInfoTab = () => {
   return (
-    <div className="text-small-regular py-8">
-      <div className="grid grid-cols-1 gap-y-8">
-        <div className="flex items-start gap-x-2">
-          <FastDelivery />
+    <div className="text-sm px-6 py-6">
+      <div className="flex flex-col gap-y-6">
+        <div className="flex items-start gap-3">
+          <span className="text-yellow-400 text-lg shrink-0 mt-0.5">📧</span>
           <div>
-            <span className="font-semibold">Fast delivery</span>
-            <p className="max-w-sm">
-              Your package will arrive in 3-5 business days at your pick up
-              location or in the comfort of your home.
+            <p className="text-white font-semibold text-sm">Entrega por Email</p>
+            <p className="text-gray-400 text-xs mt-1">
+              Todas las licencias se entregan digitalmente a tu correo electrónico inmediatamente después de la confirmación del pago.
             </p>
           </div>
         </div>
-        <div className="flex items-start gap-x-2">
-          <Refresh />
+        <div className="flex items-start gap-3">
+          <span className="text-yellow-400 text-lg shrink-0 mt-0.5">🔄</span>
           <div>
-            <span className="font-semibold">Simple exchanges</span>
-            <p className="max-w-sm">
-              Is the fit not quite right? No worries - we&apos;ll exchange your
-              product for a new one.
+            <p className="text-white font-semibold text-sm">Garantía de Funcionamiento</p>
+            <p className="text-gray-400 text-xs mt-1">
+              Si tu licencia no funciona como se espera, nuestro equipo de soporte te ayudará a resolverlo o te reemplazaremos la clave.
             </p>
           </div>
         </div>
-        <div className="flex items-start gap-x-2">
-          <Back />
+        <div className="flex items-start gap-3">
+          <span className="text-yellow-400 text-lg shrink-0 mt-0.5">💬</span>
           <div>
-            <span className="font-semibold">Easy returns</span>
-            <p className="max-w-sm">
-              Just return your product and we&apos;ll refund your money. No
-              questions asked – we&apos;ll do our best to make sure your return
-              is hassle-free.
+            <p className="text-white font-semibold text-sm">Soporte 24/7</p>
+            <p className="text-gray-400 text-xs mt-1">
+              Nuestro equipo está disponible las 24 horas para ayudarte con cualquier problema o duda sobre tu compra.
             </p>
           </div>
         </div>
