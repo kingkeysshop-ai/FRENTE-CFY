@@ -4,9 +4,9 @@ export default function Loading() {
   return (
     <div className="min-h-screen bg-gray-950">
       {/* Hero skeleton */}
-      <div className="bg-gray-900 border-b border-yellow-400/20 py-12">
+      <div className="bg-gray-900 border-b border-yellow-400/10 py-12">
         <div className="content-container flex flex-col items-center gap-3 animate-pulse">
-          <div className="w-32 h-5 bg-gray-800 rounded-full" />
+          <div className="w-32 h-5 bg-yellow-400/10 rounded-full" />
           <div className="w-64 h-10 bg-gray-800 rounded-xl" />
           <div className="w-80 h-4 bg-gray-700 rounded-lg" />
         </div>

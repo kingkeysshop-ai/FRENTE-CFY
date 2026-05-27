@@ -8,6 +8,7 @@ import CartButton from "@modules/layout/components/cart-button"
 import MobileBottomNav from "@modules/layout/components/mobile-bottom-nav"
 import NavLinks from "@modules/layout/components/nav-links"
 import SideMenu from "@modules/layout/components/side-menu"
+import ScrollAwareHeader from "@modules/layout/components/scroll-aware-header"
 
 export default async function Nav() {
   const [regions, locales, currentLocale] = await Promise.all([
@@ -19,9 +20,8 @@ export default async function Nav() {
   return (
     <>
       {/* Navbar desktop/mobile top */}
-      <div className="sticky top-0 inset-x-0 z-50">
-        <header className="relative h-16 mx-auto border-b border-yellow-400/20 bg-gray-900/95 backdrop-blur-md">
-          <nav className="content-container flex items-center justify-between w-full h-full">
+      <ScrollAwareHeader>
+        <nav className="content-container flex items-center justify-between w-full h-full">
 
             {/* Izquierda - Menu hamburguesa */}
             <div className="flex-1 basis-0 h-full flex items-center">
@@ -57,9 +57,8 @@ export default async function Nav() {
               </Suspense>
             </div>
 
-          </nav>
-        </header>
-      </div>
+        </nav>
+      </ScrollAwareHeader>
 
       <MobileBottomNav />
 

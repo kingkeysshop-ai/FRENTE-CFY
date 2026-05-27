@@ -22,7 +22,7 @@ export default async function ProductRail({
   if (!pricedProducts?.length) return null
 
   return (
-    <div className="content-container py-10">
+    <div className="content-container py-10 relative">
       {/* Header de coleccion */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
@@ -37,14 +37,23 @@ export default async function ProductRail({
         </LocalizedClientLink>
       </div>
 
-      {/* Grid de productos */}
-      <ul className="grid grid-cols-2 small:grid-cols-3 lg:grid-cols-4 gap-4">
-        {pricedProducts.map((product) => (
-          <li key={product.id}>
-            <ProductPreview product={product} region={region} isFeatured />
-          </li>
-        ))}
-      </ul>
+      {/* Carrusel horizontal */}
+      <div className="overflow-x-auto scroll-smooth snap-x snap-mandatory -mx-4 px-4 pb-4 hide-scrollbar">
+        <div className="flex gap-4">
+          {pricedProducts.map((product) => (
+            <div key={product.id} className="snap-start shrink-0 w-[72vw] min-w-[240px] max-w-[280px]">
+              <ProductPreview product={product} region={region} isFeatured />
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Fading edge hint */}
+      <div className="absolute top-[92px] right-0 w-20 h-[calc(100%-92px)] bg-gradient-to-l from-gray-950 via-gray-950/80 to-transparent pointer-events-none" />
+
+      <style>{`
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
     </div>
   )
 }

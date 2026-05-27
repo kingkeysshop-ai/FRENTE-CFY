@@ -38,6 +38,8 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
           draggable={false}
           quality={60}
           sizes="(max-width: 576px) 280px, (max-width: 768px) 360px, (max-width: 992px) 480px, 800px"
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect fill='%23374151' width='40' height='40'/%3E%3C/svg%3E"
           fill
         />
       ) : (
