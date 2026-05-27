@@ -219,11 +219,12 @@ function ParticleCanvas() {
 
     function init() {
       resize()
-      const count = Math.min(Math.floor((canvas!.width * canvas!.height) / 12000), 50)
+      const count = Math.min(Math.floor((canvas!.width * canvas!.height) / 9000), 60)
       particles = Array.from({ length: count }, () => ({
         x: Math.random() * canvas!.width,
         y: Math.random() * canvas!.height,
-        vx: 0, vy: 0,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
         baseX: Math.random() * canvas!.width,
         baseY: Math.random() * canvas!.height,
         size: Math.random() * 2.5 + 1,
@@ -235,10 +236,10 @@ function ParticleCanvas() {
       ctx!.clearRect(0, 0, canvas!.width, canvas!.height)
 
       for (const p of particles) {
-        p.vx += (p.baseX - p.x) * 0.006
-        p.vy += (p.baseY - p.y) * 0.006
-        p.vx *= 0.94
-        p.vy *= 0.94
+        p.vx += (p.baseX - p.x) * 0.008
+        p.vy += (p.baseY - p.y) * 0.008
+        p.vx *= 0.93
+        p.vy *= 0.93
 
         if (mouseActive) {
           const dx = mouseX - p.x
@@ -246,8 +247,8 @@ function ParticleCanvas() {
           const dist = Math.sqrt(dx * dx + dy * dy)
           if (dist < 150 && dist > 0) {
             const force = (150 - dist) / 150
-            p.vx -= (dx / dist) * force * 2.5
-            p.vy -= (dy / dist) * force * 2.5
+            p.vx -= (dx / dist) * force * 3.5
+            p.vy -= (dy / dist) * force * 3.5
           }
         }
 
