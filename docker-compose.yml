@@ -1,0 +1,74 @@
+version: '3.8'
+
+networks:
+  medusa_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  uploads_data:
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    networks:
+      - medusa_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: medusa
+      POSTGRES_PASSWORD: medusa_password
+      POSTGRES_DB: medusa
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medusa"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - medusa_network
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - medusa_network
+    ports:
+      - "9000:9000"
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://medusa:medusa_password@postgres:5432/medusa
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: change-me-jwt
+      COOKIE_SECRET: change-me-cookie
+      PORT: 9000
+      STORE_CORS: http://localhost:8000,http://localhost:7001
+      ADMIN_CORS: http://localhost:7000,http://localhost:7001
+      MEDUSA_ADMIN_ONBOARDING_TYPE: nextjs
+      MEDUSA_ADMIN_BACKEND_URL: http://localhost:7000
+      MEDUSA_STORE_BACKEND_URL: http://localhost:8000

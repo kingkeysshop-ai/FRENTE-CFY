@@ -1,0 +1,31 @@
+{
+  "name": "MedusaJS Backend v1",
+  "description": "MedusaJS v1 e-commerce backend con PostgreSQL, Redis, Stripe y Aurapay",
+  "type": "docker-compose",
+  "docker_compose_path": "docker-compose.yml",
+  "links": {
+    "docs": "https://docs.medusajs.com/v1",
+    "health_endpoint": "/app"
+  },
+  "services": {
+    "postgres": {
+      "type": "postgresql",
+      "version": "15"
+    },
+    "redis": {
+      "type": "redis",
+      "version": "7"
+    },
+    "backend": {
+      "type": "dockerfile",
+      "port": 9000,
+      "health_check": {
+        "path": "/app",
+        "interval": 30,
+        "timeout": 10,
+        "retries": 3,
+        "start_period": 60
+      }
+    }
+  }
+}

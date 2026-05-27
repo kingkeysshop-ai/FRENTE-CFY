@@ -1,0 +1,11 @@
+node_modules
+dist
+.git
+.github
+.vscode
+coverage
+__tests__
+*.spec.ts
+*.test.ts
+.DS_Store
+.cache

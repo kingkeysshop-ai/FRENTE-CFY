@@ -1,0 +1,7 @@
+{
+  "name": "aurapay",
+  "version": "1.0.0",
+  "description": "Aurapay payment provider for MedusaJS",
+  "main": "index.js",
+  "license": "MIT"
+}
