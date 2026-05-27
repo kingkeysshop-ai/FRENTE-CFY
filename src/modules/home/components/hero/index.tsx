@@ -208,7 +208,7 @@ function ParticleCanvas() {
     if (!ctx) return
 
     let animId: number
-    let particles: { x: number; y: number; vx: number; vy: number; baseX: number; baseY: number; size: number; alpha: number; drift: number }[] = []
+    let particles: { x: number; y: number; vx: number; vy: number; baseX: number; baseY: number; size: number; alpha: number; driftX: number; driftY: number }[] = []
     let mouseX = -1e4, mouseY = -1e4, mouseActive = false
 
     function resize() {
@@ -229,7 +229,8 @@ function ParticleCanvas() {
         baseY: Math.random() * canvas!.height,
         size: Math.random() * 2.5 + 1,
         alpha: Math.random() * 0.5 + 0.3,
-        drift: (i % 3 - 1) * (Math.random() * 0.15 + 0.05),
+        driftX: (i % 3 - 1) * (Math.random() * 0.2 + 0.1),
+        driftY: (i % 5 - 2) * (Math.random() * 0.15 + 0.05),
       }))
     }
 
@@ -237,10 +238,13 @@ function ParticleCanvas() {
       ctx!.clearRect(0, 0, canvas!.width, canvas!.height)
 
       for (const p of particles) {
-        p.vx += (p.baseX - p.x) * 0.006 + p.drift
-        p.vy += (p.baseY - p.y) * 0.006 + Math.sin(Date.now() * 0.001 + p.baseX) * 0.04
-        p.vx *= 0.96
-        p.vy *= 0.96
+        p.vx += (p.baseX - p.x) * 0.002 + p.driftX + Math.sin(Date.now() * 0.0008 + p.baseX) * 0.05
+        p.vy += (p.baseY - p.y) * 0.002 + p.driftY + Math.cos(Date.now() * 0.0006 + p.baseY) * 0.05
+        p.vx *= 0.97
+        p.vy *= 0.97
+
+        p.baseX += (p.x - p.baseX) * 0.0005
+        p.baseY += (p.y - p.baseY) * 0.0005
 
         if (mouseActive) {
           const dx = mouseX - p.x
