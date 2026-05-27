@@ -2,6 +2,7 @@ import { getBaseURL } from "@lib/util/env"
 import { Metadata } from "next"
 import "styles/globals.css"
 import KingKeysChakraProvider from "@lib/providers/chakra-provider"
+import ParticleBackground from "@components/particle-background"
 
 export const metadata: Metadata = {
   metadataBase: new URL(getBaseURL()),
@@ -46,7 +47,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     <html lang="es" suppressHydrationWarning>
       <body suppressHydrationWarning>
         <KingKeysChakraProvider>
-          <main className="relative">{props.children}</main>
+          <ParticleBackground />
+          <main className="relative z-10">{props.children}</main>
         </KingKeysChakraProvider>
       </body>
     </html>
