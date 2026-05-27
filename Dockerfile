@@ -1,6 +1,7 @@
-FROM node:20-alpine AS builder
+FROM node:20-alpine
 
 RUN corepack enable && corepack prepare pnpm@9 --activate
+RUN apk add --no-cache tini
 
 WORKDIR /app
 
@@ -27,25 +28,7 @@ ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 RUN pnpm exec next build
 
-FROM node:20-alpine AS runner
-
-RUN apk add --no-cache tini
-
-WORKDIR /app
-
-ENV NODE_ENV=production
-ENV PORT=8000
-
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/next.config.js ./
-COPY --from=builder /app/public ./public
-
-RUN chown -R node:node /app
-USER node
-
 EXPOSE 8000
 
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD ./node_modules/.bin/next start -p ${PORT:-8000}
+CMD ["node_modules/.bin/next", "start", "-p", "8000"]
