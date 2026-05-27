@@ -2,7 +2,6 @@ import { getBaseURL } from "@lib/util/env"
 import { Metadata } from "next"
 import "styles/globals.css"
 import KingKeysChakraProvider from "@lib/providers/chakra-provider"
-import ParticleBackground from "../components/particle-background"
 
 export const metadata: Metadata = {
   metadataBase: new URL(getBaseURL()),
@@ -47,8 +46,17 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     <html lang="es" suppressHydrationWarning>
       <body suppressHydrationWarning>
         <KingKeysChakraProvider>
-          <ParticleBackground />
-          <main className="relative z-10">{props.children}</main>
+          <div
+            id="pk-bg"
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 0,
+              pointerEvents: "none",
+              background: "radial-gradient(circle at 50% 50%, rgba(250,204,21,0.08) 0%, transparent 70%)",
+            }}
+          />
+          <main className="relative z-10 min-h-screen">{props.children}</main>
         </KingKeysChakraProvider>
       </body>
     </html>
