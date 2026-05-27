@@ -51,18 +51,18 @@ client.fetch = async <T>(
   let path = input
 
   if (query && Object.keys(query).length > 0) {
-    const params = new URLSearchParams()
+    const searchParams: string[] = []
     for (const [key, value] of Object.entries(query)) {
       if (value === undefined || value === null) {
         continue
       }
       if (Array.isArray(value)) {
-        value.forEach((item) => params.append(key, String(item)))
+        value.forEach((item) => searchParams.push(`${key}[]=${encodeURIComponent(String(item))}`))
       } else {
-        params.append(key, String(value))
+        searchParams.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
       }
     }
-    path = `${path}${path.includes("?") ? "&" : "?"}${params.toString()}`
+    path = `${path}${path.includes("?") ? "&" : "?"}${searchParams.join("&")}`
   }
 
   const payload = body ?? undefined
