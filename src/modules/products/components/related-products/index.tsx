@@ -39,7 +39,7 @@ export default async function RelatedProducts({
     return response.products.filter(
       (responseProduct) => responseProduct.id !== product.id
     )
-  })
+  }).catch(() => [])
 
   if (!products.length) {
     return null

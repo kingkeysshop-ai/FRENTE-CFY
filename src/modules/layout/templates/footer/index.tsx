@@ -4,8 +4,8 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import NewsletterSignup from "@components/NewsletterSignup"
 
 export default async function Footer() {
-  const { collections } = await listCollections()
-  const productCategories = await listCategories()
+  const { collections } = await listCollections().catch(() => ({ collections: [], count: 0 }))
+  const productCategories = await listCategories().catch(() => [])
 
   return (
     <footer className="bg-gray-900 border-t border-yellow-400/20 w-full">

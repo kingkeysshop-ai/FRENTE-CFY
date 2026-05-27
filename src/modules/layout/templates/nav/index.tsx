@@ -13,9 +13,9 @@ import SearchBar from "@modules/layout/components/search-bar"
 
 export default async function Nav() {
   const [regions, locales, currentLocale] = await Promise.all([
-    listRegions().then((regions: any[]) => regions),
-    listLocales(),
-    getLocale(),
+    listRegions().then((regions: any[]) => regions).catch(() => []),
+    listLocales().catch(() => []),
+    getLocale().catch(() => null),
   ])
 
   return (
