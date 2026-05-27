@@ -229,8 +229,8 @@ function ParticleCanvas() {
         baseY: Math.random() * canvas!.height,
         size: Math.random() * 2.5 + 1,
         alpha: Math.random() * 0.5 + 0.3,
-        driftX: (i % 3 - 1) * (Math.random() * 0.2 + 0.1),
-        driftY: (i % 5 - 2) * (Math.random() * 0.15 + 0.05),
+        driftX: (i % 3 - 1) * (Math.random() * 0.08 + 0.04),
+        driftY: (i % 5 - 2) * (Math.random() * 0.06 + 0.02),
       }))
     }
 
@@ -238,10 +238,10 @@ function ParticleCanvas() {
       ctx!.clearRect(0, 0, canvas!.width, canvas!.height)
 
       for (const p of particles) {
-        p.vx += (p.baseX - p.x) * 0.002 + p.driftX + Math.sin(Date.now() * 0.0008 + p.baseX) * 0.05
-        p.vy += (p.baseY - p.y) * 0.002 + p.driftY + Math.cos(Date.now() * 0.0006 + p.baseY) * 0.05
-        p.vx *= 0.97
-        p.vy *= 0.97
+        p.vx += (p.baseX - p.x) * 0.002 + p.driftX + Math.sin(Date.now() * 0.0008 + p.baseX) * 0.02
+        p.vy += (p.baseY - p.y) * 0.002 + p.driftY + Math.cos(Date.now() * 0.0006 + p.baseY) * 0.02
+        p.vx *= 0.98
+        p.vy *= 0.98
 
         p.baseX += (p.x - p.baseX) * 0.0005
         p.baseY += (p.y - p.baseY) * 0.0005
