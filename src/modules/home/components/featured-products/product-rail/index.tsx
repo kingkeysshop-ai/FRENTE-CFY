@@ -2,6 +2,7 @@ import { listProducts } from "@lib/data/products"
 import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import ProductPreview from "@modules/products/components/product-preview"
+import CarouselArrows from "./CarouselArrows"
 
 export default async function ProductRail({
   collection,
@@ -21,6 +22,8 @@ export default async function ProductRail({
 
   if (!pricedProducts?.length) return null
 
+  const id = `carousel-${collection.id}`
+
   return (
     <div className="content-container py-10 relative">
       {/* Header de coleccion */}
@@ -38,15 +41,22 @@ export default async function ProductRail({
       </div>
 
       {/* Carrusel horizontal */}
-      <div className="overflow-x-auto scroll-smooth snap-x snap-mandatory -mx-4 px-4 pb-4 hide-scrollbar">
-        <div className="flex gap-4">
-          {pricedProducts.map((product) => (
-            <div key={product.id} className="snap-start shrink-0 w-[72vw] min-w-[240px] max-w-[280px]">
-              <ProductPreview product={product} region={region} isFeatured />
-            </div>
-          ))}
+      <div className="relative">
+        <div
+          id={id}
+          className="overflow-x-auto scroll-smooth snap-x snap-mandatory -mx-4 px-4 pb-4 hide-scrollbar"
+        >
+          <div className="flex gap-4">
+            {pricedProducts.map((product) => (
+              <div key={product.id} className="snap-start shrink-0 w-[72vw] min-w-[240px] max-w-[280px]">
+                <ProductPreview product={product} region={region} isFeatured />
+              </div>
+            ))}
+          </div>
         </div>
+        <CarouselArrows containerId={id} />
       </div>
+
       {/* Fading edge hint */}
       <div className="absolute top-[92px] right-0 w-20 h-[calc(100%-92px)] bg-gradient-to-l from-gray-950 via-gray-950/80 to-transparent pointer-events-none" />
 

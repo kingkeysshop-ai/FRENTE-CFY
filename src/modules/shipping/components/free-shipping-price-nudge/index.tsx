@@ -1,14 +1,13 @@
 "use client"
 
 import { convertToLocale } from "@lib/util/money"
-import { CheckCircleSolid, XMark } from "@medusajs/icons"
 import {
   HttpTypes,
   StoreCart,
   StoreCartShippingOption,
   StorePrice,
 } from "@medusajs/types"
-import { Button, clx } from "@medusajs/ui"
+import { clx } from "@medusajs/ui"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { useState } from "react"
 import { StoreFreeShippingPrice } from "types/global"
@@ -133,46 +132,46 @@ function FreeShippingInline({
   }
 }) {
   return (
-    <div className="bg-neutral-100 p-2 rounded-lg border">
-      <div className="space-y-1.5">
-        <div className="flex justify-between text-xs text-neutral-600">
+    <div className="bg-gray-900 border border-yellow-400/20 p-3 rounded-xl">
+      <div className="space-y-2">
+        <div className="flex justify-between text-xs text-gray-400">
           <div>
             {price.target_reached ? (
-              <div className="flex items-center gap-1.5">
-                <CheckCircleSolid className="text-green-500 inline-block" />{" "}
-                Free Shipping unlocked!
+              <div className="flex items-center gap-1.5 text-yellow-400 font-semibold">
+                ✓ Envío gratis desbloqueado
               </div>
             ) : (
-              `Unlock Free Shipping`
+              `Desbloquea envío gratis`
             )}
           </div>
 
           <div
-            className={clx("visible", {
+            className={clx({
               "opacity-0 invisible": price.target_reached,
             })}
           >
-            Only{" "}
-            <span className="text-neutral-950">
+            Faltan{" "}
+            <span className="text-white font-semibold">
               {convertToLocale({
                 amount: price.target_remaining,
                 currency_code: cart.currency_code,
               })}
-            </span>{" "}
-            away
+            </span>
           </div>
         </div>
-        <div className="flex justify-between gap-1">
+
+        <div className="flex gap-1">
           <div
             className={clx(
-              "bg-gradient-to-r from-zinc-400 to-zinc-500 h-1 rounded-full max-w-full duration-500 ease-in-out",
+              "h-1 rounded-full max-w-full duration-500 ease-in-out",
               {
-                "from-green-400 to-green-500": price.target_reached,
+                "bg-gradient-to-r from-yellow-400 to-yellow-300": price.target_reached,
+                "bg-gradient-to-r from-yellow-400/60 to-yellow-400/30": !price.target_reached,
               }
             )}
-            style={{ width: `${price.remaining_percentage}%` }}
-          ></div>
-          <div className="bg-neutral-300 h-1 rounded-full w-fit flex-grow"></div>
+            style={{ width: `${Math.min(price.remaining_percentage, 100)}%` }}
+          />
+          <div className="h-1 rounded-full flex-grow bg-gray-700" />
         </div>
       </div>
     </div>
@@ -199,73 +198,69 @@ function FreeShippingPopup({
         }
       )}
     >
-      <div>
-        <Button
-          className="rounded-full bg-neutral-900 shadow-none outline-none border-none text-[15px] p-2"
-          onClick={() => setIsClosed(true)}
-        >
-          <XMark />
-        </Button>
-      </div>
+      <button
+        className="w-7 h-7 rounded-full bg-gray-800 border border-gray-600 flex items-center justify-center text-gray-400 hover:text-white hover:border-gray-400 transition-all"
+        onClick={() => setIsClosed(true)}
+      >
+        ✕
+      </button>
 
-      <div className="w-[400px] bg-black text-white p-6 rounded-lg ">
-        <div className="pb-4">
-          <div className="space-y-3">
-            <div className="flex justify-between text-[15px] text-neutral-400">
-              <div>
-                {price.target_reached ? (
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircleSolid className="text-green-500 inline-block" />{" "}
-                    Free Shipping unlocked!
-                  </div>
-                ) : (
-                  `Unlock Free Shipping`
-                )}
-              </div>
+      <div className="w-[380px] bg-gray-900 border border-yellow-400/20 rounded-xl p-5 shadow-lg shadow-yellow-400/5">
+        <div className="space-y-3">
+          <div className="flex justify-between text-sm text-gray-400">
+            <div>
+              {price.target_reached ? (
+                <div className="flex items-center gap-1.5 text-yellow-400 font-semibold">
+                  ✓ Envío gratis desbloqueado
+                </div>
+              ) : (
+                <span>Desbloquea envío gratis</span>
+              )}
+            </div>
 
-              <div
-                className={clx("visible", {
-                  "opacity-0 invisible": price.target_reached,
+            <div
+              className={clx({
+                "opacity-0 invisible": price.target_reached,
+              })}
+            >
+              Faltan{" "}
+              <span className="text-white font-semibold">
+                {convertToLocale({
+                  amount: price.target_remaining,
+                  currency_code: cart.currency_code,
                 })}
-              >
-                Only{" "}
-                <span className="text-white">
-                  {convertToLocale({
-                    amount: price.target_remaining,
-                    currency_code: cart.currency_code,
-                  })}
-                </span>{" "}
-                away
-              </div>
+              </span>
             </div>
-            <div className="flex justify-between gap-1">
-              <div
-                className={clx(
-                  "bg-gradient-to-r from-zinc-400 to-zinc-500 h-1.5 rounded-full max-w-full duration-500 ease-in-out",
-                  {
-                    "from-green-400 to-green-500": price.target_reached,
-                  }
-                )}
-                style={{ width: `${price.remaining_percentage}%` }}
-              ></div>
-              <div className="bg-zinc-600 h-1.5 rounded-full w-fit flex-grow"></div>
-            </div>
+          </div>
+
+          <div className="flex gap-1">
+            <div
+              className={clx(
+                "h-1.5 rounded-full max-w-full duration-500 ease-in-out",
+                {
+                  "bg-gradient-to-r from-yellow-400 to-yellow-300": price.target_reached,
+                  "bg-gradient-to-r from-yellow-400/60 to-yellow-400/30": !price.target_reached,
+                }
+              )}
+              style={{ width: `${Math.min(price.remaining_percentage, 100)}%` }}
+            />
+            <div className="h-1.5 rounded-full flex-grow bg-gray-700" />
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 mt-4">
           <LocalizedClientLink
-            className="rounded-2xl bg-transparent shadow-none outline-none border-[1px] border-white text-[15px] py-2.5 px-4"
+            className="flex-1 rounded-lg bg-transparent border border-yellow-400/40 text-yellow-400 text-sm font-bold py-2.5 px-4 text-center hover:bg-yellow-400/10 hover:border-yellow-400 transition-all"
             href="/cart"
           >
-            View cart
+            Ver carrito
           </LocalizedClientLink>
 
           <LocalizedClientLink
-            className="flex-grow rounded-2xl bg-white text-neutral-950 shadow-none outline-none border-[1px] border-white text-[15px] py-2.5 px-4 text-center"
+            className="flex-1 rounded-lg bg-yellow-400 text-gray-900 text-sm font-bold py-2.5 px-4 text-center hover:bg-yellow-300 transition-all"
             href="/store"
           >
-            View products
+            Ver productos
           </LocalizedClientLink>
         </div>
       </div>

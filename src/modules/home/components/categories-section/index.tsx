@@ -1,5 +1,6 @@
 import { listCategories } from "@lib/data/categories"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import FadeInView from "@components/FadeInView"
 
 export default async function CategoriesSection() {
   const categories = await listCategories()
@@ -45,35 +46,38 @@ export default async function CategoriesSection() {
 
         {/* Grid de categorias */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {categories.filter((c) => !c.parent_category).slice(0, 10).map((category) => (
-            <LocalizedClientLink
-              key={category.id}
-              href={`/categories/${category.handle}`}
-              className="group flex flex-col items-center gap-3 bg-gray-900 border border-gray-700 hover:border-yellow-400/60 rounded-xl p-5 transition-all duration-200 hover:shadow-lg hover:shadow-yellow-400/10 hover:-translate-y-1 text-center"
-            >
-              <span className="text-4xl group-hover:scale-110 transition-transform duration-200">
-                {getIcon(category.name)}
-              </span>
-              <span className="text-white text-sm font-bold group-hover:text-yellow-400 transition-colors duration-200">
-                {category.name}
-              </span>
-              {category.products && category.products.length > 0 && (
-                <span className="text-xs text-gray-500 bg-gray-800 px-2 py-0.5 rounded-full">
-                  {category.products.length} productos
+          {categories.filter((c) => !c.parent_category).slice(0, 10).map((category, i) => (
+            <FadeInView key={category.id} delay={i * 80}>
+              <LocalizedClientLink
+                href={`/categories/${category.handle}`}
+                className="group flex flex-col items-center gap-3 bg-gray-900 border border-gray-700 hover:border-yellow-400/60 rounded-xl p-5 transition-all duration-200 hover:shadow-lg hover:shadow-yellow-400/10 hover:-translate-y-1 text-center"
+              >
+                <span className="text-4xl group-hover:scale-110 transition-transform duration-200">
+                  {getIcon(category.name)}
                 </span>
-              )}
-            </LocalizedClientLink>
+                <span className="text-white text-sm font-bold group-hover:text-yellow-400 transition-colors duration-200">
+                  {category.name}
+                </span>
+                {category.products && category.products.length > 0 && (
+                  <span className="text-xs text-gray-500 bg-gray-800 px-2 py-0.5 rounded-full">
+                    {category.products.length} productos
+                  </span>
+                )}
+              </LocalizedClientLink>
+            </FadeInView>
           ))}
 
           {/* Card ver todas */}
-          <LocalizedClientLink
-            href="/store"
-            className="group flex flex-col items-center gap-3 bg-yellow-400/5 border border-yellow-400/20 hover:border-yellow-400/60 rounded-xl p-5 transition-all duration-200 hover:-translate-y-1 text-center"
-          >
-            <span className="text-4xl group-hover:scale-110 transition-transform duration-200">✨</span>
-            <span className="text-yellow-400 text-sm font-bold">Ver Todas</span>
-            <span className="text-xs text-gray-500 bg-gray-800 px-2 py-0.5 rounded-full">Tienda completa</span>
-          </LocalizedClientLink>
+          <FadeInView delay={10 * 80}>
+            <LocalizedClientLink
+              href="/store"
+              className="group flex flex-col items-center gap-3 bg-yellow-400/5 border border-yellow-400/20 hover:border-yellow-400/60 rounded-xl p-5 transition-all duration-200 hover:-translate-y-1 text-center"
+            >
+              <span className="text-4xl group-hover:scale-110 transition-transform duration-200">✨</span>
+              <span className="text-yellow-400 text-sm font-bold">Ver Todas</span>
+              <span className="text-xs text-gray-500 bg-gray-800 px-2 py-0.5 rounded-full">Tienda completa</span>
+            </LocalizedClientLink>
+          </FadeInView>
         </div>
 
       </div>

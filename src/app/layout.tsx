@@ -46,6 +46,16 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     <html lang="es" suppressHydrationWarning>
       <body suppressHydrationWarning>
         <KingKeysChakraProvider>
+          {/* Ambient glow */}
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 0,
+              pointerEvents: "none",
+              background: "radial-gradient(circle at 50% 50%, rgba(250,204,21,0.03) 0%, transparent 70%)",
+            }}
+          />
           <main className="relative">
             {props.children}
           </main>

@@ -9,6 +9,7 @@ import MobileBottomNav from "@modules/layout/components/mobile-bottom-nav"
 import NavLinks from "@modules/layout/components/nav-links"
 import SideMenu from "@modules/layout/components/side-menu"
 import ScrollAwareHeader from "@modules/layout/components/scroll-aware-header"
+import SearchBar from "@modules/layout/components/search-bar"
 
 export default async function Nav() {
   const [regions, locales, currentLocale] = await Promise.all([
@@ -39,7 +40,10 @@ export default async function Nav() {
             </LocalizedClientLink>
 
             {/* Derecha */}
-            <div className="flex items-center gap-x-5 h-full flex-1 basis-0 justify-end">
+            <div className="flex items-center gap-x-4 h-full flex-1 basis-0 justify-end">
+              <Suspense fallback={null}>
+                <SearchBar />
+              </Suspense>
               <NavLinks />
               <Suspense
                 fallback={

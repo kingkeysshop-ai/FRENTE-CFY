@@ -9,10 +9,12 @@ const StoreTemplate = ({
   sortBy,
   page,
   countryCode,
+  q,
 }: {
   sortBy?: SortOptions
   page?: string
   countryCode: string
+  q?: string
 }) => {
   const pageNumber = page ? parseInt(page) : 1
   const sort = sortBy || "created_at"
@@ -27,11 +29,22 @@ const StoreTemplate = ({
             🛒 Catálogo Completo
           </span>
           <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
-            Todos los <span className="text-yellow-400">Productos</span>
+            {q ? (
+              <>Resultados para <span className="text-yellow-400">&ldquo;{q}&rdquo;</span></>
+            ) : (
+              <>Todos los <span className="text-yellow-400">Productos</span></>
+            )}
           </h1>
-          <p className="text-gray-400 text-sm max-w-md">
-            Licencias digitales originales con activación inmediata garantizada.
-          </p>
+          {q && (
+            <p className="text-gray-400 text-sm max-w-md">
+              Mostrando resultados de búsqueda para &ldquo;{q}&rdquo;
+            </p>
+          )}
+          {!q && (
+            <p className="text-gray-400 text-sm max-w-md">
+              Licencias digitales originales con activación inmediata garantizada.
+            </p>
+          )}
         </div>
       </div>
 
@@ -55,6 +68,7 @@ const StoreTemplate = ({
               sortBy={sort}
               page={pageNumber}
               countryCode={countryCode}
+              q={q}
             />
           </Suspense>
         </div>
