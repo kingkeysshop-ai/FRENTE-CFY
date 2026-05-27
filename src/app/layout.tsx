@@ -2,7 +2,7 @@ import { getBaseURL } from "@lib/util/env"
 import { Metadata } from "next"
 import "styles/globals.css"
 import KingKeysChakraProvider from "@lib/providers/chakra-provider"
-import ParticleBackground from "@components/particle-background"
+import ParticleBackground from "../components/particle-background"
 
 export const metadata: Metadata = {
   metadataBase: new URL(getBaseURL()),
