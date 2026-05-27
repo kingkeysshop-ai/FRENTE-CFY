@@ -27,11 +27,11 @@ export default async function Home(props: {
       {/* Hero */}
       <Hero />
 
-      {/* Terminal stats */}
-      <StatsTerminal />
-
       {/* Por que elegirnos */}
       <WhyUs />
+
+      {/* Terminal stats */}
+      <StatsTerminal />
 
       {/* Categorias */}
       <CategoriesSection />
