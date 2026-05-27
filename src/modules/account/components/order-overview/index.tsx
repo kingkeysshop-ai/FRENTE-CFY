@@ -13,7 +13,7 @@ const OrderOverview = ({ orders }: { orders: HttpTypes.StoreOrder[] }) => {
         {orders.map((o) => (
           <div
             key={o.id}
-            className="border-b border-gray-200 pb-6 last:pb-0 last:border-none"
+            className="border-b border-gray-700 pb-6 last:pb-0 last:border-none"
           >
             <OrderCard order={o} />
           </div>
@@ -24,17 +24,24 @@ const OrderOverview = ({ orders }: { orders: HttpTypes.StoreOrder[] }) => {
 
   return (
     <div
-      className="w-full flex flex-col items-center gap-y-4"
+      className="w-full flex flex-col items-center justify-center py-16 gap-6 text-center"
       data-testid="no-orders-container"
     >
-      <h2 className="text-large-semi">Nothing to see here</h2>
-      <p className="text-base-regular">
-        You don&apos;t have any orders yet, let us change that {":)"}
-      </p>
-      <div className="mt-4">
-        <LocalizedClientLink href="/" passHref>
-          <Button data-testid="continue-shopping-button">
-            Continue shopping
+      <div className="w-20 h-20 rounded-full bg-gray-800 border-2 border-gray-700 flex items-center justify-center">
+        <span className="text-3xl">📦</span>
+      </div>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-2xl font-black text-white">
+          Sin pedidos <span className="text-yellow-400">aún</span>
+        </h2>
+        <p className="text-gray-400 text-sm max-w-sm">
+          No tienes pedidos registrados. ¡Echa un vistazo a nuestras licencias digitales!
+        </p>
+      </div>
+      <div className="mt-2">
+        <LocalizedClientLink href="/store" passHref>
+          <Button className="!bg-yellow-400 !text-gray-900 !font-bold !border-0 hover:!bg-yellow-300 !px-6 !py-3 !rounded-lg !text-sm">
+            Ver Productos
           </Button>
         </LocalizedClientLink>
       </div>

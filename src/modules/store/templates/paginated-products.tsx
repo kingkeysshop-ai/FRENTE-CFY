@@ -3,6 +3,7 @@ import { getRegion } from "@lib/data/regions"
 import ProductPreview from "@modules/products/components/product-preview"
 import { Pagination } from "@modules/store/components/pagination"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
+import EmptySearchResults from "../components/empty-search-results"
 
 const PRODUCT_LIMIT = 12
 
@@ -71,6 +72,10 @@ export default async function PaginatedProducts({
   })
 
   const totalPages = Math.ceil(count / PRODUCT_LIMIT)
+
+  if (!products.length) {
+    return <EmptySearchResults query={q} />
+  }
 
   return (
     <>

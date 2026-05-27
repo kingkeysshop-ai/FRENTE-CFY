@@ -4,6 +4,7 @@ import Items from "@modules/order/components/items"
 import OrderDetails from "@modules/order/components/order-details"
 import ShippingDetails from "@modules/order/components/shipping-details"
 import PaymentDetails from "@modules/order/components/payment-details"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
 
 type OrderCompletedTemplateProps = {
@@ -102,18 +103,18 @@ export default async function OrderCompletedTemplate({ order }: OrderCompletedTe
 
         {/* Botones */}
         <div className="flex flex-col sm:flex-row gap-3">
-          <a
+          <LocalizedClientLink
             href="/account/orders"
             className="flex-1 py-3 text-center border border-yellow-400/50 text-yellow-400 font-bold rounded-xl hover:bg-yellow-400 hover:text-gray-900 transition-all duration-200 text-sm"
           >
             Ver Mis Pedidos
-          </a>
-          <a
+          </LocalizedClientLink>
+          <LocalizedClientLink
             href="/store"
             className="flex-1 py-3 text-center bg-yellow-400 text-gray-900 font-bold rounded-xl hover:bg-yellow-300 transition-all duration-200 text-sm"
           >
             Seguir Comprando
-          </a>
+          </LocalizedClientLink>
         </div>
 
       </div>

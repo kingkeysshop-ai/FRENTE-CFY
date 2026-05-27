@@ -1,34 +1,21 @@
-import { Table } from "@medusajs/ui"
-
 const SkeletonLineItem = () => {
   return (
-    <Table.Row className="w-full m-4">
-      <Table.Cell className="p-4 w-24">
-        <div className="flex w-24 h-24 p-4 bg-gray-200 animate-pulse" />
-      </Table.Cell>
-      <Table.Cell className="text-left">
-        <div className="flex flex-col gap-y-2">
-          <div className="w-32 h-4 bg-gray-200 animate-pulse" />
-          <div className="w-24 h-4 bg-gray-200 animate-pulse" />
+    <div className="flex flex-wrap small:flex-nowrap items-start small:items-center gap-3 small:gap-4 px-4 small:px-6 py-4 border-b border-gray-700">
+      <div className="flex items-start gap-3 flex-1 min-w-0 w-full small:w-auto">
+        <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-800 animate-pulse shrink-0" />
+        <div className="flex flex-col gap-2 flex-1">
+          <div className="w-32 h-4 bg-gray-800 animate-pulse rounded" />
+          <div className="w-20 h-3 bg-gray-800 animate-pulse rounded" />
         </div>
-      </Table.Cell>
-      <Table.Cell>
-        <div className="flex gap-2 items-center">
-          <div className="w-6 h-8 bg-gray-200 animate-pulse" />
-          <div className="w-14 h-10 bg-gray-200 animate-pulse" />
+      </div>
+      <div className="flex items-center gap-3 w-full small:w-auto small:min-w-[180px] justify-between small:justify-end pl-[72px] small:pl-0">
+        <div className="flex items-center gap-2">
+          <div className="w-9 h-9 small:w-8 small:h-8 bg-gray-800 animate-pulse rounded-lg" />
+          <div className="w-14 h-9 small:h-8 bg-gray-800 animate-pulse rounded-lg" />
         </div>
-      </Table.Cell>
-      <Table.Cell>
-        <div className="flex gap-2">
-          <div className="w-12 h-6 bg-gray-200 animate-pulse" />
-        </div>
-      </Table.Cell>
-      <Table.Cell>
-        <div className="flex gap-2 justify-end">
-          <div className="w-12 h-6 bg-gray-200 animate-pulse" />
-        </div>
-      </Table.Cell>
-    </Table.Row>
+        <div className="w-16 h-4 bg-yellow-400/20 animate-pulse rounded" />
+      </div>
+    </div>
   )
 }
 
