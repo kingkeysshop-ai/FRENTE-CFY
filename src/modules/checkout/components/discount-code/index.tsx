@@ -4,7 +4,6 @@ import React from "react"
 import { applyPromotions } from "@lib/data/cart"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
-import { Badge } from "@medusajs/ui"
 import Trash from "@modules/common/icons/trash"
 import ErrorMessage from "../error-message"
 import { SubmitButton } from "../submit-button"
@@ -68,7 +67,7 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
                 data-testid="discount-input"
               />
               <SubmitButton
-                variant="secondary"
+                className="px-4 w-auto"
                 data-testid="discount-apply-button"
               >
                 Aplicar
@@ -89,9 +88,9 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
               data-testid="discount-row"
             >
               <span className="text-sm text-white flex items-center gap-2" data-testid="discount-code">
-                <Badge color={promotion.is_automatic ? "green" : "grey"} size="small">
+                <span className="inline-flex px-2 py-0.5 rounded bg-yellow-400/20 text-yellow-400 text-xs font-mono font-bold">
                   {promotion.code}
-                </Badge>
+                </span>
                 {promotion.application_method?.value !== undefined &&
                   promotion.application_method.currency_code !== undefined && (
                     <span className="text-yellow-400 text-xs">

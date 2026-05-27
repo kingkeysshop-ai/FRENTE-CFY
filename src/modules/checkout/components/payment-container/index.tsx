@@ -1,5 +1,4 @@
 import { Radio as RadioGroupOption } from "@headlessui/react"
-import { Text, clx } from "@medusajs/ui"
 import React, { useContext, useMemo, type JSX } from "react"
 
 import Radio from "@modules/common/components/radio"
@@ -33,25 +32,23 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
       key={paymentProviderId}
       value={paymentProviderId}
       disabled={disabled}
-      className={clx(
-        "flex flex-col gap-y-2 text-small-regular cursor-pointer py-4 border rounded-rounded px-8 mb-2 hover:shadow-borders-interactive-with-active",
-        {
-          "border-ui-border-interactive":
-            selectedPaymentOptionId === paymentProviderId,
-        }
-      )}
+      className={`flex flex-col gap-y-2 text-sm cursor-pointer py-4 border rounded-xl px-5 mb-2 transition-colors ${
+        selectedPaymentOptionId === paymentProviderId
+          ? "border-yellow-400 bg-yellow-400/10"
+          : "border-gray-600 hover:border-gray-500"
+      }`}
     >
-      <div className="flex items-center justify-between ">
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-4">
           <Radio checked={selectedPaymentOptionId === paymentProviderId} />
-          <Text className="text-base-regular">
+          <span className="text-white font-medium">
             {paymentInfoMap[paymentProviderId]?.title || paymentProviderId}
-          </Text>
+          </span>
           {isManual(paymentProviderId) && isDevelopment && (
             <PaymentTest className="hidden small:block" />
           )}
         </div>
-        <span className="justify-self-end text-ui-fg-base">
+        <span className="text-gray-400">
           {paymentInfoMap[paymentProviderId]?.icon}
         </span>
       </div>
@@ -85,14 +82,14 @@ export const StripeCardContainer = ({
       style: {
         base: {
           fontFamily: "Inter, sans-serif",
-          color: "#424270",
+          color: "#f3f4f6",
           "::placeholder": {
             color: "rgb(107 114 128)",
           },
         },
       },
       classes: {
-        base: "pt-3 pb-1 block w-full h-11 px-4 mt-0 bg-ui-bg-field border rounded-md appearance-none focus:outline-none focus:ring-0 focus:shadow-borders-interactive-with-active border-ui-border-base hover:bg-ui-bg-field-hover transition-all duration-300 ease-in-out",
+        base: "pt-3 pb-1 block w-full h-11 px-4 mt-0 bg-gray-800 border border-gray-600 rounded-xl appearance-none focus:outline-none focus:ring-0 focus:border-yellow-400 transition-all duration-300 ease-in-out",
       },
     }
   }, [])
@@ -107,9 +104,9 @@ export const StripeCardContainer = ({
       {selectedPaymentOptionId === paymentProviderId &&
         (stripeReady ? (
           <div className="my-4 transition-all duration-150 ease-in-out">
-            <Text className="txt-medium-plus text-ui-fg-base mb-1">
-              Enter your card details:
-            </Text>
+            <p className="text-white font-medium text-sm mb-1">
+              Ingresa los datos de tu tarjeta:
+            </p>
             <CardElement
               options={useOptions as StripeCardElementOptions}
               onChange={(e) => {

@@ -6,7 +6,7 @@ import { calculatePriceForShippingOption } from "@lib/data/fulfillment"
 import { convertToLocale } from "@lib/util/money"
 import { CheckCircleSolid, Loader } from "@medusajs/icons"
 import { HttpTypes } from "@medusajs/types"
-import { Button, clx } from "@medusajs/ui"
+import { clx } from "@medusajs/ui"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import Divider from "@modules/common/components/divider"
 import MedusaRadio from "@modules/common/components/radio"
@@ -229,16 +229,18 @@ const Shipping: React.FC<ShippingProps> = ({ cart, availableShippingMethods }) =
 
           <div>
             <ErrorMessage error={error} data-testid="delivery-option-error-message" />
-            <Button
-              size="large"
-              className="mt-4 w-full bg-yellow-400 text-gray-900 font-black hover:bg-yellow-300 border-0"
+            <button
               onClick={handleSubmit}
-              isLoading={isLoading}
-              disabled={!cart.shipping_methods?.[0]}
+              disabled={isLoading || !cart.shipping_methods?.[0]}
               data-testid="submit-delivery-option-button"
+              className="mt-4 w-full py-4 bg-yellow-400 text-gray-900 font-black text-base rounded-xl hover:bg-yellow-300 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2"
             >
-              Continuar al Pago
-            </Button>
+              {isLoading ? (
+                <span className="inline-block w-5 h-5 border-2 border-gray-900 border-t-transparent rounded-full animate-spin" />
+              ) : (
+                "Continuar al Pago"
+              )}
+            </button>
           </div>
         </>
       ) : (

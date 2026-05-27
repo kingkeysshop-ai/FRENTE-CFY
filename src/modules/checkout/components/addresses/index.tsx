@@ -4,10 +4,9 @@ import { setAddresses } from "@lib/data/cart"
 import compareAddresses from "@lib/util/compare-addresses"
 import { CheckCircleSolid } from "@medusajs/icons"
 import { HttpTypes } from "@medusajs/types"
-import { useToggleState } from "@medusajs/ui"
 import Divider from "@modules/common/components/divider"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useActionState } from "react"
+import { useActionState, useState } from "react"
 import BillingAddress from "../billing_address"
 import ErrorMessage from "../error-message"
 import ShippingAddress from "../shipping-address"
@@ -29,7 +28,7 @@ const Addresses = ({
   // Abrir si: paso explícito = address, O si no hay dirección guardada aún
   const isOpen = step === "address" || (!cart?.shipping_address?.address_1 && step !== "delivery" && step !== "payment" && step !== "review")
 
-  const { state: sameAsBilling, toggle: toggleSameAsBilling } = useToggleState(
+  const [sameAsBilling, setSameAsBilling] = useState(
     cart?.shipping_address && cart?.billing_address
       ? compareAddresses(cart?.shipping_address, cart?.billing_address)
       : true
@@ -65,7 +64,7 @@ const Addresses = ({
             <ShippingAddress
               customer={customer}
               checked={sameAsBilling}
-              onChange={toggleSameAsBilling}
+              onChange={() => setSameAsBilling(!sameAsBilling)}
               cart={cart}
             />
             {!sameAsBilling && (

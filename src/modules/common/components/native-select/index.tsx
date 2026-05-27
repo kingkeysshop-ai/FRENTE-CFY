@@ -1,5 +1,4 @@
 import { ChevronUpDown } from "@medusajs/icons"
-import { clx } from "@medusajs/ui"
 import {
   SelectHTMLAttributes,
   forwardRef,
@@ -17,7 +16,7 @@ export type NativeSelectProps = {
 
 const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
   (
-    { placeholder = "Select...", defaultValue, className, children, ...props },
+    { placeholder = "Seleccionar...", defaultValue, className, children, ...props },
     ref
   ) => {
     const innerRef = useRef<HTMLSelectElement>(null)
@@ -41,26 +40,22 @@ const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
         <div
           onFocus={() => innerRef.current?.focus()}
           onBlur={() => innerRef.current?.blur()}
-          className={clx(
-            "relative flex items-center text-base-regular border border-ui-border-base bg-ui-bg-subtle rounded-md hover:bg-ui-bg-field-hover",
-            className,
-            {
-              "text-ui-fg-muted": isPlaceholder,
-            }
-          )}
+          className={`relative flex items-center text-sm border border-gray-600 bg-gray-800 rounded-xl hover:bg-gray-700 transition-colors ${className || ""} ${
+            isPlaceholder ? "text-gray-500" : "text-white"
+          }`}
         >
           <select
             ref={innerRef}
             defaultValue={defaultValue}
             {...props}
-            className="appearance-none flex-1 bg-transparent border-none px-4 py-2.5 transition-colors duration-150 outline-none "
+            className="appearance-none flex-1 bg-transparent border-none px-4 py-2.5 transition-colors duration-150 outline-none text-white"
           >
             <option disabled value="">
               {placeholder}
             </option>
             {children}
           </select>
-          <span className="absolute right-4 inset-y-0 flex items-center pointer-events-none ">
+          <span className="absolute right-4 inset-y-0 flex items-center pointer-events-none text-gray-400">
             <ChevronUpDown />
           </span>
         </div>

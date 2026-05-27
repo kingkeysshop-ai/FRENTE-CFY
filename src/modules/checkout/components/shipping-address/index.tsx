@@ -1,5 +1,4 @@
 import { HttpTypes } from "@medusajs/types"
-import { Container } from "@medusajs/ui"
 import Checkbox from "@modules/common/components/checkbox"
 import Input from "@modules/common/components/input"
 import { mapKeys } from "lodash"
@@ -95,8 +94,8 @@ const ShippingAddress = ({
   return (
     <>
       {customer && (addressesInRegion?.length || 0) > 0 && (
-        <Container className="mb-6 flex flex-col gap-y-4 p-5">
-          <p className="text-small-regular">
+        <div className="mb-6 flex flex-col gap-y-4 p-5 bg-gray-800/60 border border-gray-700 rounded-xl">
+          <p className="text-sm text-gray-300">
             {`Hola ${customer.first_name}, ¿quieres usar una de tus direcciones guardadas?`}
           </p>
           <AddressSelect
@@ -108,7 +107,7 @@ const ShippingAddress = ({
             }
             onSelect={setFormAddress}
           />
-        </Container>
+        </div>
       )}
       <div className="grid grid-cols-2 gap-4">
         <Input

@@ -4,7 +4,7 @@ import { RadioGroup } from "@headlessui/react"
 import { isStripeLike, paymentInfoMap } from "@lib/constants"
 import { initiatePaymentSession } from "@lib/data/cart"
 import { CheckCircleSolid, CreditCard } from "@medusajs/icons"
-import { Button, Container, clx } from "@medusajs/ui"
+import { clx } from "@medusajs/ui"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import PaymentContainer, { StripeCardContainer } from "@modules/checkout/components/payment-container"
 import Divider from "@modules/common/components/divider"
@@ -129,21 +129,24 @@ const Payment = ({
 
           <ErrorMessage error={error} data-testid="payment-method-error-message" />
 
-          <Button
-            size="large"
-            className="mt-6 w-full bg-yellow-400 text-gray-900 font-black hover:bg-yellow-300 border-0"
+          <button
             onClick={handleSubmit}
-            isLoading={isLoading}
             disabled={
+              isLoading ||
               (isStripeLike(selectedPaymentMethod) && !cardComplete) ||
               (!selectedPaymentMethod && !paidByGiftcard)
             }
             data-testid="submit-payment-button"
+            className="mt-6 w-full py-4 bg-yellow-400 text-gray-900 font-black text-base rounded-xl hover:bg-yellow-300 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2"
           >
-            {!activeSession && isStripeLike(selectedPaymentMethod)
-              ? "Ingresar datos de tarjeta"
-              : "Continuar a la revisión"}
-          </Button>
+            {isLoading ? (
+              <span className="inline-block w-5 h-5 border-2 border-gray-900 border-t-transparent rounded-full animate-spin" />
+            ) : !activeSession && isStripeLike(selectedPaymentMethod) ? (
+              "Ingresar datos de tarjeta"
+            ) : (
+              "Continuar a la revisión"
+            )}
+          </button>
         </div>
 
         <div className={isOpen ? "hidden" : "block"}>
@@ -158,9 +161,9 @@ const Payment = ({
               <div className="flex flex-col w-1/3">
                 <p className="font-bold text-white mb-1">Detalles de pago</p>
                 <div className="flex gap-2 text-sm text-gray-400 items-center" data-testid="payment-details-summary">
-                  <Container className="flex items-center h-7 w-fit p-2 bg-gray-800">
+                  <div className="flex items-center h-7 w-fit p-2 bg-gray-800 rounded-lg">
                     {paymentInfoMap[selectedPaymentMethod]?.icon || <CreditCard />}
-                  </Container>
+                  </div>
                   <span>
                     {isStripeLike(selectedPaymentMethod) && cardBrand
                       ? cardBrand
