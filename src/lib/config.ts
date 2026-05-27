@@ -16,9 +16,12 @@ if (envBackendUrl) {
   }
 }
 
+const PUBLISHABLE_API_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
+
 export const sdk = new Medusa({
   baseUrl: MEDUSA_BACKEND_URL,
   maxRetries: 3,
+  publishableApiKey: PUBLISHABLE_API_KEY,
 })
 
 const client = sdk.client as any
