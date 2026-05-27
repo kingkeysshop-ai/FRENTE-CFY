@@ -49,9 +49,11 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           <canvas
             id="pk-canvas"
             className="fixed inset-0 w-full h-full pointer-events-none"
-            style={{ zIndex: 0 }}
+            style={{ zIndex: 9999, mixBlendMode: "screen" }}
           />
-          <main className="relative z-10 min-h-screen">{props.children}</main>
+          <main className="relative">
+            {props.children}
+          </main>
           <script
             dangerouslySetInnerHTML={{
               __html: `
