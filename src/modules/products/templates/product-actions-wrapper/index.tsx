@@ -13,7 +13,7 @@ export default async function ProductActionsWrapper({
   region: any
 }) {
   const product = await listProducts({
-    queryParams: { id: [id] },
+    queryParams: { id },
     regionId: region.id,
   }).then(({ response }) => response.products[0])
 
