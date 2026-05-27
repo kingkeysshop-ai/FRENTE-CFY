@@ -63,18 +63,20 @@ export const listProducts = async ({
     queryOptions.expand ??
     "variants,variants.prices,variants.options,images,options,tags"
 
+  const query = {
+    limit,
+    offset,
+    region_id: region?.id,
+    expand,
+    ...queryOptions,
+  }
+
   return sdk.client
     .fetch<{ products: HttpTypes.StoreProduct[]; count: number }>(
       `/store/products`,
       {
         method: "GET",
-        query: {
-          limit,
-          offset,
-          region_id: region?.id,
-          expand,
-          ...queryOptions,
-        },
+        query,
         headers,
         next,
         cache: "force-cache",
@@ -91,6 +93,10 @@ export const listProducts = async ({
         nextPage: nextPage,
         queryParams,
       }
+    })
+    .catch((e: any) => {
+      console.error("listProducts failed:", e.config?.url || e.message, "query:", JSON.stringify(query), "status:", e.response?.status, "data:", e.response?.data)
+      throw e
     })
 }
 

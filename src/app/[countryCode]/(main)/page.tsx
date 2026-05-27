@@ -16,8 +16,10 @@ export default async function Home(props: {
   params: Promise<{ countryCode: string }>
 }) {
   const { countryCode } = await props.params
-  const region = await getRegion(countryCode)
-  const { collections } = await listCollections()
+  const [region, { collections }] = await Promise.all([
+    getRegion(countryCode).catch(() => null),
+    listCollections().catch(() => ({ collections: [] })),
+  ])
 
   if (!collections || !region) return null
 
