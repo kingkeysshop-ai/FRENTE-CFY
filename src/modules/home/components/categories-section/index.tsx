@@ -3,7 +3,7 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import FadeInView from "@components/FadeInView"
 
 export default async function CategoriesSection() {
-  const categories = await listCategories()
+  const categories = await listCategories().catch(() => [])
 
   if (!categories?.length) return null
 
