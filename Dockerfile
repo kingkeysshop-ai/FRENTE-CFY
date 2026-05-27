@@ -29,7 +29,6 @@ RUN pnpm exec next build
 
 FROM node:20-alpine AS runner
 
-RUN corepack enable && corepack prepare pnpm@9 --activate
 RUN apk add --no-cache tini
 
 WORKDIR /app
@@ -42,10 +41,11 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/public ./public
+
 RUN chown -R node:node /app
 USER node
 
 EXPOSE 8000
 
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["pnpm", "exec", "next", "start", "-p", "8000"]
+CMD ./node_modules/.bin/next start -p ${PORT:-8000}
