@@ -50,10 +50,14 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             id="pk-bg"
             style={{
               position: "fixed",
-              inset: 0,
-              zIndex: 0,
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              zIndex: 99999,
               pointerEvents: "none",
-              background: "radial-gradient(circle at 50% 50%, rgba(250,204,21,0.08) 0%, transparent 70%)",
+              background: "red",
+              opacity: 0.3,
             }}
           />
           <main className="relative z-10 min-h-screen">{props.children}</main>
