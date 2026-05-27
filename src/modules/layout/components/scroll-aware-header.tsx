@@ -17,7 +17,7 @@ export default function ScrollAwareHeader({ children }: { children: React.ReactN
       className={`sticky top-0 inset-x-0 z-50 transition-all duration-500 ${
         scrolled
           ? "bg-gray-900/95 backdrop-blur-md shadow-lg shadow-black/30"
-          : "bg-transparent"
+          : "bg-gray-900/30 backdrop-blur-sm"
       }`}
     >
       <header

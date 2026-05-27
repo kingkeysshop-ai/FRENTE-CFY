@@ -59,13 +59,13 @@ function Line({
 
   return (
     <div className="flex items-center gap-2 text-sm sm:text-base leading-relaxed animate-fadeIn">
-      <span className="text-green-400/70 shrink-0">$</span>
-      <span className="text-green-300/90 font-mono">{label}</span>
+      <span className="text-yellow-400/70 shrink-0">$</span>
+      <span className="text-yellow-300/90 font-mono">{label}</span>
       <span className="text-gray-600 flex-1 min-w-[20px] text-center">..</span>
       <span className="text-yellow-400 font-mono font-bold tabular-nums shrink-0">
         [{<Counter target={value} active={show} />}]
       </span>
-      <span className="text-green-400/60 font-mono text-xs hidden sm:inline">
+      <span className="text-yellow-400/60 font-mono text-xs hidden sm:inline">
         {suffix}
       </span>
     </div>
@@ -102,20 +102,20 @@ export default function StatsTerminal() {
     <section className="py-16 sm:py-24 flex justify-center px-4">
       <div
         ref={ref}
-        className="w-full max-w-2xl bg-[#0a0a0a] border border-green-900/50 rounded-xl shadow-[0_0_30px_rgba(34,197,94,0.06)] overflow-hidden"
+        className="w-full max-w-2xl bg-[#0a0a0a] border border-yellow-900/50 rounded-xl shadow-[0_0_30px_rgba(250,204,21,0.06)] overflow-hidden"
       >
         {/* Terminal bar */}
-        <div className="flex items-center gap-2 px-4 py-3 bg-[#111] border-b border-green-900/30">
+        <div className="flex items-center gap-2 px-4 py-3 bg-[#111] border-b border-yellow-900/30">
           <span className="w-3 h-3 rounded-full bg-red-500/80" />
           <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
-          <span className="w-3 h-3 rounded-full bg-green-500/80" />
-          <span className="ml-3 text-xs font-mono text-green-400/60">licenses.sh — bash</span>
+          <span className="w-3 h-3 rounded-full bg-yellow-400/80" />
+          <span className="ml-3 text-xs font-mono text-yellow-400/60">licenses.sh — bash</span>
         </div>
 
         {/* Content */}
         <div className="px-4 sm:px-6 py-6 sm:py-8 space-y-1.5">
-          <p className="text-green-400/50 font-mono text-xs mb-4">
-            <span className="text-green-400">root</span>
+          <p className="text-yellow-400/50 font-mono text-xs mb-4">
+            <span className="text-yellow-300">root</span>
             <span className="text-gray-600">@</span>
             <span className="text-yellow-400">king-keys</span>
             <span className="text-gray-600">:~$</span> ./licenses.sh --stats
@@ -126,8 +126,8 @@ export default function StatsTerminal() {
           ))}
 
           <div className="flex items-center gap-2 mt-4 text-sm">
-            <span className="text-green-400 font-mono">root@king-keys:~$</span>
-            <span className={`font-mono text-green-300/90 ${cursor ? "opacity-100" : "opacity-0"}`}>_</span>
+            <span className="text-yellow-400 font-mono">root@king-keys:~$</span>
+            <span className={`font-mono text-yellow-300/90 ${cursor ? "opacity-100" : "opacity-0"}`}>_</span>
           </div>
         </div>
       </div>
