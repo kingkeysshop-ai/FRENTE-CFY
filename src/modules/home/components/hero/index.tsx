@@ -291,23 +291,23 @@ function ParticleCanvas() {
       const now = Date.now()
       particles = particles.filter((p) => now - p.born < 30000)
     }
-
     const cleanupInterval = setInterval(cleanup, 5000)
 
-    init()
-    draw()
-    canvas.addEventListener("click", onClick)
-    canvas.addEventListener("mousemove", onMove)
-    canvas.addEventListener("mouseleave", onLeave)
+    function onClick(e: MouseEvent) {
+      const rect = canvas!.getBoundingClientRect()
+      const cx = e.clientX - rect.left
+      const cy = e.clientY - rect.top
 
-    return () => {
-      cancelAnimationFrame(animId)
-      clearInterval(cleanupInterval)
-      observer.disconnect()
-      canvas.removeEventListener("click", onClick)
-      canvas.removeEventListener("mousemove", onMove)
-      canvas.removeEventListener("mouseleave", onLeave)
-    }
+      for (const p of particles) {
+        const dx = p.x - cx
+        const dy = p.y - cy
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        if (dist < 300 && dist > 0) {
+          const force = (300 - dist) / 300
+          const angle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.8
+          p.vx += Math.cos(angle) * force * (12 + Math.random() * 8)
+          p.vy += Math.sin(angle) * force * (12 + Math.random() * 8)
+        }
       }
 
       for (let i = 0; i < 6; i++) {
@@ -338,7 +338,7 @@ function ParticleCanvas() {
 
     function onLeave() { mouseActive = false }
 
-    const observer = new ResizeObserver(() => { resize() })
+    const observer = new ResizeObserver(() => resize())
     observer.observe(parent)
 
     init()
@@ -349,6 +349,7 @@ function ParticleCanvas() {
 
     return () => {
       cancelAnimationFrame(animId)
+      clearInterval(cleanupInterval)
       observer.disconnect()
       canvas.removeEventListener("click", onClick)
       canvas.removeEventListener("mousemove", onMove)
