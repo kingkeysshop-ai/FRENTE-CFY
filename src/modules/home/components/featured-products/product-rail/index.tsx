@@ -18,7 +18,7 @@ export default async function ProductRail({
     queryParams: {
       collection_id: [collection.id],
     },
-  })
+  }).catch(() => ({ response: { products: [], count: 0 }, nextPage: null }))
 
   if (!pricedProducts?.length) return null
 

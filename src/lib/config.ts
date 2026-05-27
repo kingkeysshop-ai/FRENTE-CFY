@@ -67,7 +67,10 @@ client.fetch = async <T>(
 
   const payload = body ?? undefined
 
-  return client.request(method, path, payload, undefined, mergedHeaders)
+  return client.request(method, path, payload, undefined, mergedHeaders).catch((err: any) => {
+    console.error("API_ERROR:", method, path, "status:", err.response?.status, "body:", JSON.stringify(err.response?.data).slice(0,500), "q:", JSON.stringify(query).slice(0,300))
+    throw err
+  })
 }
 
 const store = {

@@ -21,7 +21,7 @@ export default async function Home(props: {
     listCollections().catch(() => ({ collections: [] })),
   ])
 
-  if (!collections || !region) return null
+  if (!collections || !region) return <div className="min-h-screen bg-gray-950" />
 
   return (
     <div className="min-h-screen bg-gray-950">
