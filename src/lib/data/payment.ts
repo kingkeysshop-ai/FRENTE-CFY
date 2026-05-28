@@ -5,6 +5,8 @@ import { getAuthHeaders, getCacheOptions } from "./cookies"
 import { HttpTypes } from "@medusajs/types"
 
 export const listCartPaymentMethods = async (regionId: string) => {
+  if (!regionId) return null
+
   const headers = {
     ...(await getAuthHeaders()),
   }
@@ -14,18 +16,17 @@ export const listCartPaymentMethods = async (regionId: string) => {
   }
 
   return sdk.client
-    .fetch<any>(
-      `/store/payment-providers`,
+    .fetch<{ region: HttpTypes.StoreRegion }>(
+      `/store/regions/${regionId}`,
       {
         method: "GET",
-        query: { region_id: regionId },
         headers,
         next,
         cache: "force-cache",
       }
     )
-    .then(({ payment_providers }) =>
-      payment_providers.sort((a: any, b: any) => {
+    .then(({ region }) =>
+      (region.payment_providers || []).sort((a: any, b: any) => {
         return a.id > b.id ? 1 : -1
       })
     )
