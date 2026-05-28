@@ -1,3 +1,5 @@
+import "server-only"
+
 import { getLocaleHeader } from "@lib/util/get-locale-header"
 import Medusa from "@medusajs/medusa-js"
 
@@ -124,8 +126,18 @@ const store = {
   },
   payment: {
     initiatePaymentSession: async (cart: any, data: { provider_id: string }, _opts?: unknown, headers?: Record<string, string>) => {
-      await sdk.carts.createPaymentSessions(cart.id, headers)
-      return sdk.carts.setPaymentSession(cart.id, { provider_id: data.provider_id } as any, headers)
+      try {
+        return await sdk.carts.setPaymentSession(cart.id, { provider_id: data.provider_id } as any, headers)
+      } catch (error: any) {
+        if (
+          error.response?.data?.message === "Could not find payment session" ||
+          error.response?.data?.type === "payment_session"
+        ) {
+          await sdk.carts.createPaymentSessions(cart.id, headers)
+          return sdk.carts.setPaymentSession(cart.id, { provider_id: data.provider_id } as any, headers)
+        }
+        throw error
+      }
     },
   },
 }

@@ -9,7 +9,7 @@ type AccountInfoProps = {
   currentInfo: string | React.ReactNode
   isSuccess?: boolean
   isError?: boolean
-  errorMessage?: string
+  errorMessage?: string | null
   clearState: () => void
   children?: React.ReactNode
   "data-testid"?: string

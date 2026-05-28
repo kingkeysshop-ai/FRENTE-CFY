@@ -256,10 +256,9 @@ export async function initiatePaymentSession(
 
   return (sdk as any).store.payment
     .initiatePaymentSession(cart, data, {}, headers)
-    .then(async (resp: any) => {
+    .then(async () => {
       const cartCacheTag = await getCacheTag("carts")
       revalidateTag(cartCacheTag)
-      return resp
     })
     .catch(medusaError)
 }
