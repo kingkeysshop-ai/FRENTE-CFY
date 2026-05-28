@@ -31,7 +31,9 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
       .finally(() => setUpdating(false))
   }
 
-  const maxQuantity = item.variant?.manage_inventory ? 10 : 10
+  const maxQuantity = item.variant?.manage_inventory
+    ? Math.min(item.variant.inventory_quantity ?? 10, 10)
+    : 10
 
   if (type === "preview") {
     return (

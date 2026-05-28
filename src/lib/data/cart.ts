@@ -46,7 +46,6 @@ export async function retrieveCart(cartId?: string, expand?: string) {
       },
       headers,
       next,
-      cache: "force-cache",
     })
     .then(({ cart }) => cart)
     .catch(() => null)
@@ -395,8 +394,9 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
     return e.message
   }
 
+  const countryCode = formData.get("shipping_address.country_code") || formData.get("billing_address.country_code") || "gb"
   redirect(
-    `/${formData.get("shipping_address.country_code")}/checkout?step=delivery`
+    `/${countryCode}/checkout?step=delivery`
   )
 }
 
@@ -427,7 +427,7 @@ export async function placeOrder(cartId?: string) {
 
   if (cartRes?.type === "order") {
     const countryCode =
-      cartRes.order.shipping_address?.country_code?.toLowerCase()
+      cartRes.order.shipping_address?.country_code?.toLowerCase() || "gb"
 
     const orderCacheTag = await getCacheTag("orders")
     revalidateTag(orderCacheTag)
@@ -484,6 +484,5 @@ export async function listCartOptions() {
   }>(`/store/shipping-options/${cartId}`, {
     next,
     headers,
-    cache: "force-cache",
   })
 }

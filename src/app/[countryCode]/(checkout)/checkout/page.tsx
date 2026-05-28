@@ -11,13 +11,13 @@ export const metadata: Metadata = {
 }
 
 export default async function Checkout() {
-  const cart = await retrieveCart()
+  const cart = await retrieveCart().catch(() => null)
 
   if (!cart) {
     return notFound()
   }
 
-  const customer = await retrieveCustomer()
+  const customer = await retrieveCustomer().catch(() => null)
 
   return (
     <div className="grid grid-cols-1 small:grid-cols-[1fr_416px] content-container gap-x-12 gap-y-8 py-8 small:py-12">

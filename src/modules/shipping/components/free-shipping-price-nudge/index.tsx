@@ -36,7 +36,7 @@ const computeTarget = (
     return {
       current_amount: currentAmount,
       target_amount: targetAmount,
-      target_reached: currentAmount > targetAmount,
+      target_reached: currentAmount >= targetAmount,
       target_remaining:
         currentAmount > targetAmount ? 0 : targetAmount - currentAmount,
       remaining_percentage: (currentAmount / targetAmount) * 100,
@@ -54,7 +54,7 @@ const computeTarget = (
     return {
       current_amount: currentAmount,
       target_amount: targetAmount,
-      target_reached: targetAmount > currentAmount,
+      target_reached: targetAmount >= currentAmount,
       target_remaining:
         targetAmount > currentAmount ? 0 : currentAmount - targetAmount,
       remaining_percentage: (currentAmount / targetAmount) * 100,

@@ -138,7 +138,7 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
                 {customer.first_name?.[0]?.toUpperCase() ?? "👤"}
               </div>
               <div>
-                <p className="text-white font-bold text-sm">{customer.first_name} {customer.last_name}</p>
+                <p className="text-white font-bold text-sm">{customer.first_name ?? ""} {customer.last_name ?? ""}</p>
                 <p className="text-gray-500 text-xs truncate max-w-[160px]">{customer.email}</p>
               </div>
             </div>

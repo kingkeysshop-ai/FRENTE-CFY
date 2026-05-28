@@ -1,5 +1,11 @@
 import { isEmpty } from "./isEmpty"
 
+const noDivisionCurrencies = [
+  "krw", "jpy", "vnd", "clp", "pyg", "xaf", "xof", "bif",
+  "djf", "gnf", "kmf", "mga", "rwf", "xpf", "htg", "vuv",
+  "xag", "xdr", "xau",
+]
+
 type ConvertToLocaleParams = {
   amount: number
   currency_code: string
@@ -15,12 +21,18 @@ export const convertToLocale = ({
   maximumFractionDigits,
   locale = "en-US",
 }: ConvertToLocaleParams) => {
-  return currency_code && !isEmpty(currency_code)
-    ? new Intl.NumberFormat(locale, {
-        style: "currency",
-        currency: currency_code,
-        minimumFractionDigits,
-        maximumFractionDigits,
-      }).format(amount)
-    : amount.toString()
+  if (!currency_code || isEmpty(currency_code)) {
+    return amount.toString()
+  }
+
+  const dividedAmount = noDivisionCurrencies.includes(currency_code.toLowerCase())
+    ? amount
+    : amount / 100
+
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency_code,
+    minimumFractionDigits,
+    maximumFractionDigits,
+  }).format(dividedAmount)
 }

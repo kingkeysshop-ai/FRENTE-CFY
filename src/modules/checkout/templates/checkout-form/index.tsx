@@ -13,12 +13,32 @@ export default async function CheckoutForm({
   cart: HttpTypes.StoreCart | null
   customer: HttpTypes.StoreCustomer | null
 }) {
-  if (!cart) return null
+  if (!cart) {
+    return (
+      <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 text-center">
+        <p className="text-gray-400">No hay carrito activo. Agrega productos primero.</p>
+      </div>
+    )
+  }
+
+  if (!cart.region?.id) {
+    return (
+      <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 text-center">
+        <p className="text-gray-400">Error: región del carrito no disponible. Intenta recargar.</p>
+      </div>
+    )
+  }
 
   const shippingMethods = await listCartShippingMethods(cart.id)
-  const paymentMethods = await listCartPaymentMethods(cart.region?.id ?? "")
+  const paymentMethods = await listCartPaymentMethods(cart.region.id)
 
-  if (!shippingMethods || !paymentMethods) return null
+  if (!shippingMethods || !paymentMethods) {
+    return (
+      <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 text-center">
+        <p className="text-gray-400">Error al cargar opciones de envío o pago. Intenta recargar.</p>
+      </div>
+    )
+  }
 
   return (
     <div className="w-full grid grid-cols-1 gap-y-6">

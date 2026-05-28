@@ -28,9 +28,9 @@ export async function generateStaticParams() {
     }
 
     const countryCodes = await listRegions().then(
-      (regions: any[]) =>
-        regions
-          ?.map((r) => r.countries?.map((c: any) => c.iso_2))
+      (regions: any[] | null) =>
+        (regions ?? [])
+          .map((r) => r.countries?.map((c: any) => c.iso_2))
           .flat()
           .filter(Boolean) as string[]
     )
