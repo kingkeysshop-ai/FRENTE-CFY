@@ -12,13 +12,26 @@ const LineItemOptions = ({
   "data-testid": dataTestid,
   "data-value": dataValue,
 }: LineItemOptionsProps) => {
+  if (!variant?.title && !variant?.options?.length) {
+    return null
+  }
+
+  const optionsText = variant.options
+    ?.map((opt: any) => opt.value)
+    .filter(Boolean)
+    .join(", ")
+
+  const display = variant.title || optionsText
+
+  if (!display) return null
+
   return (
     <Text
       data-testid={dataTestid}
       data-value={dataValue}
       className="inline-block txt-medium text-ui-fg-subtle w-full overflow-hidden text-ellipsis"
     >
-      Variant: {variant?.title}
+      {display}
     </Text>
   )
 }

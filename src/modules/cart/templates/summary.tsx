@@ -24,13 +24,13 @@ function getCheckoutStep(cart: HttpTypes.StoreCart) {
 const Summary = ({ cart }: SummaryProps) => {
   const step = getCheckoutStep(cart)
 
-  // Extraer datos para CartTotals con currency_code
+  const itemsSubtotal = cart.items?.reduce((sum: number, item: any) => sum + (item.total ?? 0), 0) ?? 0
+
   const cartTotals = {
     total: cart.total,
-    subtotal: cart.subtotal,
+    subtotal: cart.subtotal ?? cart.item_subtotal ?? itemsSubtotal,
     tax_total: cart.tax_total,
     currency_code: cart.region?.currency_code || "USD",
-    item_subtotal: cart.item_subtotal,
     shipping_subtotal: cart.shipping_subtotal,
     discount_subtotal: cart.discount_subtotal,
   }

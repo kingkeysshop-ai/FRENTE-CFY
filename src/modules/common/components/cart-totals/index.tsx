@@ -16,14 +16,14 @@ type CartTotalsProps = {
 }
 
 const CartTotals: React.FC<CartTotalsProps> = ({ totals }) => {
-  const { currency_code, total, tax_total, item_subtotal, shipping_subtotal, discount_subtotal } = totals
+  const { currency_code, total, tax_total, subtotal, shipping_subtotal, discount_subtotal } = totals
 
   return (
     <div className="flex flex-col gap-y-3 text-sm">
       <div className="flex items-center justify-between">
         <span className="text-gray-300">Subtotal (sin envío e impuestos)</span>
-        <span className="text-white font-semibold" data-testid="cart-subtotal" data-value={item_subtotal || 0}>
-          {convertToLocale({ amount: item_subtotal ?? 0, currency_code })}
+        <span className="text-white font-semibold" data-testid="cart-subtotal" data-value={subtotal || 0}>
+          {convertToLocale({ amount: subtotal ?? 0, currency_code })}
         </span>
       </div>
       <div className="flex items-center justify-between">
