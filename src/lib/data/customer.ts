@@ -77,7 +77,7 @@ export async function signup(_currentState: unknown, formData: FormData) {
       password,
     })
 
-    const token = await (sdk.auth as any).login("emailpass", "customer", { email, password })
+    const token = await (sdk.auth as any).login("emailpass", "customer", { email: customerForm.email, password })
     await setAuthToken(token)
     const customerCacheTag = await getCacheTag("customers")
     revalidateTag(customerCacheTag)
