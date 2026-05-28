@@ -18,7 +18,7 @@ const Payment = ({
   cart: any
   availablePaymentMethods: any[]
 }) => {
-  const activeSession = cart.payment_collection?.payment_sessions?.find(
+  const activeSession = (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
     (paymentSession: any) => paymentSession.status === "pending"
   )
 
@@ -55,7 +55,7 @@ const Payment = ({
     setIsLoading(true)
     setError(null)
     try {
-      const currentSession = cart.payment_collection?.payment_sessions?.find(
+      const currentSession = (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
         (ps: any) => ps.status === "pending" && ps.provider_id === selectedPaymentMethod
       )
       if (!currentSession) {

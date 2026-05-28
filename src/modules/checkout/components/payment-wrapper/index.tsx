@@ -24,7 +24,7 @@ const stripePromise = stripeKey
   : null
 
 const PaymentWrapper: React.FC<PaymentWrapperProps> = ({ cart, children }) => {
-  const paymentSession = cart.payment_collection?.payment_sessions?.find(
+  const paymentSession = (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
     (s: any) => s.status === "pending"
   )
 

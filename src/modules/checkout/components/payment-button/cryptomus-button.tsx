@@ -15,7 +15,7 @@ const CryptomusPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: P
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const session = cart.payment_collection?.payment_sessions?.find(
+  const session = (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
     (s: any) => s.status === "pending"
   )
 

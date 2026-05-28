@@ -25,7 +25,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
     !cart.email ||
     (cart.shipping_methods?.length ?? 0) < 1
 
-  const paymentSession = cart.payment_collection?.payment_sessions?.[0]
+  const paymentSession = (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.[0]
 
   switch (true) {
     case isStripeLike(paymentSession?.provider_id):
@@ -87,7 +87,7 @@ const StripePaymentButton = ({
   const elements = useElements()
   const card = elements?.getElement("card")
 
-  const session = cart.payment_collection?.payment_sessions?.find(
+  const session = (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
     (s: any) => s.status === "pending"
   )
 
