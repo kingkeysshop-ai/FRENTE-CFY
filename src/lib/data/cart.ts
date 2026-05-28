@@ -465,6 +465,9 @@ export async function updateRegion(countryCode: string, currentPath: string) {
 
 export async function listCartOptions() {
   const cartId = await getCartId()
+  if (!cartId) {
+    return { shipping_options: [] }
+  }
   const headers = {
     ...(await getAuthHeaders()),
   }
@@ -474,8 +477,7 @@ export async function listCartOptions() {
 
   return await sdk.client.fetch<{
     shipping_options: HttpTypes.StoreCartShippingOption[]
-  }>("/store/shipping-options", {
-    query: { cart_id: cartId },
+  }>(`/store/shipping-options/${cartId}`, {
     next,
     headers,
     cache: "force-cache",
