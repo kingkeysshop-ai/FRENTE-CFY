@@ -2,6 +2,7 @@
 
 import { updateLineItem } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
+import { convertToLocale } from "@lib/util/money"
 import CartItemSelect from "@modules/cart/components/cart-item-select"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import DeleteButton from "@modules/common/components/delete-button"
@@ -49,7 +50,7 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
         <div className="flex flex-1 flex-col gap-1 min-w-0">
           <LocalizedClientLink href={`/products/${item.product_handle}`}>
             <p className="text-white font-semibold text-sm hover:text-yellow-400 transition-colors truncate" data-testid="product-title">
-              {item.product_title}
+              {item.title || item.product_title}
             </p>
           </LocalizedClientLink>
           <LineItemOptions variant={item.variant} data-testid="product-variant" />
@@ -108,8 +109,11 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
           </CartItemSelect>
           {updating && <Spinner />}
         </div>
-        <div className="text-yellow-400 font-bold text-sm whitespace-nowrap small:text-right">
-          <LineItemPrice item={item} style="tight" currencyCode={currencyCode} />
+        <div className="flex flex-col items-end gap-0.5">
+          <span className="text-gray-400 text-xs">{item.quantity}x {convertToLocale({ amount: item.unit_price ?? 0, currency_code: currencyCode })}</span>
+          <span className="text-yellow-400 font-bold text-sm whitespace-nowrap">
+            <LineItemPrice item={item} style="tight" currencyCode={currencyCode} />
+          </span>
         </div>
       </div>
       {error && <ErrorMessage error={error} data-testid="product-error-message" />}
