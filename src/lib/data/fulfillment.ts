@@ -15,12 +15,9 @@ export const listCartShippingMethods = async (cartId: string) => {
 
   return sdk.client
     .fetch<any>(
-      `/store/shipping-options`,
+      `/store/shipping-options/${cartId}`,
       {
         method: "GET",
-        query: {
-          cart_id: cartId,
-        },
         headers,
         next,
         cache: "force-cache",
