@@ -56,15 +56,15 @@ export const isPaypal = (providerId?: string) => {
 }
 
 export const isManual = (providerId?: string) => {
-  return providerId?.startsWith("pp_system_default")
+  return providerId?.startsWith("pp_system_default") || providerId === "manual"
 }
 
 export const isCryptomus = (providerId?: string) => {
-  return providerId?.startsWith("pp_cryptomus")
+  return providerId?.startsWith("pp_cryptomus") || providerId === "cryptomus"
 }
 
 export const isAurpay = (providerId?: string) => {
-  return providerId?.startsWith("pp_aurpay")
+  return providerId?.startsWith("pp_aurpay") || providerId === "aurapay"
 }
 
 export const noDivisionCurrencies = [
