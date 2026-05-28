@@ -20,6 +20,7 @@ export const listCartPaymentMethods = async (regionId: string) => {
       `/store/regions/${regionId}`,
       {
         method: "GET",
+        query: { expand: "payment_providers" },
         headers,
         next,
       }
