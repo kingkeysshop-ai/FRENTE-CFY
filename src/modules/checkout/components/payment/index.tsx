@@ -18,9 +18,11 @@ const Payment = ({
   cart: any
   availablePaymentMethods: any[]
 }) => {
-  const activeSession = (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
-    (paymentSession: any) => paymentSession.status === "pending"
-  )
+  const activeSession = cart.payment_session?.status === "pending"
+    ? cart.payment_session
+    : (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
+        (paymentSession: any) => paymentSession.status === "pending"
+      )
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -55,9 +57,11 @@ const Payment = ({
     setIsLoading(true)
     setError(null)
     try {
-      const currentSession = (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
-        (ps: any) => ps.status === "pending" && ps.provider_id === selectedPaymentMethod
-      )
+      const currentSession = cart.payment_session?.status === "pending" && cart.payment_session?.provider_id === selectedPaymentMethod
+        ? cart.payment_session
+        : (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
+            (ps: any) => ps.status === "pending" && ps.provider_id === selectedPaymentMethod
+          )
       if (!currentSession) {
         await initiatePaymentSession(cart, { provider_id: selectedPaymentMethod })
       }

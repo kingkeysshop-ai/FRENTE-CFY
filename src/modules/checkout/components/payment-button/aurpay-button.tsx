@@ -21,9 +21,11 @@ const AurpayPaymentButton: React.FC<AurpayPaymentButtonProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   // Obtener la sesión de pago de Aurpay (generada por el backend con HMAC-SHA256)
-  const paymentSession = (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
-    (s: any) => s.provider_id?.startsWith("pp_aurpay") && s.status === "pending"
-  )
+  const paymentSession = cart.payment_session?.provider_id?.startsWith("pp_aurpay") && cart.payment_session?.status === "pending"
+    ? cart.payment_session
+    : (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
+        (s: any) => s.provider_id?.startsWith("pp_aurpay") && s.status === "pending"
+      )
   const payUrl = paymentSession?.data?.pay_url as string | undefined
 
   const handlePayment = async () => {
