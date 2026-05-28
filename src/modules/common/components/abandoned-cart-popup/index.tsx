@@ -1,9 +1,25 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, useRef } from "react"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
-const POPUP_SEEN_KEY = "kingkeys_abandoned_popup_seen"
+const POPUP_COOLDOWN_KEY = "kingkeys_abandoned_popup_last"
+const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000 // 7 days
+
+const canShow = (): boolean => {
+  try {
+    const last = localStorage.getItem(POPUP_COOLDOWN_KEY)
+    return !last || Date.now() - Number(last) >= COOLDOWN_MS
+  } catch {
+    return false
+  }
+}
+
+const markShown = (): void => {
+  try {
+    localStorage.setItem(POPUP_COOLDOWN_KEY, Date.now().toString())
+  } catch {}
+}
 
 type AbandonedCartPopupProps = {
   itemCount: number
@@ -11,29 +27,27 @@ type AbandonedCartPopupProps = {
 
 const AbandonedCartPopup = ({ itemCount }: AbandonedCartPopupProps) => {
   const [visible, setVisible] = useState(false)
+  const mounted = useRef(false)
 
   const dismiss = useCallback(() => {
     setVisible(false)
-    sessionStorage.setItem(POPUP_SEEN_KEY, "true")
+    markShown()
   }, [])
 
   useEffect(() => {
-    if (itemCount === 0) return
-    if (sessionStorage.getItem(POPUP_SEEN_KEY)) return
+    if (mounted.current) return
+    mounted.current = true
 
-    const handleMouseLeave = (e: MouseEvent) => {
-      if (e.clientY > 0) return
-      setVisible(true)
-    }
+    if (itemCount === 0 || !canShow()) return
 
     const delay = setTimeout(() => {
-      document.addEventListener("mouseleave", handleMouseLeave)
-    }, 5000)
+      document.addEventListener("mouseleave", (e: MouseEvent) => {
+        if (e.clientY > 0) return
+        setVisible(true)
+      }, { once: true })
+    }, 15000)
 
-    return () => {
-      clearTimeout(delay)
-      document.removeEventListener("mouseleave", handleMouseLeave)
-    }
+    return () => clearTimeout(delay)
   }, [itemCount])
 
   if (!visible) return null
