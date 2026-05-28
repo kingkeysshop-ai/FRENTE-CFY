@@ -119,8 +119,10 @@ const store = {
     },
   },
   payment: {
-    initiatePaymentSession: async (cart: any, data: { provider_id: string }, _opts?: unknown, headers?: Record<string, string>) =>
-      sdk.carts.setPaymentSession(cart.id, { provider_id: data.provider_id } as any, headers),
+    initiatePaymentSession: async (cart: any, data: { provider_id: string }, _opts?: unknown, headers?: Record<string, string>) => {
+      await sdk.carts.createPaymentSessions(cart.id, headers)
+      return sdk.carts.setPaymentSession(cart.id, { provider_id: data.provider_id } as any, headers)
+    },
   },
 }
 
