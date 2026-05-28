@@ -24,7 +24,7 @@ import { getLocale } from "@lib/data/locale-actions"
 export async function retrieveCart(cartId?: string, expand?: string) {
   const id = cartId || (await getCartId())
   expand ??=
-    "items,items.variant,items.variant.product,region,shipping_methods,payment_sessions,shipping_address"
+    "items,items.variant,items.variant.product,region,shipping_methods,payment_sessions,shipping_address,billing_address"
 
   if (!id) {
     return null

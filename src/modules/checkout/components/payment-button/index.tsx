@@ -21,7 +21,6 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
   const notReady =
     !cart ||
     !cart.shipping_address ||
-    !cart.billing_address ||
     !cart.email ||
     (cart.shipping_methods?.length ?? 0) < 1
 
