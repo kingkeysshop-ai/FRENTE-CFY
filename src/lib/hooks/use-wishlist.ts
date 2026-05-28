@@ -1,33 +1,29 @@
 "use client"
 
-import { useCallback, useSyncExternalStore } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 const STORAGE_KEY = "kingkeys_wishlist"
 
-function getSnapshot(): string[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? JSON.parse(raw) : []
-  } catch {
-    return []
-  }
-}
-
-function subscribe(callback: () => void) {
-  window.addEventListener("storage", callback)
-  return () => window.removeEventListener("storage", callback)
-}
-
 export function useWishlist() {
-  const items = useSyncExternalStore(subscribe, getSnapshot, () => [])
+  const [items, setItems] = useState<string[]>([])
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      setItems(raw ? JSON.parse(raw) : [])
+    } catch {
+      setItems([])
+    }
+  }, [])
 
   const toggle = useCallback((productId: string) => {
-    const current = getSnapshot()
-    const next = current.includes(productId)
-      ? current.filter((id) => id !== productId)
-      : [...current, productId]
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
-    window.dispatchEvent(new Event("storage"))
+    setItems((prev) => {
+      const next = prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId]
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+      return next
+    })
   }, [])
 
   const isWishlisted = useCallback(
