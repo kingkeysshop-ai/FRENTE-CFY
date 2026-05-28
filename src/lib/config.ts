@@ -126,18 +126,8 @@ const store = {
   },
   payment: {
     initiatePaymentSession: async (cart: any, data: { provider_id: string }, _opts?: unknown, headers?: Record<string, string>) => {
-      try {
-        return await sdk.carts.setPaymentSession(cart.id, { provider_id: data.provider_id } as any, headers)
-      } catch (error: any) {
-        if (
-          error.response?.data?.message === "Could not find payment session" ||
-          error.response?.data?.type === "payment_session"
-        ) {
-          await sdk.carts.createPaymentSessions(cart.id, headers)
-          return sdk.carts.setPaymentSession(cart.id, { provider_id: data.provider_id } as any, headers)
-        }
-        throw error
-      }
+      await sdk.carts.createPaymentSessions(cart.id, headers)
+      return sdk.carts.setPaymentSession(cart.id, { provider_id: data.provider_id } as any, headers)
     },
   },
 }
