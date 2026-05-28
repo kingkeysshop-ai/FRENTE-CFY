@@ -1,8 +1,9 @@
 "use client"
-import React, { useActionState } from "react"
+import React, { useEffect, useActionState } from "react"
 import Input from "@modules/common/components/input"
 import AccountInfo from "../account-info"
 import { HttpTypes } from "@medusajs/types"
+import { updateCustomerPassword } from "@lib/data/customer"
 
 type MyInformationProps = {
   customer: HttpTypes.StoreCustomer
@@ -11,17 +12,14 @@ type MyInformationProps = {
 const ProfilePassword: React.FC<MyInformationProps> = ({ customer }) => {
   const [successState, setSuccessState] = React.useState(false)
 
-  const updatePassword = async (
-    _currentState: Record<string, unknown>,
-    formData: FormData
-  ) => {
-    return { success: false, error: "La actualización de contraseña no está disponible aún." }
-  }
-
-  const [state, formAction] = useActionState(updatePassword, {
+  const [state, formAction] = useActionState(updateCustomerPassword, {
     error: "",
     success: false,
   })
+
+  useEffect(() => {
+    setSuccessState(state.success)
+  }, [state])
 
   const clearState = () => setSuccessState(false)
 
@@ -35,8 +33,8 @@ const ProfilePassword: React.FC<MyInformationProps> = ({ customer }) => {
           </span>
         }
         isSuccess={successState}
-        isError={false}
-        errorMessage={undefined}
+        isError={!!state.error}
+        errorMessage={state.error}
         clearState={clearState}
         data-testid="account-password-editor"
       >
@@ -63,9 +61,6 @@ const ProfilePassword: React.FC<MyInformationProps> = ({ customer }) => {
             data-testid="confirm-password-input"
           />
         </div>
-        <p className="text-xs text-gray-500 italic mt-2">
-          ⚠️ La actualización de contraseña no está disponible actualmente.
-        </p>
       </AccountInfo>
     </form>
   )

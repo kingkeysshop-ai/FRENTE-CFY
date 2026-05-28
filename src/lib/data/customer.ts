@@ -149,6 +149,90 @@ export async function transferCart() {
   revalidateTag(cartCacheTag)
 }
 
+// ─── Actualizar contraseña del cliente autenticado ────────────────────────────
+export const updateCustomerPassword = async (
+  _currentState: Record<string, unknown>,
+  formData: FormData
+): Promise<{ success: boolean; error: string | null }> => {
+  const oldPassword = formData.get("old_password") as string
+  const newPassword = formData.get("new_password") as string
+  const confirmPassword = formData.get("confirm_password") as string
+
+  if (!oldPassword || !newPassword || !confirmPassword) {
+    return { success: false, error: "Todos los campos son obligatorios" }
+  }
+
+  if (newPassword !== confirmPassword) {
+    return { success: false, error: "Las contraseñas nuevas no coinciden" }
+  }
+
+  const headers = {
+    ...(await getAuthHeaders()),
+  }
+
+  try {
+    await sdk.customers.update(
+      { password: newPassword, old_password: oldPassword } as any,
+      headers
+    )
+    const cacheTag = await getCacheTag("customers")
+    revalidateTag(cacheTag)
+    return { success: true, error: null }
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.response?.data?.message || error.message || "Error al actualizar la contraseña",
+    }
+  }
+}
+
+// ─── Generar token de recuperación de contraseña ───────────────────────────────
+export async function generatePasswordToken(
+  _currentState: { error: string | null; submitted: boolean },
+  formData: FormData
+): Promise<{ error: string | null; submitted: boolean }> {
+  const email = formData.get("email") as string
+  if (!email) return { error: "El correo electrónico es obligatorio", submitted: true }
+
+  const headers = {
+    ...(await getAuthHeaders()),
+  }
+
+  try {
+    await (sdk as any).store.customer.generatePasswordToken(email, {}, headers)
+    return { error: null, submitted: true }
+  } catch (error: any) {
+    return {
+      error: error.response?.data?.message || error.message || "Error al enviar el correo de recuperación",
+      submitted: true,
+    }
+  }
+}
+
+// ─── Restablecer contraseña ───────────────────────────────────────────────────
+export async function resetPassword(
+  _currentState: { error: string | null; submitted: boolean },
+  formData: FormData
+): Promise<{ error: string | null; submitted: boolean }> {
+  const email = formData.get("email") as string
+  const token = formData.get("token") as string
+  const password = formData.get("password") as string
+  const passwordConfirm = formData.get("password_confirm") as string
+
+  if (!email || !token || !password) return { error: "Todos los campos son obligatorios", submitted: true }
+  if (password !== passwordConfirm) return { error: "Las contraseñas no coinciden", submitted: true }
+
+  try {
+    await (sdk as any).store.customer.resetPassword({ email, token, password }, {}, {})
+    return { error: null, submitted: true }
+  } catch (error: any) {
+    return {
+      error: error.response?.data?.message || error.message || "Error al restablecer la contraseña",
+      submitted: true,
+    }
+  }
+}
+
 // ─── Agregar dirección al cliente ─────────────────────────────────────────────
 export const addCustomerAddress = async (
   currentState: Record<string, unknown>,

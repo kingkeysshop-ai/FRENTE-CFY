@@ -108,6 +108,10 @@ const store = {
       sdk.customers.addresses.deleteAddress(addressId, headers),
     updateAddress: (addressId: string, payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
       sdk.customers.addresses.updateAddress(addressId, payload as any, headers),
+    generatePasswordToken: (email: string, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.customers.generatePasswordToken({ email } as any, headers),
+    resetPassword: (payload: { email: string; token: string; password: string }, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.customers.resetPassword(payload as any, headers),
   },
   order: {
     requestTransfer: (id: string, _payload?: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
