@@ -28,10 +28,10 @@ export const retrieveOrder = async (id: string) => {
     .then(({ order }) => order)
 }
 
-// ─── Listar órdenes del cliente ───────────────────────────────────────────────
+// ─── Listar órdenes del cliente (Medusa v1) ──────────────────────────────────
 export const listOrders = async (
-  limit: number = 10,
-  offset: number = 0,
+  _limit: number = 10,
+  _offset: number = 0,
   filters?: Record<string, any>
 ) => {
   const next = {
@@ -44,8 +44,6 @@ export const listOrders = async (
       {
         method: "GET",
         query: {
-          limit,
-          offset,
           expand: "items,shipping_address,billing_address,payment_collections",
           ...filters,
         },
