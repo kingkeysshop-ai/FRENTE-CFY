@@ -1,137 +1,72 @@
 "use client"
 
-import { placeOrder } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
-import Image from "next/image"
-import React, { useState } from "react"
+import { useState } from "react"
 import ErrorMessage from "../error-message"
 
-type AurpayPaymentButtonProps = {
+type Props = {
   cart: HttpTypes.StoreCart
   notReady: boolean
   "data-testid"?: string
 }
 
-const AurpayPaymentButton: React.FC<AurpayPaymentButtonProps> = ({
-  cart,
-  notReady,
-  "data-testid": dataTestId,
-}) => {
+const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Props) => {
   const [submitting, setSubmitting] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
-  // Obtener la sesión de pago de Aurpay (generada por el backend con HMAC-SHA256)
-  const paymentSession = (cart.payment_session?.provider_id === "aurapay" || cart.payment_session?.provider_id?.startsWith("pp_aurpay")) && cart.payment_session?.status === "pending"
-    ? cart.payment_session
-    : (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
-        (s: any) => (s.provider_id === "aurapay" || s.provider_id?.startsWith("pp_aurpay")) && s.status === "pending"
-      )
-  const payUrl = paymentSession?.data?.pay_url as string | undefined
+  const paymentSession =
+    cart.payment_session?.status === "pending"
+      ? cart.payment_session
+      : (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
+          (s: any) => s.status === "pending"
+        )
 
   const handlePayment = async () => {
     if (submitting || notReady) return
-
-    if (!payUrl) {
-      setErrorMessage(
-        "No se pudo generar el enlace de pago de Aurpay. Intenta recargar la página."
-      )
-      return
-    }
-
     setSubmitting(true)
+    setError(null)
 
     try {
-      // 1) Crear la orden en Medusa (queda en estado pending hasta que webhook confirme)
-      await placeOrder()
+      const amount = ((cart.total ?? 0) / 100).toFixed(2)
+      const currency = (cart.region?.currency_code ?? "USD").toUpperCase()
+      const orderId = `${cart.id}-${Date.now()}`
+      const cartId = cart.id
 
-      // 2) Redirigir al usuario a Aurpay para completar el pago
-      window.location.href = payUrl
+      const res = await fetch("/api/aurpay/create-invoice", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount, currency, orderId, cartId }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok || !data.url) {
+        throw new Error(data.error || "No se pudo generar el enlace de pago de Aurpay")
+      }
+
+      window.location.href = data.url
     } catch (err: any) {
-      setErrorMessage(err.message || "Error al iniciar el pago")
+      setError(err.message)
       setSubmitting(false)
     }
   }
 
   return (
-    <div className="w-full flex flex-col items-center gap-4">
+    <>
       <button
-        type="button"
+        disabled={notReady || submitting || !paymentSession}
         onClick={handlePayment}
-        disabled={notReady || submitting || !payUrl}
-        data-testid={dataTestId}
-        style={{
-          boxShadow:
-            "0 5px 30px 2px rgb(0 0 0 / 0.06), 0 3px 15px -4px rgb(0 0 0 / 0.06)",
-          cursor:
-            notReady || submitting || !payUrl ? "not-allowed" : "pointer",
-          height: "54px",
-          paddingLeft: "20px",
-          boxSizing: "border-box",
-          border: "none",
-          outline: "none",
-          background: "#23275D",
-          borderRadius: "5px",
-          display: "flex",
-          alignItems: "center",
-          overflow: "hidden",
-          opacity: notReady || submitting || !payUrl ? 0.5 : 1,
-          width: "100%",
-          justifyContent: "center",
-          maxWidth: "400px",
-        }}
+        data-testid={dataTestId ?? "aurpay-payment-button"}
+        className="w-full py-4 bg-yellow-400 text-gray-900 font-black text-base rounded-xl hover:bg-yellow-300 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2"
       >
         {submitting ? (
-          <span className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+          <span className="inline-block w-5 h-5 border-2 border-gray-900 border-t-transparent rounded-full animate-spin" />
         ) : (
-          <Image
-            width={24}
-            height={24}
-            src="https://aurpay.net/wp-content/uploads/2022/06/favicon-logo.png"
-            alt="logo"
-          />
+          "Pagar con Aurpay (Crypto)"
         )}
-        <span
-          style={{
-            display: "block",
-            height: "54px",
-            backgroundColor: "#191D48",
-            padding: "12px 20px",
-            boxSizing: "border-box",
-            transform: "skewX(-15deg) translateX(0.875rem)",
-            textAlign: "center",
-            flex: 1,
-          }}
-        >
-          <span
-            style={{
-              display: "block",
-              color: "#FFFFFF",
-              fontSize: "14px",
-              marginBottom: "4px",
-              transform: "skewX(8deg)",
-              fontWeight: 700,
-            }}
-          >
-            {submitting ? "Procesando..." : "Pay with Aurpay"}
-          </span>
-          <span
-            style={{
-              display: "block",
-              fontSize: "10px",
-              color: "#FFFFFF",
-              opacity: 0.5,
-              transform: "skewX(6deg)",
-            }}
-          >
-            Secured by Aurpay
-          </span>
-        </span>
       </button>
-      <ErrorMessage
-        error={errorMessage}
-        data-testid="aurpay-payment-error-message"
-      />
-    </div>
+      <ErrorMessage error={error} data-testid="aurpay-payment-error" />
+    </>
   )
 }
 

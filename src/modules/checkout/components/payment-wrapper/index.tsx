@@ -4,7 +4,7 @@ import { loadStripe } from "@stripe/stripe-js"
 import React from "react"
 import StripeWrapper from "./stripe-wrapper"
 import { HttpTypes } from "@medusajs/types"
-import { isCryptomus, isStripeLike } from "@lib/constants"
+import { isAurpay, isCryptomus, isStripeLike } from "@lib/constants"
 
 type PaymentWrapperProps = {
   cart: HttpTypes.StoreCart
@@ -46,7 +46,7 @@ const PaymentWrapper: React.FC<PaymentWrapperProps> = ({ cart, children }) => {
     )
   }
 
-  // Cryptomus redirects externally, no client-side SDK wrapper needed
+  // Cryptomus and Aurpay redirect externally, no client-side SDK wrapper needed
   return <div>{children}</div>
 }
 
