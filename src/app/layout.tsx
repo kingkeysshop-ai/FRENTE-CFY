@@ -20,6 +20,13 @@ export const metadata: Metadata = {
   other: {
     "theme-color": "#facc15",
   },
+  alternates: {
+    canonical: getBaseURL(),
+    languages: {
+      "x-default": getBaseURL(),
+      es: getBaseURL(),
+    },
+  },
   openGraph: {
     type: "website",
     locale: "es_ES",

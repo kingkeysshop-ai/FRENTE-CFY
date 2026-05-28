@@ -1,6 +1,7 @@
 import ItemsTemplate from "./items"
 import Summary from "./summary"
 import EmptyCartMessage from "../components/empty-cart-message"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import SignInPrompt from "../components/sign-in-prompt"
 import { HttpTypes } from "@medusajs/types"
 
@@ -43,6 +44,12 @@ const CartTemplate = ({
               <div className="bg-gray-900 border border-gray-700 rounded-xl overflow-hidden">
                 <ItemsTemplate cart={cart} />
               </div>
+              <LocalizedClientLink
+                href="/store"
+                className="flex items-center justify-center gap-2 py-3 px-6 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl text-gray-300 hover:text-white text-sm font-semibold transition-all duration-200 w-full small:w-fit"
+              >
+                ← Seguir Comprando
+              </LocalizedClientLink>
             </div>
 
             {/* Resumen */}

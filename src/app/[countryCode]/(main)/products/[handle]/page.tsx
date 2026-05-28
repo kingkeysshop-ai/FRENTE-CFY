@@ -2,6 +2,7 @@ import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { listProducts } from "@lib/data/products"
 import { getRegion, listRegions } from "@lib/data/regions"
+import { getBaseURL } from "@lib/util/env"
 import ProductTemplate from "@modules/products/templates"
 import { HttpTypes } from "@medusajs/types"
 
@@ -92,6 +93,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return {
     title: `${product.title} | Medusa Store`,
     description: `${product.title}`,
+    alternates: {
+      canonical: `${getBaseURL()}/${params.countryCode}/products/${params.handle}`,
+    },
     openGraph: {
       title: `${product.title} | Medusa Store`,
       description: `${product.title}`,

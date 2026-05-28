@@ -2,6 +2,7 @@ import { listProducts } from "@lib/data/products"
 import { getProductPrice } from "@lib/util/get-product-price"
 import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import WishlistButton from "@modules/wishlist/components/wishlist-button"
 import Thumbnail from "../thumbnail"
 import PreviewPrice from "./price"
 
@@ -39,6 +40,10 @@ export default async function ProductPreview({
               🔥 Oferta
             </span>
           )}
+          {/* Wishlist heart */}
+          <div className="absolute top-3 right-3 z-10">
+            <WishlistButton productId={product.id} />
+          </div>
           {/* Overlay con boton ver */}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
             <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4 py-2 bg-yellow-400 text-gray-900 text-sm font-bold rounded-lg">

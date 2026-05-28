@@ -44,6 +44,14 @@ export default async function Nav() {
               <Suspense fallback={null}>
                 <SearchBar />
               </Suspense>
+              <LocalizedClientLink
+                href="/wishlist"
+                className="flex items-center gap-1 text-sm text-gray-400 hover:text-yellow-400 transition-colors"
+                aria-label="Favoritos"
+              >
+                <span>❤️</span>
+                <span className="hidden small:inline">Favoritos</span>
+              </LocalizedClientLink>
               <NavLinks />
               <Suspense
                 fallback={
