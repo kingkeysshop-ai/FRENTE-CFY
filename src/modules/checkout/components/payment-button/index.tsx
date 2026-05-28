@@ -77,9 +77,16 @@ const StripePaymentButton = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const onPaymentCompleted = async () => {
-    await placeOrder()
-      .catch((err: any) => setErrorMessage(err.message))
-      .finally(() => setSubmitting(false))
+    try {
+      await placeOrder()
+    } catch (err: any) {
+      if (err?.digest === "NEXT_REDIRECT") {
+        throw err
+      }
+      setErrorMessage(err.message)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const stripe = useStripe()
@@ -169,9 +176,16 @@ const ManualTestPaymentButton = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const onPaymentCompleted = async () => {
-    await placeOrder()
-      .catch((err: any) => setErrorMessage(err.message))
-      .finally(() => setSubmitting(false))
+    try {
+      await placeOrder()
+    } catch (err: any) {
+      if (err?.digest === "NEXT_REDIRECT") {
+        throw err
+      }
+      setErrorMessage(err.message)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const handlePayment = async () => {
