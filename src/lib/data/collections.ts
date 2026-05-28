@@ -41,7 +41,7 @@ export const listCollections = async (
         cache: "force-cache",
       }
     )
-    .then(({ collections }) => ({ collections, count: collections.length }))
+    .then(({ collections, count }) => ({ collections, count }))
 }
 
 export const getCollectionByHandle = async (
@@ -53,7 +53,7 @@ export const getCollectionByHandle = async (
 
   return sdk.client
     .fetch<any>(`/store/collections`, {
-      query: { handle: [handle] },
+      query: { handle },
       next,
       cache: "force-cache",
     })

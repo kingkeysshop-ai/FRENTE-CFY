@@ -22,7 +22,7 @@ export const retrieveVariant = async (
 
   return await sdk.client
     .fetch<{ variant: any }>(
-      `/store/product-variants/${variant_id}`,
+      `/store/variants/${variant_id}`,
       {
         method: "GET",
         headers,

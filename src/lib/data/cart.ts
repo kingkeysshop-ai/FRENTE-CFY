@@ -276,8 +276,12 @@ export async function applyPromotions(codes: string[]) {
     ...(await getAuthHeaders()),
   }
 
+  const cart = await retrieveCart(cartId)
+  const existingCodes = cart?.discounts?.map((d: any) => d.code) || []
+  const mergedCodes = Array.from(new Set([...existingCodes, ...codes]))
+
   return (sdk as any).store.cart
-    .update(cartId, { discount_codes: codes }, {}, headers)
+    .update(cartId, { discount_codes: mergedCodes }, {}, headers)
     .then(async () => {
       const cartCacheTag = await getCacheTag("carts")
       revalidateTag(cartCacheTag)

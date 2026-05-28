@@ -16,18 +16,7 @@ export const retrieveOrder = async (id: string) => {
       {
         method: "GET",
         query: {
-          fields: [
-            "+items",
-            "+items.variant",
-            "+items.variant.product",
-            "+items.thumbnail",
-            "+shipping_address",
-            "+billing_address",
-            "+shipping_methods",
-            "+payment_collections",
-            "+fulfillments",
-            "+fulfillments.tracking_links",
-          ].join(","),
+          expand: "items,items.variant,items.variant.product,items.thumbnail,shipping_address,billing_address,shipping_methods,payment_collections,fulfillments,fulfillments.tracking_links",
         },
         headers: {
           ...(await getAuthHeaders()),
@@ -57,7 +46,7 @@ export const listOrders = async (
         query: {
           limit,
           offset,
-          fields: "+items,+shipping_address,+billing_address,+payment_collections",
+          expand: "items,shipping_address,billing_address,payment_collections",
           ...filters,
         },
         headers: {
@@ -83,13 +72,7 @@ export const createTransferRequest = async (
   const headers = await getAuthHeaders()
 
   try {
-    const { order } = await sdk.client.fetch<{ order: HttpTypes.StoreOrder }>(
-      `/store/orders/${orderId}/transfer`,
-      {
-        method: "POST",
-        headers,
-      }
-    )
+    const { order } = await (sdk as any).store.order.requestTransfer(orderId, {}, {}, headers)
 
     return { success: true, error: null, order }
   } catch (error: any) {
@@ -108,13 +91,7 @@ export const acceptTransferRequest = async (
 ): Promise<{ order: HttpTypes.StoreOrder }> => {
   const headers = await getAuthHeaders()
 
-  return sdk.client.fetch<{ order: HttpTypes.StoreOrder }>(
-    `/store/orders/${orderId}/transfer/${token}/accept`,
-    {
-      method: "POST",
-      headers,
-    }
-  )
+  return (sdk as any).store.order.acceptTransfer(orderId, { token }, {}, headers)
 }
 
 // ─── Rechazar solicitud de transferencia ─────────────────────────────────────
@@ -124,11 +101,5 @@ export const declineTransferRequest = async (
 ): Promise<{ order: HttpTypes.StoreOrder }> => {
   const headers = await getAuthHeaders()
 
-  return sdk.client.fetch<{ order: HttpTypes.StoreOrder }>(
-    `/store/orders/${orderId}/transfer/${token}/decline`,
-    {
-      method: "POST",
-      headers,
-    }
-  )
+  return (sdk as any).store.order.declineTransfer(orderId, { token }, {}, headers)
 }

@@ -144,12 +144,7 @@ export async function transferCart() {
 
   const headers = await getAuthHeaders()
 
-  await sdk.client.fetch(`/store/carts/${cartId}/transfer`, {
-    method: "POST",
-    headers: {
-      ...headers,
-    },
-  })
+  await (sdk as any).store.cart.transferCart(cartId, {}, {}, headers)
 
   const cartCacheTag = await getCacheTag("carts")
   revalidateTag(cartCacheTag)
