@@ -100,7 +100,7 @@ const StripePaymentButton = ({
       return
     }
     await stripe
-      .confirmCardPayment(session?.data.client_secret as string, {
+      .confirmCardPayment(session?.data?.client_secret as string, {
         payment_method: {
           card,
           billing_details: {
@@ -122,7 +122,7 @@ const StripePaymentButton = ({
         if (error) {
           const pi = error.payment_intent
           if ((pi && pi.status === "requires_capture") || (pi && pi.status === "succeeded")) {
-            onPaymentCompleted()
+            return onPaymentCompleted()
           }
           setErrorMessage(error.message || null)
           return
@@ -133,6 +133,8 @@ const StripePaymentButton = ({
         ) {
           return onPaymentCompleted()
         }
+        setErrorMessage("Estado de pago inesperado: " + paymentIntent.status)
+        setSubmitting(false)
       })
   }
 

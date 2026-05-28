@@ -11,7 +11,7 @@ import ErrorMessage from "@modules/checkout/components/error-message"
 import Divider from "@modules/common/components/divider"
 import MedusaRadio from "@modules/common/components/radio"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 const PICKUP_OPTION_ON = "__PICKUP_ON"
 const PICKUP_OPTION_OFF = "__PICKUP_OFF"
@@ -47,17 +47,17 @@ const Shipping: React.FC<ShippingProps> = ({ cart, availableShippingMethods }) =
 
   const isOpen = searchParams.get("step") === "delivery"
 
-  const _pickupMethods = availableShippingMethods?.filter(
+  const _pickupMethods = useMemo(() => availableShippingMethods?.filter(
     (sm) =>
       sm.data?.["type"] === "pickup" ||
       sm.data?.["method_type"] === "pickup" ||
       sm.name?.toLowerCase().includes("pickup") ||
       sm.name?.toLowerCase().includes("recoger")
-  )
+  ), [availableShippingMethods])
 
-  const _shippingMethods = availableShippingMethods?.filter(
+  const _shippingMethods = useMemo(() => availableShippingMethods?.filter(
     (sm) => !_pickupMethods?.some((pickup) => pickup.id === sm.id)
-  )
+  ), [availableShippingMethods, _pickupMethods])
   const hasPickupOptions = !!_pickupMethods?.length
 
   useEffect(() => {

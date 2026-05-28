@@ -70,9 +70,7 @@ export async function signup(_currentState: unknown, formData: FormData) {
   }
 
   try {
-    // ✅ CORRECCIÓN PARA SDK V1: Usar sdk.customers.create en lugar de sdk.store.customer
-    // El recurso de clientes en Medusa V1 se crea con sdk.customers.create
-    const customerResponse = await sdk.customers.create({
+    await sdk.customers.create({
       email: customerForm.email,
       first_name: customerForm.first_name,
       last_name: customerForm.last_name,
@@ -80,9 +78,10 @@ export async function signup(_currentState: unknown, formData: FormData) {
       password,
     })
 
-    // Opcional: Si el backend requiere confirmación de email,
-    // el usuario no estará logueado automáticamente.
-    // Aquí podrías lanzar un error personalizado o manejar la respuesta.
+    const token = await (sdk.auth as any).login("emailpass", "customer", { email, password })
+    await setAuthToken(token)
+    const customerCacheTag = await getCacheTag("customers")
+    revalidateTag(customerCacheTag)
 
     return null
   } catch (error: any) {
@@ -119,7 +118,8 @@ export async function login(_currentState: unknown, formData: FormData) {
 
 // ─── Cerrar sesión ────────────────────────────────────────────────────────────
 export async function signout(countryCode: string) {
-  await sdk.auth.deleteSession()
+  const headers = await getAuthHeaders()
+  await (sdk as any).auth.logout(headers)
 
   await removeAuthToken()
 
@@ -196,24 +196,22 @@ export const addCustomerAddress = async (
 // ─── Eliminar dirección del cliente ──────────────────────────────────────────
 export const deleteCustomerAddress = async (
   addressId: string
-): Promise<void> => {
+): Promise<{ success: boolean; error: string | null }> => {
   const headers = {
     ...(await getAuthHeaders()),
   }
 
-  await sdk.client
-    .fetch(`/store/customers/me/addresses/${addressId}`, {
+  try {
+    await sdk.client.fetch(`/store/customers/me/addresses/${addressId}`, {
       method: "DELETE",
       headers,
     })
-    .then(async () => {
-      const customerCacheTag = await getCacheTag("customers")
-      revalidateTag(customerCacheTag)
-      return { success: true, error: null }
-    })
-    .catch((err: any) => {
-      return { success: false, error: err.toString() }
-    })
+    const customerCacheTag = await getCacheTag("customers")
+    revalidateTag(customerCacheTag)
+    return { success: true, error: null }
+  } catch (err: any) {
+    return { success: false, error: err.toString() }
+  }
 }
 
 // ─── Actualizar dirección del cliente ────────────────────────────────────────

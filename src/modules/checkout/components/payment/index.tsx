@@ -36,14 +36,12 @@ const Payment = ({
 
   const setPaymentMethod = async (method: string) => {
     setError(null)
+    setCardBrand(null)
     setSelectedPaymentMethod(method)
-    if (isStripeLike(method)) {
-      await initiatePaymentSession(cart, { provider_id: method })
-    }
   }
 
-  const paidByGiftcard = cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0
-  const paymentReady = (activeSession && cart?.shipping_methods.length !== 0) || paidByGiftcard
+  const paidByGiftcard = cart?.gift_cards && cart?.gift_cards?.length > 0 && Number(cart?.total) === 0
+  const paymentReady = (activeSession && (cart?.shipping_methods?.length ?? 0) > 0) || paidByGiftcard
 
   const createQueryString = useCallback((name: string, value: string) => {
     const params = new URLSearchParams(searchParams)
@@ -55,13 +53,15 @@ const Payment = ({
 
   const handleSubmit = async () => {
     setIsLoading(true)
+    setError(null)
     try {
-      const shouldInputCard = isStripeLike(selectedPaymentMethod) && !activeSession
-      const checkActiveSession = activeSession?.provider_id === selectedPaymentMethod
-      if (!checkActiveSession) {
+      const currentSession = cart.payment_collection?.payment_sessions?.find(
+        (ps: any) => ps.status === "pending" && ps.provider_id === selectedPaymentMethod
+      )
+      if (!currentSession) {
         await initiatePaymentSession(cart, { provider_id: selectedPaymentMethod })
       }
-      if (!shouldInputCard) {
+      if (!isStripeLike(selectedPaymentMethod) || (currentSession || paidByGiftcard)) {
         return router.push(pathname + "?" + createQueryString("step", "review"), { scroll: false })
       }
     } catch (err: any) {
@@ -95,7 +95,7 @@ const Payment = ({
 
       <div>
         <div className={isOpen ? "block" : "hidden"}>
-          {!paidByGiftcard && availablePaymentMethods?.length && (
+          {!paidByGiftcard && (availablePaymentMethods?.length ?? 0) > 0 && (
             <RadioGroup value={selectedPaymentMethod} onChange={(value: string) => setPaymentMethod(value)}>
               {availablePaymentMethods.map((paymentMethod) => (
                 <div key={paymentMethod.id}>

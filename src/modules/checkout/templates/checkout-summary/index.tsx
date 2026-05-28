@@ -3,7 +3,8 @@ import DiscountCode from "@modules/checkout/components/discount-code"
 import CartTotals from "@modules/common/components/cart-totals"
 
 const CheckoutSummary = ({ cart }: { cart: any }) => {
-  // Extraer datos para CartTotals con currency_code
+  if (!cart) return null
+
   const cartTotals = {
     total: cart.total,
     subtotal: cart.subtotal,

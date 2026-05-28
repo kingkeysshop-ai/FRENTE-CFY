@@ -90,12 +90,11 @@ const store = {
     complete: (cartId: string, _opts?: unknown, headers?: Record<string, string>) =>
       sdk.carts.complete(cartId, headers),
     transferCart: async (cartId: string, _payload?: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) => {
-      const session = await sdk.auth.getSession(headers)
-      const customerId = session?.customer?.id
-      if (!customerId) {
+      const { customer } = await sdk.client.fetch<{ customer: any }>("/store/customers/me", { method: "GET", headers }).catch(() => ({ customer: null }))
+      if (!customer?.id) {
         throw new Error("No authenticated customer to transfer cart to")
       }
-      return sdk.carts.update(cartId, { customer_id: customerId } as any, headers)
+      return sdk.carts.update(cartId, { customer_id: customer.id } as any, headers)
     },
   },
   customer: {
@@ -160,4 +159,4 @@ auth.login = async (type: string, method: string, payload: any) => {
   return access_token
 }
 
-;(sdk as any).auth.logout = async (headers?: Record<string, string>) => sdk.auth.deleteSession(headers)
+;(sdk as any).auth.logout = async (headers?: Record<string, string>) => sdk.client.fetch("/store/auth", { method: "DELETE", headers })

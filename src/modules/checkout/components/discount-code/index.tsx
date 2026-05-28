@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { applyPromotions } from "@lib/data/cart"
+import { applyPromotions, updateCart } from "@lib/data/cart"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
 import Trash from "@modules/common/icons/trash"
@@ -21,10 +21,10 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
   const { promotions = [] } = cart
 
   const removePromotionCode = async (code: string) => {
-    const validPromotions = promotions.filter((p) => p.code !== code)
-    await applyPromotions(
-      validPromotions.filter((p) => p.code !== undefined).map((p) => p.code!)
-    )
+    const remainingCodes = promotions
+      .filter((p) => p.code !== code && p.code !== undefined)
+      .map((p) => p.code!)
+    await updateCart({ discount_codes: remainingCodes })
   }
 
   const addPromotionCode = async (formData: FormData) => {
