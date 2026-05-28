@@ -400,6 +400,66 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
   )
 }
 
+export async function setDigitalInfo(currentState: unknown, formData: FormData) {
+  try {
+    const cartId = await getCartId()
+    if (!cartId) {
+      throw new Error("No existing cart found")
+    }
+
+    const email = formData.get("email") as string
+    const firstName = formData.get("first_name") as string
+    const lastName = formData.get("last_name") as string
+
+    if (!email) {
+      throw new Error("El email es obligatorio")
+    }
+
+    const cart = await retrieveCart(cartId)
+    if (!cart) {
+      throw new Error("Cart not found")
+    }
+
+    const countryCode = cart.region?.countries?.[0]?.iso_2 || "gb"
+
+    await updateCart({
+      email,
+      shipping_address: {
+        first_name: firstName,
+        last_name: lastName,
+        address_1: "-",
+        city: "-",
+        postal_code: "-",
+        country_code: countryCode,
+        province: "",
+        phone: "",
+      },
+      billing_address: {
+        first_name: firstName,
+        last_name: lastName,
+        address_1: "-",
+        city: "-",
+        postal_code: "-",
+        country_code: countryCode,
+        province: "",
+        phone: "",
+      },
+    })
+
+    const { shipping_options } = await listCartOptions()
+    if (shipping_options?.length > 0) {
+      await setShippingMethod({
+        cartId,
+        shippingMethodId: shipping_options[0].id,
+      })
+    }
+  } catch (e: any) {
+    return e.message
+  }
+
+  redirect(`/gb/checkout?step=payment`)
+}
+
 /**
  * Places an order for a cart. If no cart ID is provided, it will use the cart ID from the cookies.
  * @param cartId - optional - The ID of the cart to place an order for.
