@@ -126,7 +126,11 @@ const store = {
   },
   payment: {
     initiatePaymentSession: async (cart: any, data: { provider_id: string }, _opts?: unknown, headers?: Record<string, string>) => {
-      await sdk.carts.createPaymentSessions(cart.id, headers)
+      try {
+        await sdk.carts.createPaymentSessions(cart.id, headers)
+      } catch {
+        // Payment sessions already exist — continue
+      }
       return sdk.carts.setPaymentSession(cart.id, { provider_id: data.provider_id } as any, headers)
     },
   },

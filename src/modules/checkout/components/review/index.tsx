@@ -12,13 +12,44 @@ const Review = ({ cart }: { cart: any }) => {
   const paidByGiftcard =
     cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0
 
+  const hasShippingAddress = !!cart?.shipping_address
+  const hasShippingMethods = (cart?.shipping_methods?.length ?? 0) > 0
+  const hasPaymentSession = !!cart?.payment_session
+  const hasPaymentSessions = (cart?.payment_sessions?.length ?? 0) > 0
+  const hasPaymentCollection = !!cart?.payment_collection
+
   const previousStepsCompleted =
-    cart?.shipping_address &&
-    (cart?.shipping_methods?.length ?? 0) > 0 &&
-    (cart?.payment_session || (cart?.payment_sessions?.length ?? 0) > 0 || cart?.payment_collection || paidByGiftcard)
+    hasShippingAddress &&
+    hasShippingMethods &&
+    (hasPaymentSession || hasPaymentSessions || hasPaymentCollection || paidByGiftcard)
+
+  console.log("=== REVIEW DEBUG ===")
+  console.log("hasShippingAddress:", hasShippingAddress)
+  console.log("hasShippingMethods:", hasShippingMethods)
+  console.log("hasPaymentSession:", hasPaymentSession)
+  console.log("hasPaymentSessions:", hasPaymentSessions)
+  console.log("payment_session:", cart?.payment_session)
+  console.log("payment_sessions:", cart?.payment_sessions)
+  console.log("billing_address:", cart?.billing_address)
+  console.log("email:", cart?.email)
 
   return (
     <div className="bg-transparent">
+      {/* DEBUG PANEL */}
+      {isOpen && (
+        <div className="mb-4 p-3 bg-gray-800 border border-cyan-500/30 rounded-lg text-xs font-mono text-cyan-300 space-y-1">
+          <div>step=review | isOpen=true</div>
+          <div>shipping_address: {hasShippingAddress ? "✅" : "❌"}</div>
+          <div>shipping_methods: {hasShippingMethods ? "✅" : "❌"}</div>
+          <div>payment_session: {hasPaymentSession ? "✅" : "❌"}</div>
+          <div>payment_sessions: {hasPaymentSessions ? "✅" : "❌"}</div>
+          <div>previousStepsCompleted: {previousStepsCompleted ? "✅" : "❌"}</div>
+          <div>provider_id: {cart?.payment_session?.provider_id || "—"}</div>
+          <div>billing_address: {cart?.billing_address ? "✅" : "❌"}</div>
+          <div>email: {cart?.email ? "✅" : "❌"}</div>
+        </div>
+      )}
+
       <div className="flex flex-row items-center justify-between mb-6">
         <h2 className={clx("text-xl font-black text-white flex items-center gap-2", {
           "opacity-40 pointer-events-none select-none": !isOpen,
