@@ -1,7 +1,6 @@
 "use server"
 
 import { sdk } from "@lib/config"
-import medusaError from "@lib/util/medusa-error"
 import { HttpTypes } from "@medusajs/types"
 import { revalidateTag } from "next/cache"
 import { redirect } from "next/navigation"
@@ -46,11 +45,13 @@ export const updateCustomer = async (body: any) => {
     ...(await getAuthHeaders()),
   }
 
-  // ✅ SDK v2 — .update() solo acepta (body, headers)
-  const updateRes = await sdk.customers
-    .update(body, headers)
-    .then(({ customer }: any) => customer)
-    .catch(medusaError)
+  let updateRes: any
+  try {
+    const res = await sdk.customers.update(body, headers) as any
+    updateRes = res.customer
+  } catch (e: any) {
+    throw new Error("Error al actualizar datos del cliente. Intenta de nuevo.")
+  }
 
   const cacheTag = await getCacheTag("customers")
   revalidateTag(cacheTag)

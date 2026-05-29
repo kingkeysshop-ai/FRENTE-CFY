@@ -139,8 +139,8 @@ export default function ProductActions({
         product.title ?? undefined,
         "success"
       )
-    } catch {
-      showToast("Error al añadir al carrito", "Intenta de nuevo", "error")
+    } catch (e: any) {
+      showToast("Error al añadir al carrito", e?.message ?? "Intenta de nuevo", "error")
     } finally {
       setIsAdding(false)
     }

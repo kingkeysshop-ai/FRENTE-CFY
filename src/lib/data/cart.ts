@@ -1,7 +1,6 @@
 "use server"
 
 import { sdk } from "@lib/config"
-import medusaError from "@lib/util/medusa-error"
 import { HttpTypes } from "@medusajs/types"
 import { revalidateTag } from "next/cache"
 import { redirect } from "next/navigation"
@@ -103,18 +102,20 @@ export async function updateCart(data: any) {
     ...(await getAuthHeaders()),
   }
 
-  return (sdk as any).store.cart
-    .update(cartId, data, {}, headers)
-    .then(async ({ cart }: { cart: HttpTypes.StoreCart }) => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
+  try {
+    const { cart } = await (sdk as any).store.cart
+      .update(cartId, data, {}, headers) as { cart: HttpTypes.StoreCart }
 
-      const fulfillmentCacheTag = await getCacheTag("fulfillment")
-      revalidateTag(fulfillmentCacheTag)
+    const cartCacheTag = await getCacheTag("carts")
+    revalidateTag(cartCacheTag)
 
-      return cart
-    })
-    .catch(medusaError)
+    const fulfillmentCacheTag = await getCacheTag("fulfillment")
+    revalidateTag(fulfillmentCacheTag)
+
+    return cart
+  } catch (e: any) {
+    throw new Error("Error al actualizar el carrito. Intenta de nuevo.")
+  }
 }
 
 export async function addToCart({
@@ -140,24 +141,40 @@ export async function addToCart({
     ...(await getAuthHeaders()),
   }
 
-  await (sdk as any).store.cart
-    .createLineItem(
-      cart.id,
-      {
-        variant_id: variantId,
-        quantity,
-      },
-      {},
-      headers
-    )
-    .then(async () => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
+  try {
+    await (sdk as any).store.cart
+      .createLineItem(
+        cart.id,
+        {
+          variant_id: variantId,
+          quantity,
+        },
+        {},
+        headers
+      )
 
-      const fulfillmentCacheTag = await getCacheTag("fulfillment")
-      revalidateTag(fulfillmentCacheTag)
-    })
-    .catch(medusaError)
+    const cartCacheTag = await getCacheTag("carts")
+    revalidateTag(cartCacheTag)
+
+    const fulfillmentCacheTag = await getCacheTag("fulfillment")
+    revalidateTag(fulfillmentCacheTag)
+  } catch (e: any) {
+    const isNotFound = e?.response?.status === 404 || e?.type === "not_found"
+    if (isNotFound) {
+      console.error(
+        "addToCart failed: variant not found",
+        JSON.stringify({ variantId, cartId: cart.id, countryCode })
+      )
+      try {
+        const productsCacheTag = await getCacheTag("products")
+        revalidateTag(productsCacheTag)
+      } catch {}
+      throw new Error(
+        "Este producto ya no está disponible. Por favor, recarga la página para ver los productos actualizados."
+      )
+    }
+    throw new Error("Error al agregar el producto al carrito. Intenta de nuevo.")
+  }
 
   return await retrieveCart(cart.id)
 }
@@ -183,16 +200,18 @@ export async function updateLineItem({
     ...(await getAuthHeaders()),
   }
 
-  await (sdk as any).store.cart
-    .updateLineItem(cartId, lineId, { quantity }, {}, headers)
-    .then(async () => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
+  try {
+    await (sdk as any).store.cart
+      .updateLineItem(cartId, lineId, { quantity }, {}, headers)
 
-      const fulfillmentCacheTag = await getCacheTag("fulfillment")
-      revalidateTag(fulfillmentCacheTag)
-    })
-    .catch(medusaError)
+    const cartCacheTag = await getCacheTag("carts")
+    revalidateTag(cartCacheTag)
+
+    const fulfillmentCacheTag = await getCacheTag("fulfillment")
+    revalidateTag(fulfillmentCacheTag)
+  } catch (e: any) {
+    throw new Error("Error al actualizar el producto. Intenta de nuevo.")
+  }
 
   return await retrieveCart(cartId)
 }
@@ -212,16 +231,18 @@ export async function deleteLineItem(lineId: string) {
     ...(await getAuthHeaders()),
   }
 
-  await (sdk as any).store.cart
-    .deleteLineItem(cartId, lineId, {}, headers)
-    .then(async () => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
+  try {
+    await (sdk as any).store.cart
+      .deleteLineItem(cartId, lineId, {}, headers)
 
-      const fulfillmentCacheTag = await getCacheTag("fulfillment")
-      revalidateTag(fulfillmentCacheTag)
-    })
-    .catch(medusaError)
+    const cartCacheTag = await getCacheTag("carts")
+    revalidateTag(cartCacheTag)
+
+    const fulfillmentCacheTag = await getCacheTag("fulfillment")
+    revalidateTag(fulfillmentCacheTag)
+  } catch (e: any) {
+    throw new Error("Error al eliminar el producto. Intenta de nuevo.")
+  }
 
   return await retrieveCart(cartId)
 }
@@ -261,13 +282,15 @@ export async function initiatePaymentSession(
     ...(await getAuthHeaders()),
   }
 
-  return (sdk as any).store.payment
-    .initiatePaymentSession(cart, data, {}, headers)
-    .then(async () => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
-    })
-    .catch(medusaError)
+  try {
+    await (sdk as any).store.payment
+      .initiatePaymentSession(cart, data, {}, headers)
+
+    const cartCacheTag = await getCacheTag("carts")
+    revalidateTag(cartCacheTag)
+  } catch (e: any) {
+    throw new Error("Error al iniciar sesión de pago. Intenta de nuevo.")
+  }
 }
 
 export async function applyPromotions(codes: string[]) {
@@ -285,16 +308,18 @@ export async function applyPromotions(codes: string[]) {
   const existingCodes = cart?.discounts?.map((d: any) => d.code) || []
   const mergedCodes = Array.from(new Set([...existingCodes, ...codes]))
 
-  return (sdk as any).store.cart
-    .update(cartId, { discount_codes: mergedCodes }, {}, headers)
-    .then(async () => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
+  try {
+    await (sdk as any).store.cart
+      .update(cartId, { discount_codes: mergedCodes }, {}, headers)
 
-      const fulfillmentCacheTag = await getCacheTag("fulfillment")
-      revalidateTag(fulfillmentCacheTag)
-    })
-    .catch(medusaError)
+    const cartCacheTag = await getCacheTag("carts")
+    revalidateTag(cartCacheTag)
+
+    const fulfillmentCacheTag = await getCacheTag("fulfillment")
+    revalidateTag(fulfillmentCacheTag)
+  } catch (e: any) {
+    throw new Error("Error al aplicar código de descuento. Intenta de nuevo.")
+  }
 }
 
 export async function applyGiftCard(code: string) {
@@ -482,14 +507,16 @@ export async function placeOrder(cartId?: string) {
     ...(await getAuthHeaders()),
   }
 
-  const cartRes = await (sdk as any).store.cart
-    .complete(id, {}, headers)
-    .then(async (cartRes: any) => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
-      return cartRes
-    })
-    .catch(medusaError)
+  let cartRes: any
+  try {
+    cartRes = await (sdk as any).store.cart
+      .complete(id, {}, headers)
+
+    const cartCacheTag = await getCacheTag("carts")
+    revalidateTag(cartCacheTag)
+  } catch (e: any) {
+    throw new Error("Error al procesar el pedido. Intenta de nuevo.")
+  }
 
   if (cartRes?.type === "order") {
     const countryCode =

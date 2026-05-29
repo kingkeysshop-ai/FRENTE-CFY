@@ -24,6 +24,17 @@ export const sdk = new Medusa({
   publishableApiKey: process.env.MEDUSA_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
 })
 
+async function mergeHeaders(headers?: Record<string, string>): Promise<Record<string, string>> {
+  const merged: Record<string, string> = { ...(headers || {}) }
+  try {
+    const localeHeader = await getLocaleHeader()
+    if (localeHeader?.["x-medusa-locale"] && !merged["x-medusa-locale"]) {
+      merged["x-medusa-locale"] = localeHeader["x-medusa-locale"]
+    }
+  } catch {}
+  return merged
+}
+
 const client = sdk.client as any
 
 client.fetch = async <T>(
@@ -70,68 +81,78 @@ client.fetch = async <T>(
   const payload = body ?? undefined
 
   return client.request(method, path, payload, undefined, mergedHeaders).catch((err: any) => {
-    console.error("API_ERROR:", method, path, "status:", err.response?.status, "body:", JSON.stringify(err.response?.data).slice(0,500), "q:", JSON.stringify(query).slice(0,300))
+    const errBody = err.response?.data
+    const errMsg = errBody?.message === null ? "(null)" : errBody?.message
+    console.error(
+      "API_ERROR:", method, path,
+      "status:", err.response?.status,
+      "type:", errBody?.type,
+      "message:", errMsg,
+      "q:", JSON.stringify(query).slice(0,300)
+    )
     throw err
   })
 }
 
 const store = {
   cart: {
-    create: (payload?: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
-      sdk.carts.create(payload as any, headers),
-    update: (cartId: string, payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
-      sdk.carts.update(cartId, payload as any, headers),
-    createLineItem: (cartId: string, payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
-      sdk.carts.lineItems.create(cartId, payload as any, headers),
-    updateLineItem: (cartId: string, lineId: string, payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
-      sdk.carts.lineItems.update(cartId, lineId, payload as any, headers),
-    deleteLineItem: (cartId: string, lineId: string, _opts?: unknown, headers?: Record<string, string>) =>
-      sdk.carts.lineItems.delete(cartId, lineId, headers),
-    addShippingMethod: (cartId: string, payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
-      sdk.carts.addShippingMethod(cartId, payload as any, headers),
-    complete: (cartId: string, _opts?: unknown, headers?: Record<string, string>) =>
-      sdk.carts.complete(cartId, headers),
+    create: async (payload?: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.carts.create(payload as any, await mergeHeaders(headers)),
+    update: async (cartId: string, payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.carts.update(cartId, payload as any, await mergeHeaders(headers)),
+    createLineItem: async (cartId: string, payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.carts.lineItems.create(cartId, payload as any, await mergeHeaders(headers)),
+    updateLineItem: async (cartId: string, lineId: string, payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.carts.lineItems.update(cartId, lineId, payload as any, await mergeHeaders(headers)),
+    deleteLineItem: async (cartId: string, lineId: string, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.carts.lineItems.delete(cartId, lineId, await mergeHeaders(headers)),
+    addShippingMethod: async (cartId: string, payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.carts.addShippingMethod(cartId, payload as any, await mergeHeaders(headers)),
+    complete: async (cartId: string, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.carts.complete(cartId, await mergeHeaders(headers)),
     transferCart: async (cartId: string, _payload?: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) => {
-      const { customer } = await sdk.client.fetch<{ customer: any }>("/store/customers/me", { method: "GET", headers }).catch(() => ({ customer: null }))
+      const merged = await mergeHeaders(headers)
+      const { customer } = await sdk.client.fetch<{ customer: any }>("/store/customers/me", { method: "GET", headers: merged }).catch(() => ({ customer: null }))
       if (!customer?.id) {
         throw new Error("No authenticated customer to transfer cart to")
       }
-      return sdk.carts.update(cartId, { customer_id: customer.id } as any, headers)
+      return sdk.carts.update(cartId, { customer_id: customer.id } as any, merged)
     },
   },
   customer: {
-    create: (payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
-      sdk.customers.create(payload as any, headers),
-    update: (payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
-      sdk.customers.update(payload as any, headers),
-    createAddress: (payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
-      sdk.customers.addresses.addAddress({ address: payload } as any, headers),
-    deleteAddress: (addressId: string, headers?: Record<string, string>) =>
-      sdk.customers.addresses.deleteAddress(addressId, headers),
-    updateAddress: (addressId: string, payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
-      sdk.customers.addresses.updateAddress(addressId, payload as any, headers),
-    generatePasswordToken: (email: string, _opts?: unknown, headers?: Record<string, string>) =>
-      sdk.customers.generatePasswordToken({ email } as any, headers),
-    resetPassword: (payload: { email: string; token: string; password: string }, _opts?: unknown, headers?: Record<string, string>) =>
-      sdk.customers.resetPassword(payload as any, headers),
+    create: async (payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.customers.create(payload as any, await mergeHeaders(headers)),
+    update: async (payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.customers.update(payload as any, await mergeHeaders(headers)),
+    createAddress: async (payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.customers.addresses.addAddress({ address: payload } as any, await mergeHeaders(headers)),
+    deleteAddress: async (addressId: string, headers?: Record<string, string>) =>
+      sdk.customers.addresses.deleteAddress(addressId, await mergeHeaders(headers)),
+    updateAddress: async (addressId: string, payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.customers.addresses.updateAddress(addressId, payload as any, await mergeHeaders(headers)),
+    generatePasswordToken: async (email: string, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.customers.generatePasswordToken({ email } as any, await mergeHeaders(headers)),
+    resetPassword: async (payload: { email: string; token: string; password: string }, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.customers.resetPassword(payload as any, await mergeHeaders(headers)),
   },
   order: {
-    requestTransfer: (id: string, _payload?: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
-      sdk.orders.requestCustomerOrders({ order_ids: [id] } as any, headers),
-    acceptTransfer: (id: string, payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
-      sdk.orders.confirmRequest({ token: payload?.token } as any, headers),
+    requestTransfer: async (id: string, _payload?: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.orders.requestCustomerOrders({ order_ids: [id] } as any, await mergeHeaders(headers)),
+    acceptTransfer: async (id: string, payload: Record<string, unknown>, _opts?: unknown, headers?: Record<string, string>) =>
+      sdk.orders.confirmRequest({ token: payload?.token } as any, await mergeHeaders(headers)),
     declineTransfer: async () => {
       throw new Error("Order transfer decline is not supported in Medusa v1 compatibility mode")
     },
   },
   payment: {
     initiatePaymentSession: async (cart: any, data: { provider_id: string }, _opts?: unknown, headers?: Record<string, string>) => {
+      const merged = await mergeHeaders(headers)
       try {
-        await sdk.carts.createPaymentSessions(cart.id, headers)
+        await sdk.carts.createPaymentSessions(cart.id, merged)
       } catch {
         // Payment sessions already exist — continue
       }
-      return sdk.carts.setPaymentSession(cart.id, { provider_id: data.provider_id } as any, headers)
+      return sdk.carts.setPaymentSession(cart.id, { provider_id: data.provider_id } as any, merged)
     },
   },
 }
