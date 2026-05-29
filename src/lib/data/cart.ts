@@ -237,13 +237,20 @@ export async function setShippingMethod({
     ...(await getAuthHeaders()),
   }
 
-  return (sdk as any).store.cart
-    .addShippingMethod(cartId, { option_id: shippingMethodId }, {}, headers)
-    .then(async () => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
-    })
-    .catch(medusaError)
+  try {
+    await (sdk as any).store.cart
+      .addShippingMethod(cartId, { option_id: shippingMethodId }, {}, headers)
+
+    const cartCacheTag = await getCacheTag("carts")
+    revalidateTag(cartCacheTag)
+  } catch (e: any) {
+    if (e?.response?.status === 404) {
+      throw new Error(
+        "El método de envío seleccionado no está disponible en este momento. Intenta con otra opción."
+      )
+    }
+    throw new Error("Error al seleccionar método de envío. Intenta de nuevo.")
+  }
 }
 
 export async function initiatePaymentSession(
