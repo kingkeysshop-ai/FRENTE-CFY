@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 
 const AURPAY_API_BASE = process.env.AURPAY_API_BASE || "https://dashboard.aurpay.net"
 const AURPAY_API_KEY = process.env.AURPAY_API_KEY!
+const AURPAY_API_SECRET = process.env.AURPAY_API_SECRET
 const NEXT_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!
 
 export async function POST(req: NextRequest) {
@@ -33,14 +34,25 @@ export async function POST(req: NextRequest) {
       enable_post_callback: true,
     }
 
+    console.log("[Aurpay] Request API-Key prefix:", AURPAY_API_KEY?.substring(0, 8) + "...")
+    console.log("[Aurpay] API-Secret configured:", !!AURPAY_API_SECRET)
+
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      "API-Key": AURPAY_API_KEY,
+    }
+    if (AURPAY_API_SECRET) {
+      headers["API-Secret"] = AURPAY_API_SECRET
+    }
+
     const response = await fetch(`${AURPAY_API_BASE}/api/order/pay-url`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "API-Key": AURPAY_API_KEY,
-      },
+      headers,
       body: JSON.stringify(payload),
     })
+
+    console.log("[Aurpay] Response status:", response.status)
+    console.log("[Aurpay] Response headers:", JSON.stringify(Object.fromEntries(response.headers.entries())))
 
     const data = await response.json()
 
