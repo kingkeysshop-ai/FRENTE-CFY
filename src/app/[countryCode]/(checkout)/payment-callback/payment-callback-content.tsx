@@ -3,7 +3,7 @@
 import { useSearchParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
-export default function PaymentCallbackPage() {
+export default function PaymentCallbackContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [status, setStatus] = useState<string>("processing")
