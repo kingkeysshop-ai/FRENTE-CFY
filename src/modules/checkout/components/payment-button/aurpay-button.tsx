@@ -24,11 +24,18 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
         (s: any) => s.provider_id === "aurapay"
       )
 
-      let redirectUrl = session?.data?.redirect_url
+      const redirectUrl = session?.data?.redirect_url
         || session?.data?.url
         || session?.data?.pay_url
 
-      if (!redirectUrl || !redirectUrl.startsWith("http")) {
+      const isCorrupted = !redirectUrl
+        || session?.data?.data === 404
+        || (typeof session?.data === "object"
+          && !session?.data?.redirect_url
+          && !session?.data?.url
+          && !session?.data?.pay_url)
+
+      if (isCorrupted) {
         await initiatePaymentSession(freshCart, { provider_id: "aurapay" })
 
         const updatedCart = await retrieveCart(cart.id)
@@ -36,15 +43,17 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
           (s: any) => s.provider_id === "aurapay"
         )
 
-        redirectUrl = updatedSession?.data?.redirect_url
+        const newUrl = updatedSession?.data?.redirect_url
           || updatedSession?.data?.url
           || updatedSession?.data?.pay_url
 
-        if (!redirectUrl || !redirectUrl.startsWith("http")) {
-          setError("No se pudo obtener el link de pago de Aurpay")
-          setIsLoading(false)
-          return
+        if (newUrl) {
+          window.location.href = newUrl
+        } else {
+          setError("No se pudo generar el link de pago")
         }
+        setIsLoading(false)
+        return
       }
 
       window.location.href = redirectUrl
