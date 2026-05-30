@@ -2,7 +2,6 @@
 
 import { HttpTypes } from "@medusajs/types"
 import { useState } from "react"
-import { placeOrder } from "@lib/data/cart"
 import ErrorMessage from "../error-message"
 
 type Props = {
@@ -12,7 +11,6 @@ type Props = {
 }
 
 const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Props) => {
-  const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const paymentSession =
@@ -22,41 +20,30 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
           (s: any) => s.status === "pending"
         )
 
-  const handlePayment = async () => {
-    if (submitting || notReady) return
-    setSubmitting(true)
-    setError(null)
+  const handlePayment = () => {
+    if (error || notReady || !paymentSession) return
 
-    try {
-      const result = await placeOrder()
+    const redirectUrl = cart?.payment_session?.data?.redirect_url
+      || cart?.payment_session?.data?.url
+      || cart?.payment_session?.data?.pay_url
 
-      if (result?.payment_session?.data) {
-        const redirectUrl = result.payment_session.data.redirect_url || result.payment_session.data.url
-        if (redirectUrl) {
-          window.location.href = redirectUrl
-          return
-        }
-      }
-
-      throw new Error("No se pudo obtener la URL de pago de Aurpay")
-    } catch (err: any) {
-      if (err?.digest === "NEXT_REDIRECT") {
-        throw err
-      }
-      setError(err.message)
-      setSubmitting(false)
+    if (!redirectUrl) {
+      setError("No se pudo obtener el link de pago")
+      return
     }
+
+    window.location.href = redirectUrl as string
   }
 
   return (
     <>
       <button
         onClick={handlePayment}
-        disabled={submitting || notReady || !paymentSession}
+        disabled={!!error || notReady || !paymentSession}
         data-testid={dataTestId ?? "aurpay-payment-button"}
         style={{
           boxShadow: "0 5px 30px 2px rgb(0 0 0 / 0.06), 0 3px 15px -4px rgb(0 0 0 / 0.06)",
-          cursor: submitting || notReady || !paymentSession ? "not-allowed" : "pointer",
+          cursor: error || notReady || !paymentSession ? "not-allowed" : "pointer",
           height: "54px",
           paddingLeft: "20px",
           boxSizing: "border-box",
@@ -68,7 +55,7 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
           alignItems: "center",
           overflow: "hidden",
           width: "100%",
-          opacity: submitting || notReady || !paymentSession ? 0.5 : 1,
+          opacity: error || notReady || !paymentSession ? 0.5 : 1,
         }}
       >
         <img
@@ -98,7 +85,7 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
               fontWeight: 700,
             }}
           >
-            {submitting ? "Procesando..." : "Pay with Aurpay"}
+            Pay with Aurpay
           </span>
           <span
             style={{
