@@ -12,6 +12,7 @@ const S3_PATHNAME = process.env.MEDUSA_CLOUD_S3_PATHNAME
 const isDev = process.env.NODE_ENV === "development"
 
 module.exports = {
+  output: "standalone",
   transpilePackages: ["@medusajs/ui"],
   experimental: { serverActions: { allowedOrigins: ["*"] } },
   images: {
