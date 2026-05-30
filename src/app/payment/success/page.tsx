@@ -1,91 +1,17 @@
-"use client"
-
-import { useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
-import { placeOrder } from "@lib/data/cart"
+import { Suspense } from "react"
+import PaymentSuccessContent from "./payment-success-content"
 
 export default function PaymentSuccessPage() {
-  const searchParams = useSearchParams()
-  const [status, setStatus] = useState<"loading" | "error" | "retrying">("loading")
-  const [errorMessage, setErrorMessage] = useState("")
-
-  const cartId = searchParams.get("cart_id") || searchParams.get("cartId")
-
-  useEffect(() => {
-    if (!cartId) {
-      setStatus("error")
-      setErrorMessage("No se recibió el ID del carrito")
-      return
-    }
-
-    let cancelled = false
-    let retryCount = 0
-    const maxRetries = 5
-
-    const attemptOrder = async () => {
-      try {
-        await placeOrder(cartId)
-      } catch (err: any) {
-        if (cancelled) return
-        if (err?.digest === "NEXT_REDIRECT") {
-          throw err
-        }
-        if (retryCount < maxRetries) {
-          retryCount++
-          setStatus("retrying")
-          await new Promise((r) => setTimeout(r, 3000))
-          if (!cancelled) await attemptOrder()
-        } else {
-          setStatus("error")
-          setErrorMessage(err.message || "Error al procesar el pago")
-        }
-      }
-    }
-
-    attemptOrder()
-
-    return () => { cancelled = true }
-  }, [cartId])
-
-  if (!cartId) {
-    return (
+  return (
+    <Suspense fallback={
       <div className="flex items-center justify-center min-h-screen bg-black">
-        <div className="text-center max-w-md px-4">
-          <h1 className="text-white text-xl font-bold mb-2">Error</h1>
-          <p className="text-gray-400">No se recibió el ID del carrito</p>
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-400">Procesando pago...</p>
         </div>
       </div>
-    )
-  }
-
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-black">
-      <div className="text-center max-w-md px-4">
-        {status === "loading" || status === "retrying" ? (
-          <>
-            <div className="w-8 h-8 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <h1 className="text-white text-xl font-bold">
-              {status === "retrying" ? "Reintentando..." : "Procesando tu pago..."}
-            </h1>
-            <p className="text-gray-400 mt-2">
-              {status === "retrying"
-                ? "El pago aún no se ha confirmado. Reintentando..."
-                : "Estamos verificando el estado de tu pago. Esto puede tomar unos segundos."}
-            </p>
-          </>
-        ) : (
-          <>
-            <h1 className="text-white text-xl font-bold mb-2">Error al procesar el pago</h1>
-            <p className="text-gray-400 mb-4">{errorMessage}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-yellow-400 text-gray-900 font-bold rounded-xl hover:bg-yellow-300 transition-colors"
-            >
-              Reintentar
-            </button>
-          </>
-        )}
-      </div>
-    </div>
+    }>
+      <PaymentSuccessContent />
+    </Suspense>
   )
 }
