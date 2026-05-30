@@ -43,7 +43,15 @@ export const paymentInfoMap: Record<
     title: "Aurpay (Crypto)",
     icon: <CreditCard />,
   },
+  aurapay: {
+    title: "Aurpay (Crypto)",
+    icon: <CreditCard />,
+  },
   pp_gsmpay_gsmpay: {
+    title: "GSMPay",
+    icon: <CreditCard />,
+  },
+  gsmpay: {
     title: "GSMPay",
     icon: <CreditCard />,
   },

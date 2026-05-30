@@ -391,6 +391,11 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
       throw new Error("No existing cart found when setting addresses")
     }
 
+    const email = formData.get("email") as string
+    if (!email) {
+      return "El email es obligatorio"
+    }
+
     const data = {
       shipping_address: {
         first_name: formData.get("shipping_address.first_name"),
@@ -404,7 +409,7 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
         province: formData.get("shipping_address.province"),
         phone: formData.get("shipping_address.phone"),
       },
-      email: formData.get("email"),
+      email,
     } as any
 
     const sameAsBilling = formData.get("same_as_billing")

@@ -41,7 +41,13 @@ const Payment = ({
 
   const isOpen = searchParams.get("step") === "payment"
 
-  const setPaymentMethod = async (method: string) => {
+  useEffect(() => {
+    if (activeSession?.provider_id) {
+      setSelectedPaymentMethod(activeSession.provider_id)
+    }
+  }, [cart?.payment_session?.provider_id])
+
+  const setPaymentMethod = (method: string) => {
     setError(null)
     setCardBrand(null)
     setSelectedPaymentMethod(method)

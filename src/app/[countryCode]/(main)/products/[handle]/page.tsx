@@ -115,6 +115,10 @@ export default async function ProductPage(props: Props) {
     notFound()
   }
 
+  if (!params.handle) {
+    notFound()
+  }
+
   const pricedProduct = await listProducts({
     countryCode: params.countryCode,
     queryParams: { handle: params.handle },
