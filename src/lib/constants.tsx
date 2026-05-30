@@ -43,6 +43,10 @@ export const paymentInfoMap: Record<
     title: "Aurpay (Crypto)",
     icon: <CreditCard />,
   },
+  pp_gsmpay_gsmpay: {
+    title: "GSMPay",
+    icon: <CreditCard />,
+  },
 }
 
 export const isStripeLike = (providerId?: string) => {
@@ -65,6 +69,10 @@ export const isCryptomus = (providerId?: string) => {
 
 export const isAurpay = (providerId?: string) => {
   return providerId?.startsWith("pp_aurpay") || providerId === "aurapay"
+}
+
+export const isGSMPay = (providerId?: string) => {
+  return providerId?.startsWith("pp_gsmpay") || providerId === "gsmpay"
 }
 
 export const noDivisionCurrencies = [
