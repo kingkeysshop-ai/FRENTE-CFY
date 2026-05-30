@@ -2,6 +2,7 @@
 
 import { HttpTypes } from "@medusajs/types"
 import { useState } from "react"
+import { retrieveCart, initiatePaymentSession } from "@lib/data/cart"
 import ErrorMessage from "../error-message"
 
 type Props = {
@@ -17,20 +18,36 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
   const handleSubmit = async () => {
     setIsLoading(true)
     try {
-      const session = cart?.payment_sessions?.find(
+      const freshCart = await retrieveCart(cart.id)
+
+      const session = freshCart?.payment_sessions?.find(
         (s: any) => s.provider_id === "aurapay"
       )
-      const redirectUrl = session?.data?.redirect_url
+
+      let redirectUrl = session?.data?.redirect_url
         || session?.data?.url
         || session?.data?.pay_url
 
-      if (!redirectUrl) {
-        setError("No se pudo obtener el link de pago de Aurpay")
-        setIsLoading(false)
-        return
+      if (!redirectUrl || !redirectUrl.startsWith("http")) {
+        await initiatePaymentSession(freshCart, { provider_id: "aurapay" })
+
+        const updatedCart = await retrieveCart(cart.id)
+        const updatedSession = updatedCart?.payment_sessions?.find(
+          (s: any) => s.provider_id === "aurapay"
+        )
+
+        redirectUrl = updatedSession?.data?.redirect_url
+          || updatedSession?.data?.url
+          || updatedSession?.data?.pay_url
+
+        if (!redirectUrl || !redirectUrl.startsWith("http")) {
+          setError("No se pudo obtener el link de pago de Aurpay")
+          setIsLoading(false)
+          return
+        }
       }
 
-      window.location.href = redirectUrl as string
+      window.location.href = redirectUrl
     } catch (e) {
       setError("Error al redirigir a Aurpay")
       setIsLoading(false)
