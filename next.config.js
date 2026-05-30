@@ -14,4 +14,14 @@ const isDev = process.env.NODE_ENV === "development"
 module.exports = {
   transpilePackages: ["@medusajs/ui"],
   experimental: { serverActions: { allowedOrigins: ["*"] } },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "backend.cfynet.xyz",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
 }

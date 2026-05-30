@@ -2,6 +2,7 @@
 
 import { HttpTypes } from "@medusajs/types"
 import { useState } from "react"
+import { placeOrder } from "@lib/data/cart"
 import ErrorMessage from "../error-message"
 
 type Props = {
@@ -27,25 +28,21 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
     setError(null)
 
     try {
-      const amount = ((cart.total ?? 0) / 100).toFixed(2)
-      const currency = (cart.region?.currency_code ?? "USD").toUpperCase()
-      const orderId = `${cart.id}-${Date.now()}`
-      const cartId = cart.id
+      const result = await placeOrder()
 
-      const res = await fetch("/api/aurpay/create-invoice", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, currency, orderId, cartId }),
-      })
-
-      const data = await res.json()
-
-      if (!res.ok || !data.url) {
-        throw new Error(data.error || "No se pudo generar el enlace de pago de Aurpay")
+      if (result?.payment_session?.data) {
+        const redirectUrl = result.payment_session.data.redirect_url || result.payment_session.data.url
+        if (redirectUrl) {
+          window.location.href = redirectUrl
+          return
+        }
       }
 
-      window.location.href = data.url
+      throw new Error("No se pudo obtener la URL de pago de Aurpay")
     } catch (err: any) {
+      if (err?.digest === "NEXT_REDIRECT") {
+        throw err
+      }
       setError(err.message)
       setSubmitting(false)
     }

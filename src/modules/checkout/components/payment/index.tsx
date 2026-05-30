@@ -74,18 +74,10 @@ const Payment = ({
     console.log("cart.payment_sessions:", cart.payment_sessions)
 
     try {
-      const currentSession = cart.payment_session?.status === "pending" && cart.payment_session?.provider_id === selectedPaymentMethod
-        ? cart.payment_session
-        : (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
-            (ps: any) => ps.status === "pending" && ps.provider_id === selectedPaymentMethod
-          )
-      console.log("currentSession found:", currentSession)
-      if (!currentSession) {
-        console.log("no currentSession — calling initiatePaymentSession")
-        await initiatePaymentSession(cart, { provider_id: selectedPaymentMethod })
-        console.log("initiatePaymentSession succeeded")
-      }
-      if (!isStripeLike(selectedPaymentMethod) || (currentSession || paidByGiftcard)) {
+      console.log("calling initiatePaymentSession")
+      await initiatePaymentSession(cart, { provider_id: selectedPaymentMethod })
+      console.log("initiatePaymentSession succeeded")
+      if (!isStripeLike(selectedPaymentMethod) || (paidByGiftcard)) {
         return router.push(pathname + "?" + createQueryString("step", "review"), { scroll: false })
       }
     } catch (err: any) {
