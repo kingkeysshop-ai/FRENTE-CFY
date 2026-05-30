@@ -1,11 +1,12 @@
 "use client"
 
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { placeOrder } from "@lib/data/cart"
 
 export default function PaymentSuccessContent() {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const [status, setStatus] = useState<"loading" | "error" | "retrying">("loading")
   const [errorMessage, setErrorMessage] = useState("")
 
@@ -20,7 +21,7 @@ export default function PaymentSuccessContent() {
 
     let cancelled = false
     let retryCount = 0
-    const maxRetries = 5
+    const maxRetries = 3
 
     const attemptOrder = async () => {
       try {
@@ -29,6 +30,11 @@ export default function PaymentSuccessContent() {
         if (cancelled) return
         if (err?.digest === "NEXT_REDIRECT") {
           throw err
+        }
+        // Si el carrito ya fue completado (webhook), redirigir al home
+        if (err.message?.includes("completado") || err.message?.includes("already been completed")) {
+          router.push("/")
+          return
         }
         if (retryCount < maxRetries) {
           retryCount++
@@ -45,7 +51,7 @@ export default function PaymentSuccessContent() {
     attemptOrder()
 
     return () => { cancelled = true }
-  }, [cartId])
+  }, [cartId, router])
 
   if (!cartId) {
     return (

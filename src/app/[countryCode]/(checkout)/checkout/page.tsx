@@ -6,17 +6,22 @@ import CheckoutForm from "@modules/checkout/templates/checkout-form"
 import CheckoutSummary from "@modules/checkout/templates/checkout-summary"
 import SkeletonCheckoutForm from "@modules/skeletons/components/skeleton-checkout-form"
 import { Metadata } from "next"
-import { notFound } from "next/navigation"
+import { redirect } from "next/navigation"
 
 export const metadata: Metadata = {
   title: "Checkout",
 }
 
-export default async function Checkout() {
-  const cart = await retrieveCart().catch(() => null)
+type Props = {
+  params: Promise<{ countryCode: string }>
+}
+
+export default async function Checkout(props: Props) {
+  const params = await props.params
+  const cart = await retrieveCart()
 
   if (!cart) {
-    return notFound()
+    redirect(`/${params.countryCode}`)
   }
 
   const customer = await retrieveCustomer().catch(() => null)

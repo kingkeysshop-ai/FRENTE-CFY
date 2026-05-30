@@ -37,17 +37,23 @@ export async function retrieveCart(cartId?: string, expand?: string) {
     ...(await getCacheOptions("carts")),
   }
 
-  return await sdk.client
-    .fetch<{ cart: HttpTypes.StoreCart }>(`/store/carts/${id}`, {
-      method: "GET",
-      query: {
-        expand,
-      },
-      headers,
-      next,
-    })
-    .then(({ cart }) => cart)
-    .catch(() => null)
+  try {
+    const { cart } = await sdk.client
+      .fetch<{ cart: HttpTypes.StoreCart }>(`/store/carts/${id}`, {
+        method: "GET",
+        query: {
+          expand,
+        },
+        headers,
+        next,
+      })
+    return cart
+  } catch (e: any) {
+    if (e?.response?.status === 404) {
+      await removeCartId()
+    }
+    return null
+  }
 }
 
 export async function getOrSetCart(countryCode: string) {
