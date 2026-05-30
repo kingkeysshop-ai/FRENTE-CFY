@@ -289,6 +289,9 @@ export async function initiatePaymentSession(
     const cartCacheTag = await getCacheTag("carts")
     revalidateTag(cartCacheTag)
   } catch (e: any) {
+    console.error("[PaymentSession] Full error:", JSON.stringify(e, null, 2))
+    console.error("[PaymentSession] Response:", e?.response?.data)
+    console.error("[PaymentSession] cart.id:", cart?.id, "provider:", data?.provider_id)
     throw new Error("Error al iniciar sesión de pago. Intenta de nuevo.")
   }
 }
