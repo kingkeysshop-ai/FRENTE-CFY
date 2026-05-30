@@ -51,16 +51,67 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
   return (
     <>
       <button
-        disabled={notReady || submitting || !paymentSession}
         onClick={handlePayment}
+        disabled={submitting || notReady || !paymentSession}
         data-testid={dataTestId ?? "aurpay-payment-button"}
-        className="w-full py-4 bg-yellow-400 text-gray-900 font-black text-base rounded-xl hover:bg-yellow-300 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2"
+        style={{
+          boxShadow: "0 5px 30px 2px rgb(0 0 0 / 0.06), 0 3px 15px -4px rgb(0 0 0 / 0.06)",
+          cursor: submitting || notReady || !paymentSession ? "not-allowed" : "pointer",
+          height: "54px",
+          paddingLeft: "20px",
+          boxSizing: "border-box",
+          border: "none",
+          outline: "none",
+          background: "#23275D",
+          borderRadius: "5px",
+          display: "flex",
+          alignItems: "center",
+          overflow: "hidden",
+          width: "100%",
+          opacity: submitting || notReady || !paymentSession ? 0.5 : 1,
+        }}
       >
-        {submitting ? (
-          <span className="inline-block w-5 h-5 border-2 border-gray-900 border-t-transparent rounded-full animate-spin" />
-        ) : (
-          "Pagar con Aurpay (Crypto)"
-        )}
+        <img
+          style={{ width: "24px", height: "24px" }}
+          src="https://aurpay.net/wp-content/uploads/2022/06/favicon-logo.png"
+          alt="logo"
+        />
+        <span
+          style={{
+            display: "block",
+            height: "54px",
+            backgroundColor: "#191D48",
+            padding: "12px 20px",
+            boxSizing: "border-box",
+            transform: "skewX(-15deg) translateX(0.875rem)",
+            textAlign: "center",
+            flex: 1,
+          }}
+        >
+          <span
+            style={{
+              display: "block",
+              color: "#FFFFFF",
+              fontSize: "14px",
+              marginBottom: "4px",
+              transform: "skewX(8deg)",
+              fontWeight: 700,
+            }}
+          >
+            {submitting ? "Procesando..." : "Pay with Aurpay"}
+          </span>
+          <span
+            style={{
+              display: "block",
+              fontSize: "10px",
+              color: "#FFFFFF",
+              opacity: 0.5,
+              transform: "skewX(6deg)",
+            }}
+          >
+            Secured by Aurpay
+          </span>
+        </span>
       </button>
       <ErrorMessage error={error} data-testid="aurpay-payment-error" />
     </>
