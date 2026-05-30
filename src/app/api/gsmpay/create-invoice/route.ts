@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${GSMPAY_API_KEY}`,
+        "API-Key": GSMPAY_API_KEY,
       },
       body: JSON.stringify(payload),
     })
