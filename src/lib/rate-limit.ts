@@ -2,9 +2,9 @@ const store = new Map<string, { count: number; resetAt: number }>()
 
 setInterval(() => {
   const now = Date.now()
-  for (const [key, entry] of store) {
+  store.forEach((entry, key) => {
     if (now > entry.resetAt) store.delete(key)
-  }
+  })
 }, 60000)
 
 export function checkRateLimit(
