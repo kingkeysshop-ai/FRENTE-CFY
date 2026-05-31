@@ -1,6 +1,6 @@
 "use client"
 
-import { isAurpay, isCryptomus, isBold, isManual, isStripeLike } from "@lib/constants"
+import { isAurpay, isCryptomus, isBold, isTestPayment, isManual, isStripeLike } from "@lib/constants"
 import { placeOrder } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
 import { useElements, useStripe } from "@stripe/react-stripe-js"
@@ -9,6 +9,7 @@ import ErrorMessage from "../error-message"
 import CryptomusPaymentButton from "./cryptomus-button"
 import AurpayPaymentButton from "./aurpay-button"
 import BoldPaymentButton from "./bold-button"
+import TestPaymentButton from "./test-button"
 
 type PaymentButtonProps = {
   cart: HttpTypes.StoreCart
@@ -59,6 +60,14 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
     case isBold(paymentSession?.provider_id):
       return (
         <BoldPaymentButton
+          cart={cart}
+          notReady={notReady}
+          data-testid={dataTestId}
+        />
+      )
+    case isTestPayment(paymentSession?.provider_id):
+      return (
+        <TestPaymentButton
           cart={cart}
           notReady={notReady}
           data-testid={dataTestId}

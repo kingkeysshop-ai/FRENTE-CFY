@@ -55,6 +55,10 @@ export const paymentInfoMap: Record<
     title: "Bold (Colombia)",
     icon: <CreditCard />,
   },
+  "test-payment": {
+    title: "Pago de Prueba",
+    icon: <CreditCard />,
+  },
 }
 
 export const isStripeLike = (providerId?: string) => {
@@ -81,6 +85,10 @@ export const isAurpay = (providerId?: string) => {
 
 export const isBold = (providerId?: string) => {
   return providerId?.startsWith("pp_bold") || providerId === "bold"
+}
+
+export const isTestPayment = (providerId?: string) => {
+  return providerId === "test-payment"
 }
 
 export const noDivisionCurrencies = [

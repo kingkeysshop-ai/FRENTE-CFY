@@ -547,6 +547,59 @@ export async function placeOrder(cartId?: string) {
 }
 
 /**
+ * Completes cart and captures payment via test webhook.
+ * Used for testing the full flow without a real payment gateway.
+ */
+export async function testPaymentAndCapture(cartId?: string) {
+  const id = cartId || (await getCartId())
+
+  if (!id) {
+    throw new Error("No existing cart found when placing an order")
+  }
+
+  const headers = {
+    ...(await getAuthHeaders()),
+  }
+
+  let cartRes: any
+  try {
+    cartRes = await (sdk as any).store.cart
+      .complete(id, {}, headers)
+
+    const cartCacheTag = await getCacheTag("carts")
+    revalidateTag(cartCacheTag)
+  } catch (e: any) {
+    throw new Error("Error al procesar el pedido. Intenta de nuevo.")
+  }
+
+  if (cartRes?.type === "order") {
+    const order = cartRes.order
+
+    const backendUrl = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || process.env.MEDUSA_BACKEND_URL
+    if (backendUrl) {
+      await fetch(`${backendUrl}/hooks/test-payment`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ order_id: order.id }),
+      }).catch((e) =>
+        console.error("Test capture error:", e)
+      )
+    }
+
+    const countryCode =
+      order.shipping_address?.country_code?.toLowerCase() || "gb"
+
+    const orderCacheTag = await getCacheTag("orders")
+    revalidateTag(orderCacheTag)
+
+    await removeCartId()
+    redirect(`/${countryCode}/order/${order.id}/confirmed`)
+  }
+
+  return cartRes.cart
+}
+
+/**
  * Updates the countrycode param and revalidates the regions cache
  * @param regionId
  * @param countryCode
