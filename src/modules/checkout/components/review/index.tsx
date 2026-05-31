@@ -3,7 +3,6 @@
 import { clx } from "@medusajs/ui"
 import { CheckCircleSolid } from "@medusajs/icons"
 import PaymentButton from "../payment-button"
-import TestCheckoutButton from "../test-checkout-button"
 import { useSearchParams } from "next/navigation"
 
 const Review = ({ cart }: { cart: any }) => {
@@ -95,9 +94,6 @@ const Review = ({ cart }: { cart: any }) => {
 
           {/* Boton */}
           <PaymentButton cart={cart} data-testid="submit-order-button" />
-
-          {/* Temporal: boton de prueba */}
-          <TestCheckoutButton cart={cart} />
 
         </div>
       )}

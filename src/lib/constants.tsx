@@ -79,7 +79,7 @@ export const isCryptomus = (providerId?: string) => {
   return providerId?.startsWith("pp_cryptomus") || providerId === "cryptomus"
 }
 
-export const isAurpay = (providerId?: string) => {
+export const isAurapay = (providerId?: string) => {
   return providerId?.startsWith("pp_aurpay") || providerId === "aurapay"
 }
 

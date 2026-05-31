@@ -2,7 +2,7 @@
 
 import { RadioGroup } from "@headlessui/react"
 import { isStripeLike, paymentInfoMap } from "@lib/constants"
-import { initiatePaymentSession } from "@lib/data/cart"
+import { initiatePaymentSession, retrieveCart } from "@lib/data/cart"
 import { CheckCircleSolid, CreditCard } from "@medusajs/icons"
 import { clx } from "@medusajs/ui"
 import ErrorMessage from "@modules/checkout/components/error-message"
@@ -23,17 +23,19 @@ const Payment = ({
   console.log("availablePaymentMethods:", availablePaymentMethods)
   console.log("cart.payment_sessions:", cart?.payment_sessions)
 
-  const activeSession = cart?.payment_session?.status === "pending"
-    ? cart.payment_session
-    : (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
-        (paymentSession: any) => paymentSession.status === "pending"
-      )
-
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [cardBrand, setCardBrand] = useState<string | null>(null)
   const [cardComplete, setCardComplete] = useState(false)
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(activeSession?.provider_id ?? "")
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("")
+  const [freshCart, setFreshCart] = useState<any>(null)
+
+  const liveCart = freshCart || cart
+  const liveActiveSession = liveCart?.payment_session?.status === "pending"
+    ? liveCart.payment_session
+    : (liveCart?.payment_sessions || liveCart?.payment_collection?.payment_sessions)?.find(
+        (paymentSession: any) => paymentSession.status === "pending"
+      )
 
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -42,10 +44,14 @@ const Payment = ({
   const isOpen = searchParams.get("step") === "payment"
 
   useEffect(() => {
-    if (activeSession?.provider_id) {
-      setSelectedPaymentMethod(activeSession.provider_id)
+    setFreshCart(null)
+  }, [cart?.id])
+
+  useEffect(() => {
+    if (liveActiveSession?.provider_id) {
+      setSelectedPaymentMethod(liveActiveSession.provider_id)
     }
-  }, [cart?.payment_session?.provider_id])
+  }, [liveActiveSession?.provider_id])
 
   const setPaymentMethod = (method: string) => {
     setError(null)
@@ -53,8 +59,8 @@ const Payment = ({
     setSelectedPaymentMethod(method)
   }
 
-  const paidByGiftcard = cart?.gift_cards && cart?.gift_cards?.length > 0 && Number(cart?.total) === 0
-  const paymentReady = (activeSession && (cart?.shipping_methods?.length ?? 0) > 0) || paidByGiftcard
+  const paidByGiftcard = liveCart?.gift_cards && liveCart?.gift_cards?.length > 0 && Number(liveCart?.total) === 0
+  const paymentReady = (liveActiveSession && (liveCart?.shipping_methods?.length ?? 0) > 0) || paidByGiftcard
 
   const createQueryString = useCallback((name: string, value: string) => {
     const params = new URLSearchParams(searchParams)
@@ -68,18 +74,13 @@ const Payment = ({
     setIsLoading(true)
     setError(null)
 
-    console.log("=== PAYMENT HANDLE SUBMIT ===")
-    console.log("selectedPaymentMethod:", selectedPaymentMethod)
-    console.log("cart.payment_session:", cart.payment_session)
-    console.log("cart.payment_sessions:", cart.payment_sessions)
-
     try {
-      console.log("calling initiatePaymentSession")
-      await initiatePaymentSession(cart, { provider_id: selectedPaymentMethod })
-      console.log("initiatePaymentSession succeeded")
+      await initiatePaymentSession(liveCart, { provider_id: selectedPaymentMethod })
       if (!isStripeLike(selectedPaymentMethod) || (paidByGiftcard)) {
         return router.push(pathname + "?" + createQueryString("step", "review"), { scroll: false })
       }
+      const updatedCart = await retrieveCart(liveCart.id)
+      if (updatedCart) setFreshCart(updatedCart)
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -157,7 +158,7 @@ const Payment = ({
           >
             {isLoading ? (
               <span className="inline-block w-5 h-5 border-2 border-gray-900 border-t-transparent rounded-full animate-spin" />
-            ) : !activeSession && isStripeLike(selectedPaymentMethod) ? (
+            ) : !liveActiveSession && isStripeLike(selectedPaymentMethod) ? (
               "Ingresar datos de tarjeta"
             ) : (
               "Continuar a la revisión"
@@ -166,12 +167,12 @@ const Payment = ({
         </div>
 
         <div className={isOpen ? "hidden" : "block"}>
-          {cart && paymentReady && activeSession ? (
+          {liveCart && paymentReady && liveActiveSession ? (
             <div className="flex items-start gap-x-1 w-full">
               <div className="flex flex-col w-1/3">
                 <p className="font-bold text-white mb-1">Método de pago</p>
                 <p className="text-gray-400" data-testid="payment-method-summary">
-                  {paymentInfoMap[activeSession?.provider_id]?.title || activeSession?.provider_id}
+                  {paymentInfoMap[liveActiveSession?.provider_id]?.title || liveActiveSession?.provider_id}
                 </p>
               </div>
               <div className="flex flex-col w-1/3">

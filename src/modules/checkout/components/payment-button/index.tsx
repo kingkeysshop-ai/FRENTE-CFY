@@ -1,6 +1,6 @@
 "use client"
 
-import { isAurpay, isCryptomus, isBold, isTestPayment, isManual, isStripeLike } from "@lib/constants"
+import { isAurapay, isCryptomus, isBold, isTestPayment, isManual, isStripeLike } from "@lib/constants"
 import { placeOrder } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
 import { useElements, useStripe } from "@stripe/react-stripe-js"
@@ -26,7 +26,9 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
     !cart.email ||
     (cart.shipping_methods?.length ?? 0) < 1
 
-  const paymentSession = cart?.payment_session || (cart?.payment_sessions || cart?.payment_collection?.payment_sessions)?.find((s: any) => s.status === "pending")
+  const paymentSession = cart?.payment_session?.status === "pending"
+    ? cart.payment_session
+    : (cart?.payment_sessions || cart?.payment_collection?.payment_sessions)?.find((s: any) => s.status === "pending")
 
   switch (true) {
     case isStripeLike(paymentSession?.provider_id):
@@ -49,7 +51,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
           data-testid={dataTestId}
         />
       )
-    case isAurpay(paymentSession?.provider_id):
+    case isAurapay(paymentSession?.provider_id):
       return (
         <AurpayPaymentButton
           cart={cart}
@@ -121,12 +123,21 @@ const StripePaymentButton = ({
 
   const handlePayment = async () => {
     setSubmitting(true)
+    setErrorMessage(null)
     if (!stripe || !elements || !card || !cart) {
       setSubmitting(false)
       return
     }
+
+    const clientSecret = session?.data?.client_secret
+    if (!clientSecret) {
+      setErrorMessage("No se pudo obtener la sesión de pago. Intenta de nuevo.")
+      setSubmitting(false)
+      return
+    }
+
     await stripe
-      .confirmCardPayment(session?.data?.client_secret as string, {
+      .confirmCardPayment(clientSecret, {
         payment_method: {
           card,
           billing_details: {
