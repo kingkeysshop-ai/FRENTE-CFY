@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import crypto from "crypto"
+import { checkRateLimit } from "@/lib/rate-limit"
 
 const CRYPTOMUS_MERCHANT_ID = process.env.CRYPTOMUS_MERCHANT_ID!
 const CRYPTOMUS_PAYMENT_KEY = process.env.CRYPTOMUS_PAYMENT_KEY!
@@ -13,6 +14,11 @@ function generateSign(data: Record<string, unknown>, apiKey: string): string {
 
 export async function POST(req: NextRequest) {
   try {
+    const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown"
+    if (!checkRateLimit(`cryptomus-create-invoice:${ip}`, 5, 60000)) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 })
+    }
+
     const { amount, currency, orderId, cartId } = await req.json()
 
     if (!amount || !currency || !orderId || !cartId) {

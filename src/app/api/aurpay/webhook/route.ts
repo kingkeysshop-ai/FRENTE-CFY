@@ -1,10 +1,24 @@
 import { NextRequest, NextResponse } from "next/server"
+import { validateWebhookSecret } from "@/lib/webhook-auth"
+import { checkRateLimit } from "@/lib/rate-limit"
 
+const AURPAY_WEBHOOK_SECRET = process.env.AURPAY_WEBHOOK_SECRET
 const MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL!
 const MEDUSA_API_KEY = process.env.MEDUSA_API_KEY!
 
 export async function POST(req: NextRequest) {
   try {
+    const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown"
+    if (!checkRateLimit(`aurpay-webhook:${ip}`, 20, 60000)) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 })
+    }
+
+    const auth = validateWebhookSecret(req, AURPAY_WEBHOOK_SECRET)
+    if (!auth.valid) {
+      console.warn("[Aurpay Webhook] Auth failed:", auth.reason)
+      return NextResponse.json({ error: auth.reason }, { status: 403 })
+    }
+
     const body = await req.json()
     const cartId = req.nextUrl.searchParams.get("cart_id")
 
@@ -56,6 +70,17 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
+    const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown"
+    if (!checkRateLimit(`aurpay-webhook-get:${ip}`, 10, 60000)) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 })
+    }
+
+    const auth = validateWebhookSecret(req, AURPAY_WEBHOOK_SECRET)
+    if (!auth.valid) {
+      console.warn("[Aurpay Webhook] GET auth failed:", auth.reason)
+      return NextResponse.json({ error: auth.reason }, { status: 403 })
+    }
+
     const cartId = req.nextUrl.searchParams.get("cart_id")
 
     if (!cartId) {
