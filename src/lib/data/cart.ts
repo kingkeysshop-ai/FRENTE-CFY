@@ -397,13 +397,16 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
     return e.message
   }
 
-  const countryCode = formData.get("shipping_address.country_code") || formData.get("billing_address.country_code") || "gb"
+  const defaultCountry = process.env.DEFAULT_REGION || process.env.NEXT_PUBLIC_DEFAULT_REGION || "gb"
+  const countryCode = formData.get("shipping_address.country_code") || formData.get("billing_address.country_code") || defaultCountry
   redirect(
     `/${countryCode}/checkout?step=delivery`
   )
 }
 
 export async function setDigitalInfo(currentState: unknown, formData: FormData) {
+  let countryCode = process.env.DEFAULT_REGION || process.env.NEXT_PUBLIC_DEFAULT_REGION || "gb"
+
   try {
     const cartId = await getCartId()
     if (!cartId) {
@@ -423,7 +426,7 @@ export async function setDigitalInfo(currentState: unknown, formData: FormData) 
       throw new Error("Cart not found")
     }
 
-    const countryCode = cart.region?.countries?.[0]?.iso_2 || "gb"
+    countryCode = cart.region?.countries?.[0]?.iso_2?.toLowerCase() || countryCode
 
     await updateCart({
       email,
@@ -460,7 +463,7 @@ export async function setDigitalInfo(currentState: unknown, formData: FormData) 
     return e.message
   }
 
-  redirect(`/gb/checkout?step=payment`)
+  redirect(`/${countryCode}/checkout?step=payment`)
 }
 
 /**

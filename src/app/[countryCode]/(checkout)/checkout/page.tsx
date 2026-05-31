@@ -5,6 +5,7 @@ import PaymentWrapper from "@modules/checkout/components/payment-wrapper"
 import CheckoutForm from "@modules/checkout/templates/checkout-form"
 import CheckoutSummary from "@modules/checkout/templates/checkout-summary"
 import SkeletonCheckoutForm from "@modules/skeletons/components/skeleton-checkout-form"
+import ErrorBoundary from "@modules/common/components/error-boundary"
 import { Metadata } from "next"
 import { redirect } from "next/navigation"
 
@@ -29,9 +30,11 @@ export default async function Checkout(props: Props) {
   return (
     <div className="grid grid-cols-1 small:grid-cols-[1fr_416px] content-container gap-x-12 gap-y-8 py-8 small:py-12">
       <PaymentWrapper cart={cart}>
-        <Suspense fallback={<SkeletonCheckoutForm />}>
-          <CheckoutForm cart={cart} customer={customer} />
-        </Suspense>
+        <ErrorBoundary>
+          <Suspense fallback={<SkeletonCheckoutForm />}>
+            <CheckoutForm cart={cart} customer={customer} />
+          </Suspense>
+        </ErrorBoundary>
       </PaymentWrapper>
       <CheckoutSummary cart={cart} />
     </div>

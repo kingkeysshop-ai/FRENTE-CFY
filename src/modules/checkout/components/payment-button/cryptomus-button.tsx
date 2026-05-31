@@ -1,6 +1,6 @@
 "use client"
 
-import { placeOrder } from "@lib/data/cart"
+import { getActivePaymentSession } from "@lib/constants"
 import { HttpTypes } from "@medusajs/types"
 import { useState } from "react"
 import ErrorMessage from "../error-message"
@@ -15,11 +15,7 @@ const CryptomusPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: P
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const session = cart.payment_session?.status === "pending"
-    ? cart.payment_session
-    : (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
-        (s: any) => s.status === "pending"
-      )
+  const session = getActivePaymentSession(cart)
 
   const handlePayment = async () => {
     if (submitting) return

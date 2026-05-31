@@ -1,6 +1,16 @@
 import { HttpTypes } from "@medusajs/types"
 import { NextRequest, NextResponse } from "next/server"
 
+function randomUUID(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID()
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0
+    return (c === "x" ? r : (r & 0x3) | 0x8).toString(16)
+  })
+}
+
 const BACKEND_URL = process.env.MEDUSA_BACKEND_URL || process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL
 const PUBLISHABLE_API_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
 const DEFAULT_REGION = (process.env.DEFAULT_REGION || process.env.NEXT_PUBLIC_DEFAULT_REGION || "gb").toLowerCase()
@@ -95,7 +105,7 @@ export async function middleware(request: NextRequest) {
     }
 
     let cacheIdCookie = request.cookies.get("_medusa_cache_id")
-    let cacheId = cacheIdCookie?.value || crypto.randomUUID()
+    let cacheId = cacheIdCookie?.value || randomUUID()
 
     const regionMap = await getRegionMap(cacheId)
 

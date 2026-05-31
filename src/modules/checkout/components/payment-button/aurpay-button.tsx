@@ -1,5 +1,6 @@
 "use client"
 
+import { getActivePaymentSession } from "@lib/constants"
 import { HttpTypes } from "@medusajs/types"
 import { useState } from "react"
 import { retrieveCart, initiatePaymentSession } from "@lib/data/cart"
@@ -20,9 +21,7 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
     try {
       const freshCart = await retrieveCart(cart.id)
 
-      const session = freshCart?.payment_sessions?.find(
-        (s: any) => s.provider_id === "aurapay"
-      )
+      const session = getActivePaymentSession(freshCart)
 
       const redirectUrl = session?.data?.redirect_url
         || session?.data?.url
@@ -39,9 +38,7 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
         await initiatePaymentSession(freshCart, { provider_id: "aurapay" })
 
         const updatedCart = await retrieveCart(cart.id)
-        const updatedSession = updatedCart?.payment_sessions?.find(
-          (s: any) => s.provider_id === "aurapay"
-        )
+        const updatedSession = getActivePaymentSession(updatedCart)
 
         const newUrl = updatedSession?.data?.redirect_url
           || updatedSession?.data?.url
@@ -69,61 +66,20 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
         onClick={handleSubmit}
         disabled={isLoading || !!error || notReady}
         data-testid={dataTestId ?? "aurpay-payment-button"}
-        style={{
-          boxShadow: "0 5px 30px 2px rgb(0 0 0 / 0.06), 0 3px 15px -4px rgb(0 0 0 / 0.06)",
-          cursor: isLoading || error || notReady ? "not-allowed" : "pointer",
-          height: "54px",
-          paddingLeft: "20px",
-          boxSizing: "border-box",
-          border: "none",
-          outline: "none",
-          background: "#23275D",
-          borderRadius: "5px",
-          display: "flex",
-          alignItems: "center",
-          overflow: "hidden",
-          width: "100%",
-          opacity: isLoading || error || notReady ? 0.5 : 1,
-        }}
+        className="flex items-center overflow-hidden w-full h-[54px] pl-5 border-none outline-none rounded-md bg-[#23275D] transition-opacity disabled:opacity-50"
       >
         <img
-          style={{ width: "24px", height: "24px" }}
+          className="w-6 h-6 shrink-0"
           src="https://aurpay.net/wp-content/uploads/2022/06/favicon-logo.png"
           alt="logo"
         />
         <span
-          style={{
-            display: "block",
-            height: "54px",
-            backgroundColor: "#191D48",
-            padding: "12px 20px",
-            boxSizing: "border-box",
-            transform: "skewX(-15deg) translateX(0.875rem)",
-            textAlign: "center",
-            flex: 1,
-          }}
+          className="flex flex-col items-center justify-center h-[54px] bg-[#191D48] px-5 flex-1 skew-x-[-15deg] translate-x-3.5"
         >
-          <span
-            style={{
-              display: "block",
-              color: "#FFFFFF",
-              fontSize: "14px",
-              marginBottom: "4px",
-              transform: "skewX(8deg)",
-              fontWeight: 700,
-            }}
-          >
+          <span className="text-white text-sm font-bold skew-x-[8deg]">
             {isLoading ? "Redirigiendo..." : "Pay with Aurpay"}
           </span>
-          <span
-            style={{
-              display: "block",
-              fontSize: "10px",
-              color: "#FFFFFF",
-              opacity: 0.5,
-              transform: "skewX(6deg)",
-            }}
-          >
+          <span className="text-[10px] text-white/50 skew-x-[6deg]">
             Secured by Aurpay
           </span>
         </span>

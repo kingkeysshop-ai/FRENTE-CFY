@@ -6,7 +6,12 @@ import { HttpTypes } from "@medusajs/types"
 import { Button } from "@medusajs/ui"
 import Divider from "@modules/common/components/divider"
 import OptionSelect from "@modules/products/components/product-actions/option-select"
-import { isEqual } from "lodash"
+function isEqual(a: Record<string, any>, b: Record<string, any>): boolean {
+  const keysA = Object.keys(a)
+  const keysB = Object.keys(b)
+  if (keysA.length !== keysB.length) return false
+  return keysA.every((key) => a[key] === b[key])
+}
 import { useParams, usePathname, useSearchParams } from "next/navigation"
 import { useToast } from "@lib/context/toast-context"
 import { useEffect, useMemo, useRef, useState } from "react"

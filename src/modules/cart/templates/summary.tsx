@@ -32,7 +32,7 @@ const Summary = ({ cart }: SummaryProps) => {
     tax_total: cart.tax_total,
     currency_code: cart.region?.currency_code || "USD",
     shipping_subtotal: cart.shipping_subtotal,
-    discount_subtotal: cart.discount_subtotal,
+    discount_total: cart.discount_total,
   }
 
   return (

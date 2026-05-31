@@ -86,7 +86,7 @@ export async function signup(_currentState: unknown, formData: FormData) {
     return null
   } catch (error: any) {
     console.error("Error en registro de cliente (SDK V1):", error.response?.data || error.message)
-    throw error
+    return error.response?.data?.message || error.message || "Error al crear la cuenta"
   }
 }
 

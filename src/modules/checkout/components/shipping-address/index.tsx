@@ -1,8 +1,15 @@
 import { HttpTypes } from "@medusajs/types"
 import Checkbox from "@modules/common/components/checkbox"
 import Input from "@modules/common/components/input"
-import { mapKeys } from "lodash"
 import React, { useEffect, useMemo, useState } from "react"
+
+function mapKeys(obj: Record<string, any>, fn: (value: any, key: string) => string): Record<string, any> {
+  const result: Record<string, any> = {}
+  for (const key of Object.keys(obj)) {
+    result[fn(obj[key], key)] = obj[key]
+  }
+  return result
+}
 import AddressSelect from "../address-select"
 import CountrySelect from "../country-select"
 

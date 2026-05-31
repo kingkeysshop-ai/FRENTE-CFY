@@ -91,6 +91,19 @@ export const isTestPayment = (providerId?: string) => {
   return providerId === "test-payment"
 }
 
+export function getActivePaymentSession(cart: any) {
+  if (cart?.payment_session?.status === "pending") {
+    return cart.payment_session
+  }
+  if (cart?.payment_collection?.payment_sessions) {
+    return cart.payment_collection.payment_sessions.find((s: any) => s.status === "pending")
+  }
+  if (cart?.payment_sessions) {
+    return cart.payment_sessions.find((s: any) => s.status === "pending")
+  }
+  return null
+}
+
 export const noDivisionCurrencies = [
   "krw", "jpy", "vnd", "clp", "pyg", "xaf", "xof", "bif",
   "djf", "gnf", "kmf", "mga", "rwf", "xpf", "htg", "vuv",

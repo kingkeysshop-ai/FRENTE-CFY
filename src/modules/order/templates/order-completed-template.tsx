@@ -21,7 +21,7 @@ export default async function OrderCompletedTemplate({ order }: OrderCompletedTe
     currency_code: order.currency_code || "USD",
     item_subtotal: order.item_subtotal,
     shipping_subtotal: order.shipping_subtotal,
-    discount_subtotal: order.discount_total,
+    discount_total: order.discount_total,
   }
 
   return (

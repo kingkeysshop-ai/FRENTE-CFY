@@ -8,8 +8,6 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const cartId = req.nextUrl.searchParams.get("cart_id")
 
-    console.log("[Aurpay Webhook] POST received:", JSON.stringify(body))
-
     const { status, order_id } = body
 
     if (status === "SUCCEED" || status === "succeed") {
@@ -39,16 +37,16 @@ export async function POST(req: NextRequest) {
         )
       }
 
-      console.log(
-        `[Aurpay Webhook] Order placed successfully: ${medusaData?.order?.id}`
-      )
+    console.error(
+      `[Aurpay Webhook] Order placed successfully: ${medusaData?.order?.id}`
+    )
       return NextResponse.json({
         received: true,
         orderId: medusaData?.order?.id,
       })
     }
 
-    console.log(`[Aurpay Webhook] Payment not succeeded (status: ${status})`)
+    console.error(`[Aurpay Webhook] Payment not succeeded (status: ${status})`)
     return NextResponse.json({ received: true, status })
   } catch (err: any) {
     console.error("[Aurpay Webhook] Error:", err)
@@ -59,8 +57,6 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   try {
     const cartId = req.nextUrl.searchParams.get("cart_id")
-
-    console.log("[Aurpay Webhook] GET received, cart_id:", cartId)
 
     if (!cartId) {
       return NextResponse.json({ error: "Missing cart_id" }, { status: 400 })
@@ -87,7 +83,7 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    console.log(
+    console.error(
       `[Aurpay Webhook] Order placed successfully via GET: ${medusaData?.order?.id}`
     )
 

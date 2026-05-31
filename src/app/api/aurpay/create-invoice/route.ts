@@ -34,9 +34,6 @@ export async function POST(req: NextRequest) {
       enable_post_callback: true,
     }
 
-    console.log("[Aurpay] Request API-Key prefix:", AURPAY_API_KEY?.substring(0, 8) + "...")
-    console.log("[Aurpay] API-Secret configured:", !!AURPAY_API_SECRET)
-
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
       "API-Key": AURPAY_API_KEY,
@@ -50,9 +47,6 @@ export async function POST(req: NextRequest) {
       headers,
       body: JSON.stringify(payload),
     })
-
-    console.log("[Aurpay] Response status:", response.status)
-    console.log("[Aurpay] Response headers:", JSON.stringify(Object.fromEntries(response.headers.entries())))
 
     const data = await response.json()
 

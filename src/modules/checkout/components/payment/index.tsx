@@ -1,7 +1,7 @@
 "use client"
 
 import { RadioGroup } from "@headlessui/react"
-import { isStripeLike, paymentInfoMap } from "@lib/constants"
+import { getActivePaymentSession, isStripeLike, paymentInfoMap } from "@lib/constants"
 import { initiatePaymentSession, retrieveCart } from "@lib/data/cart"
 import { CheckCircleSolid, CreditCard } from "@medusajs/icons"
 import { clx } from "@medusajs/ui"
@@ -18,11 +18,6 @@ const Payment = ({
   cart: any
   availablePaymentMethods: any[]
 }) => {
-  // DEBUG: ver qué providers llegan al componente
-  console.log("=== PAYMENT DEBUG ===")
-  console.log("availablePaymentMethods:", availablePaymentMethods)
-  console.log("cart.payment_sessions:", cart?.payment_sessions)
-
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [cardBrand, setCardBrand] = useState<string | null>(null)
@@ -31,11 +26,7 @@ const Payment = ({
   const [freshCart, setFreshCart] = useState<any>(null)
 
   const liveCart = freshCart || cart
-  const liveActiveSession = liveCart?.payment_session?.status === "pending"
-    ? liveCart.payment_session
-    : (liveCart?.payment_sessions || liveCart?.payment_collection?.payment_sessions)?.find(
-        (paymentSession: any) => paymentSession.status === "pending"
-      )
+  const liveActiveSession = getActivePaymentSession(liveCart)
 
   const searchParams = useSearchParams()
   const router = useRouter()

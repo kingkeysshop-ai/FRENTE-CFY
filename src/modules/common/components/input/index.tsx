@@ -40,6 +40,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <div className="flex relative z-0 w-full text-sm">
           <input
             type={inputType}
+            id={name}
             name={name}
             placeholder=" "
             required={required}
@@ -49,7 +50,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           />
           <label
             htmlFor={name}
-            onClick={() => inputRef.current?.focus()}
             className="flex items-center justify-center mx-3 px-1 transition-all absolute duration-300 top-3 -z-1 origin-0 text-gray-400"
           >
             {label}

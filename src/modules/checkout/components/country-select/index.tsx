@@ -36,8 +36,8 @@ const CountrySelect = forwardRef<
       defaultValue={defaultValue}
       {...props}
     >
-      {countryOptions?.map(({ value, label }, index) => (
-        <option key={index} value={value}>
+      {countryOptions?.map(({ value, label }) => (
+        <option key={value} value={value}>
           {label}
         </option>
       ))}

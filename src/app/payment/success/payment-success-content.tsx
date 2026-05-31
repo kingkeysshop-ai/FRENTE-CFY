@@ -1,7 +1,7 @@
 "use client"
 
 import { useSearchParams, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { placeOrder } from "@lib/data/cart"
 
 export default function PaymentSuccessContent() {
@@ -9,17 +9,19 @@ export default function PaymentSuccessContent() {
   const router = useRouter()
   const [status, setStatus] = useState<"loading" | "error" | "retrying">("loading")
   const [errorMessage, setErrorMessage] = useState("")
+  const mounted = useRef(true)
 
   const cartId = searchParams.get("cart_id") || searchParams.get("cartId")
 
   useEffect(() => {
+    mounted.current = true
+
     if (!cartId) {
       setStatus("error")
       setErrorMessage("No se recibió el ID del carrito")
       return
     }
 
-    let cancelled = false
     let retryCount = 0
     const maxRetries = 3
 
@@ -27,11 +29,10 @@ export default function PaymentSuccessContent() {
       try {
         await placeOrder(cartId)
       } catch (err: any) {
-        if (cancelled) return
+        if (!mounted.current) return
         if (err?.digest === "NEXT_REDIRECT") {
           throw err
         }
-        // Si el carrito ya fue completado (webhook), redirigir al home
         if (err.message?.includes("completado") || err.message?.includes("already been completed")) {
           router.push("/")
           return
@@ -40,7 +41,7 @@ export default function PaymentSuccessContent() {
           retryCount++
           setStatus("retrying")
           await new Promise((r) => setTimeout(r, 3000))
-          if (!cancelled) await attemptOrder()
+          if (mounted.current) await attemptOrder()
         } else {
           setStatus("error")
           setErrorMessage(err.message || "Error al procesar el pago")
@@ -50,7 +51,7 @@ export default function PaymentSuccessContent() {
 
     attemptOrder()
 
-    return () => { cancelled = true }
+    return () => { mounted.current = false }
   }, [cartId, router])
 
   if (!cartId) {

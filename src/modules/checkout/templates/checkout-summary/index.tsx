@@ -12,7 +12,7 @@ const CheckoutSummary = ({ cart }: { cart: any }) => {
     currency_code: cart.region?.currency_code || "USD",
     item_subtotal: cart.item_subtotal,
     shipping_subtotal: cart.shipping_subtotal,
-    discount_subtotal: cart.discount_subtotal,
+    discount_total: cart.discount_total,
   }
 
   return (

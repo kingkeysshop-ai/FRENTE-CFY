@@ -1,5 +1,6 @@
 "use client"
 
+import { getActivePaymentSession } from "@lib/constants"
 import { HttpTypes } from "@medusajs/types"
 import { useState } from "react"
 import { retrieveCart, initiatePaymentSession } from "@lib/data/cart"
@@ -20,9 +21,7 @@ const BoldPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Props)
     try {
       const freshCart = await retrieveCart(cart.id)
 
-      const session = freshCart?.payment_sessions?.find(
-        (s: any) => s.provider_id === "bold"
-      )
+      const session = getActivePaymentSession(freshCart)
 
       const redirectUrl = session?.data?.redirect_url
 
@@ -33,9 +32,7 @@ const BoldPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Props)
         await initiatePaymentSession(freshCart, { provider_id: "bold" })
 
         const updatedCart = await retrieveCart(cart.id)
-        const updatedSession = updatedCart?.payment_sessions?.find(
-          (s: any) => s.provider_id === "bold"
-        )
+        const updatedSession = getActivePaymentSession(updatedCart)
 
         const newUrl = updatedSession?.data?.redirect_url
 
