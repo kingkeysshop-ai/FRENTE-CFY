@@ -23,7 +23,7 @@ const Payment = ({
   console.log("availablePaymentMethods:", availablePaymentMethods)
   console.log("cart.payment_sessions:", cart?.payment_sessions)
 
-  const activeSession = cart.payment_session?.status === "pending"
+  const activeSession = cart?.payment_session?.status === "pending"
     ? cart.payment_session
     : (cart.payment_sessions || cart.payment_collection?.payment_sessions)?.find(
         (paymentSession: any) => paymentSession.status === "pending"
