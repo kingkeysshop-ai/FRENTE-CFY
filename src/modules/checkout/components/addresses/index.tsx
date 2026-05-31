@@ -6,7 +6,7 @@ import { CheckCircleSolid } from "@medusajs/icons"
 import { HttpTypes } from "@medusajs/types"
 import Divider from "@modules/common/components/divider"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useActionState, useState } from "react"
+import { useActionState, useEffect, useState } from "react"
 import BillingAddress from "../billing_address"
 import ErrorMessage from "../error-message"
 import ShippingAddress from "../shipping-address"
@@ -39,6 +39,12 @@ const Addresses = ({
   }
 
   const [message, formAction] = useActionState(setAddresses, null)
+
+  useEffect(() => {
+    if (typeof message === "string" && message.startsWith("/")) {
+      router.push(message)
+    }
+  }, [message, router])
 
   return (
     <div className="bg-transparent">
@@ -81,7 +87,7 @@ const Addresses = ({
             >
               Continuar con el Envío
             </SubmitButton>
-            <ErrorMessage error={message} data-testid="address-error-message" />
+            <ErrorMessage error={message && !message.startsWith("/") ? message : null} data-testid="address-error-message" />
           </div>
         </form>
       ) : (

@@ -5,14 +5,22 @@ import ErrorMessage from "@modules/checkout/components/error-message"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
 import Input from "@modules/common/components/input"
 import { HttpTypes } from "@medusajs/types"
-import { useActionState } from "react"
+import { useActionState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 
 const DigitalInfo = ({
   cart,
 }: {
   cart: HttpTypes.StoreCart
 }) => {
+  const router = useRouter()
   const [message, formAction] = useActionState(setDigitalInfo, null)
+
+  useEffect(() => {
+    if (typeof message === "string" && message.startsWith("/")) {
+      router.push(message)
+    }
+  }, [message, router])
 
   return (
     <form action={formAction}>
@@ -45,7 +53,7 @@ const DigitalInfo = ({
           required
         />
       </div>
-      <ErrorMessage error={message} />
+      <ErrorMessage error={message && !message.startsWith("/") ? message : null} />
       <SubmitButton className="mt-6 w-full py-3 bg-yellow-400 text-gray-900 font-black rounded-xl hover:bg-yellow-300 transition-all text-sm">
         Continuar al Pago
       </SubmitButton>

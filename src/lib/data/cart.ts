@@ -399,9 +399,7 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
 
   const defaultCountry = process.env.DEFAULT_REGION || process.env.NEXT_PUBLIC_DEFAULT_REGION || "gb"
   const countryCode = formData.get("shipping_address.country_code") || formData.get("billing_address.country_code") || defaultCountry
-  redirect(
-    `/${countryCode}/checkout?step=delivery`
-  )
+  return `/${countryCode}/checkout?step=delivery`
 }
 
 export async function setDigitalInfo(currentState: unknown, formData: FormData) {
@@ -463,7 +461,7 @@ export async function setDigitalInfo(currentState: unknown, formData: FormData) 
     return e.message
   }
 
-  redirect(`/${countryCode}/checkout?step=payment`)
+  return `/${countryCode}/checkout?step=payment`
 }
 
 /**
