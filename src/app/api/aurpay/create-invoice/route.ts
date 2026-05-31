@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { checkRateLimit } from "@/lib/rate-limit"
+import { checkRateLimit } from "@lib/rate-limit"
 
 const AURPAY_API_BASE = process.env.AURPAY_API_BASE || "https://dashboard.aurpay.net"
 const AURPAY_API_KEY = process.env.AURPAY_API_KEY!

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
-import { validateWebhookSecret } from "@/lib/webhook-auth"
-import { checkRateLimit } from "@/lib/rate-limit"
+import { validateWebhookSecret } from "@lib/webhook-auth"
+import { checkRateLimit } from "@lib/rate-limit"
 
 const AURPAY_WEBHOOK_SECRET = process.env.AURPAY_WEBHOOK_SECRET
 const MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL!
