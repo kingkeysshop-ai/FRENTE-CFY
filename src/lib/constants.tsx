@@ -47,12 +47,12 @@ export const paymentInfoMap: Record<
     title: "Aurpay (Crypto)",
     icon: <CreditCard />,
   },
-  pp_gsmpay_gsmpay: {
-    title: "GSMPay",
+  pp_bold_bold: {
+    title: "Bold (Colombia)",
     icon: <CreditCard />,
   },
-  gsmpay: {
-    title: "GSMPay",
+  bold: {
+    title: "Bold (Colombia)",
     icon: <CreditCard />,
   },
 }
@@ -79,8 +79,8 @@ export const isAurpay = (providerId?: string) => {
   return providerId?.startsWith("pp_aurpay") || providerId === "aurapay"
 }
 
-export const isGSMPay = (providerId?: string) => {
-  return providerId?.startsWith("pp_gsmpay") || providerId === "gsmpay"
+export const isBold = (providerId?: string) => {
+  return providerId?.startsWith("pp_bold") || providerId === "bold"
 }
 
 export const noDivisionCurrencies = [
