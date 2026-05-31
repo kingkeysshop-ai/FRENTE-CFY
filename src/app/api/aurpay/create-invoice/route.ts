@@ -2,12 +2,19 @@ import { NextRequest, NextResponse } from "next/server"
 import { checkRateLimit } from "@lib/rate-limit"
 
 const AURPAY_API_BASE = process.env.AURPAY_API_BASE || "https://dashboard.aurpay.net"
-const AURPAY_API_KEY = process.env.AURPAY_API_KEY!
+const AURPAY_API_KEY = process.env.AURPAY_API_KEY
 const AURPAY_API_SECRET = process.env.AURPAY_API_SECRET
 const AURPAY_WEBHOOK_SECRET = process.env.AURPAY_WEBHOOK_SECRET
-const NEXT_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!
+const NEXT_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 export async function POST(req: NextRequest) {
+  if (!AURPAY_API_KEY || !NEXT_PUBLIC_BASE_URL) {
+    return NextResponse.json(
+      { error: "AURPAY_API_KEY or NEXT_PUBLIC_BASE_URL not configured" },
+      { status: 500 }
+    )
+  }
+
   try {
     const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown"
     if (!checkRateLimit(`aurpay-create-invoice:${ip}`, 5, 60000)) {
@@ -23,19 +30,12 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    if (!AURPAY_API_KEY) {
-      return NextResponse.json(
-        { error: "AURPAY_API_KEY not configured" },
-        { status: 500 }
-      )
-    }
-
     const webhookSecretParam = AURPAY_WEBHOOK_SECRET ? `&secret=${AURPAY_WEBHOOK_SECRET}` : ""
 
     const payload = {
       price: Number(amount),
       currency: currency.toUpperCase(),
-      succeed_url: `${NEXT_PUBLIC_BASE_URL}/order/${orderId}/confirmed`,
+      succeed_url: `${NEXT_PUBLIC_BASE_URL}/payment/success?cart_id=${cartId}`,
       timeout_url: `${NEXT_PUBLIC_BASE_URL}/checkout?step=review&aurpay=timeout`,
       callback_url: `${NEXT_PUBLIC_BASE_URL}/api/aurpay/webhook?cart_id=${cartId}${webhookSecretParam}`,
       timeout_callback: `${NEXT_PUBLIC_BASE_URL}/api/aurpay/webhook?cart_id=${cartId}&timeout=1${webhookSecretParam}`,
@@ -72,6 +72,6 @@ export async function POST(req: NextRequest) {
     })
   } catch (err: any) {
     console.error("[Aurpay] Unexpected error:", err)
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: "Internal error" }, { status: 500 })
   }
 }

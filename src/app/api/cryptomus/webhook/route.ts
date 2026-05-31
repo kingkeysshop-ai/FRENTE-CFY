@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server"
 import crypto from "crypto"
 import { checkRateLimit } from "@lib/rate-limit"
 
-const CRYPTOMUS_PAYMENT_KEY = process.env.CRYPTOMUS_PAYMENT_KEY!
-const MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL!
-const MEDUSA_API_KEY = process.env.MEDUSA_API_KEY!
+const CRYPTOMUS_PAYMENT_KEY = process.env.CRYPTOMUS_PAYMENT_KEY
+const MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
+const MEDUSA_API_KEY = process.env.MEDUSA_API_KEY
 
 function verifyWebhookSign(
   body: Record<string, unknown>,
@@ -25,6 +25,10 @@ function verifyWebhookSign(
 }
 
 export async function POST(req: NextRequest) {
+  if (!CRYPTOMUS_PAYMENT_KEY || !MEDUSA_BACKEND_URL || !MEDUSA_API_KEY) {
+    return NextResponse.json({ error: "Server misconfigured" }, { status: 500 })
+  }
+
   try {
     const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown"
     if (!checkRateLimit(`cryptomus-webhook:${ip}`, 20, 60000)) {
@@ -34,7 +38,6 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const { sign, status, order_id, additional_data } = body
 
-    // 1. Verify signature
     if (!sign || !verifyWebhookSign(body, sign, CRYPTOMUS_PAYMENT_KEY)) {
       console.warn("[Cryptomus Webhook] Invalid signature")
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 })
@@ -42,14 +45,11 @@ export async function POST(req: NextRequest) {
 
     console.log(`[Cryptomus Webhook] Payment status: ${status} | Order: ${order_id}`)
 
-    // 2. Only process confirmed/paid statuses
     const paidStatuses = ["paid", "paid_over", "wrong_amount_waiting", "confirm_check"]
     if (!paidStatuses.includes(status)) {
       return NextResponse.json({ received: true, status })
     }
 
-    // 3. Complete the cart / place the order in Medusa
-    // additional_data holds the cartId set during invoice creation
     const cartId = additional_data
     if (!cartId) {
       console.error("[Cryptomus Webhook] No cartId in additional_data")
@@ -70,6 +70,11 @@ export async function POST(req: NextRequest) {
     const medusaData = await medusaRes.json()
 
     if (!medusaRes.ok) {
+      const isCompleted = medusaData?.type === "order"
+      if (isCompleted) {
+        console.log(`[Cryptomus Webhook] Cart already completed: ${medusaData?.order?.id}`)
+        return NextResponse.json({ received: true, orderId: medusaData?.order?.id })
+      }
       console.error("[Cryptomus Webhook] Failed to complete cart:", medusaData)
       return NextResponse.json(
         { error: "Failed to complete Medusa order" },
@@ -84,6 +89,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ received: true, orderId: medusaData?.order?.id })
   } catch (err: any) {
     console.error("[Cryptomus Webhook] Error:", err)
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: "Internal error" }, { status: 500 })
   }
 }

@@ -537,10 +537,13 @@ export async function testPaymentAndCapture(cartId?: string) {
     const order = cartRes.order
 
     const backendUrl = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || process.env.MEDUSA_BACKEND_URL
+    const publishableKey = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
     if (backendUrl) {
+      const testHeaders: Record<string, string> = { "Content-Type": "application/json" }
+      if (publishableKey) testHeaders["x-publishable-api-key"] = publishableKey
       await fetch(`${backendUrl}/hooks/test-payment`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: testHeaders,
         body: JSON.stringify({ order_id: order.id }),
       }).catch((e) =>
         console.error("Test capture error:", e)

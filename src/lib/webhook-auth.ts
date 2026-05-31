@@ -5,7 +5,7 @@ export function validateWebhookSecret(
   envSecret?: string
 ): { valid: boolean; reason?: string } {
   if (!envSecret) {
-    return { valid: true, reason: "No secret configured" }
+    return { valid: false, reason: "AURPAY_WEBHOOK_SECRET not configured on server" }
   }
 
   const secret = req.nextUrl.searchParams.get("secret")

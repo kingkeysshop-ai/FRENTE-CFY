@@ -22,29 +22,29 @@ export default function PaymentSuccessContent() {
       return
     }
 
-    let retryCount = 0
     const maxRetries = 3
+    const delay = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
     const attemptOrder = async () => {
-      try {
-        await placeOrder(cartId)
-      } catch (err: any) {
+      for (let i = 0; i <= maxRetries; i++) {
         if (!mounted.current) return
-        if (err?.digest === "NEXT_REDIRECT") {
-          throw err
-        }
-        if (err.message?.includes("completado") || err.message?.includes("already been completed")) {
-          router.push("/")
+        try {
+          await placeOrder(cartId)
           return
-        }
-        if (retryCount < maxRetries) {
-          retryCount++
-          setStatus("retrying")
-          await new Promise((r) => setTimeout(r, 3000))
-          if (mounted.current) await attemptOrder()
-        } else {
-          setStatus("error")
-          setErrorMessage(err.message || "Error al procesar el pago")
+        } catch (err: any) {
+          if (!mounted.current) return
+          if (err?.digest === "NEXT_REDIRECT") throw err
+          if (err.message?.includes("completado") || err.message?.includes("already been completed")) {
+            router.push("/")
+            return
+          }
+          if (i < maxRetries) {
+            setStatus("retrying")
+            await delay(3000)
+          } else {
+            setStatus("error")
+            setErrorMessage(err.message || "Error al procesar el pago")
+          }
         }
       }
     }

@@ -46,23 +46,24 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
   const pathname = usePathname()
 
   // Inyecta la animación slideInLeft en el <head> una sola vez
-  // Reemplaza el <style jsx> eliminado — compatible con Next.js 15 + React 19
   const styleInjected = useRef(false)
   useEffect(() => {
     if (styleInjected.current) return
     styleInjected.current = true
 
-    const style = document.createElement("style")
-    style.innerHTML = `
+    const sheet = new CSSStyleSheet()
+    sheet.insertRule(`
       @keyframes slideInLeft {
         from { opacity: 0; transform: translateX(-20px); }
         to   { opacity: 1; transform: translateX(0); }
       }
+    `)
+    sheet.insertRule(`
       .kk-slide-in {
         animation: slideInLeft 0.35s ease-out forwards;
       }
-    `
-    document.head.appendChild(style)
+    `)
+    document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet]
   }, [])
 
   return (

@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server"
 import crypto from "crypto"
 import { checkRateLimit } from "@lib/rate-limit"
 
-const CRYPTOMUS_MERCHANT_ID = process.env.CRYPTOMUS_MERCHANT_ID!
-const CRYPTOMUS_PAYMENT_KEY = process.env.CRYPTOMUS_PAYMENT_KEY!
-const NEXT_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!
+const CRYPTOMUS_MERCHANT_ID = process.env.CRYPTOMUS_MERCHANT_ID
+const CRYPTOMUS_PAYMENT_KEY = process.env.CRYPTOMUS_PAYMENT_KEY
+const NEXT_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 function generateSign(data: Record<string, unknown>, apiKey: string): string {
   const jsonStr = JSON.stringify(data)
@@ -13,6 +13,13 @@ function generateSign(data: Record<string, unknown>, apiKey: string): string {
 }
 
 export async function POST(req: NextRequest) {
+  if (!CRYPTOMUS_MERCHANT_ID || !CRYPTOMUS_PAYMENT_KEY || !NEXT_PUBLIC_BASE_URL) {
+    return NextResponse.json(
+      { error: "Cryptomus env vars not configured" },
+      { status: 500 }
+    )
+  }
+
   try {
     const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown"
     if (!checkRateLimit(`cryptomus-create-invoice:${ip}`, 5, 60000)) {
@@ -34,7 +41,7 @@ export async function POST(req: NextRequest) {
       currency: currency.toUpperCase(),
       order_id: orderId,
       url_return: `${NEXT_PUBLIC_BASE_URL}/checkout?step=review&cryptomus=return`,
-      url_success: `${NEXT_PUBLIC_BASE_URL}/order/${orderId}/confirmed`,
+      url_success: `${NEXT_PUBLIC_BASE_URL}/payment/success?cart_id=${cartId}`,
       url_callback: `${NEXT_PUBLIC_BASE_URL}/api/cryptomus/webhook`,
       is_payment_multiple: false,
       lifetime: 3600,
@@ -70,6 +77,6 @@ export async function POST(req: NextRequest) {
     })
   } catch (err: any) {
     console.error("[Cryptomus] Unexpected error:", err)
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: "Internal error" }, { status: 500 })
   }
 }

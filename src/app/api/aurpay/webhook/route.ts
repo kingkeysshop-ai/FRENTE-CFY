@@ -2,18 +2,22 @@ import { NextRequest, NextResponse } from "next/server"
 import { validateWebhookSecret } from "@lib/webhook-auth"
 import { checkRateLimit } from "@lib/rate-limit"
 
-const AURPAY_WEBHOOK_SECRET = process.env.AURPAY_WEBHOOK_SECRET
-const MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL!
-const MEDUSA_API_KEY = process.env.MEDUSA_API_KEY!
+const AURPAY_ENV_SECRET = process.env.AURPAY_WEBHOOK_SECRET
+const MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
+const MEDUSA_API_KEY = process.env.MEDUSA_API_KEY
 
 export async function POST(req: NextRequest) {
+  if (!MEDUSA_BACKEND_URL || !MEDUSA_API_KEY) {
+    return NextResponse.json({ error: "Server misconfigured" }, { status: 500 })
+  }
+
   try {
     const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown"
     if (!checkRateLimit(`aurpay-webhook:${ip}`, 20, 60000)) {
       return NextResponse.json({ error: "Too many requests" }, { status: 429 })
     }
 
-    const auth = validateWebhookSecret(req, AURPAY_WEBHOOK_SECRET)
+    const auth = validateWebhookSecret(req, AURPAY_ENV_SECRET)
     if (!auth.valid) {
       console.warn("[Aurpay Webhook] Auth failed:", auth.reason)
       return NextResponse.json({ error: auth.reason }, { status: 403 })
@@ -22,7 +26,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const cartId = req.nextUrl.searchParams.get("cart_id")
 
-    const { status, order_id } = body
+    const { status } = body
 
     if (status === "SUCCEED" || status === "succeed") {
       if (!cartId) {
@@ -44,6 +48,14 @@ export async function POST(req: NextRequest) {
       const medusaData = await medusaRes.json()
 
       if (!medusaRes.ok) {
+        const isCompleted = medusaData?.type === "order"
+        if (isCompleted) {
+          console.log(`[Aurpay Webhook] Cart already completed: ${medusaData?.order?.id}`)
+          return NextResponse.json({
+            received: true,
+            orderId: medusaData?.order?.id,
+          })
+        }
         console.error("[Aurpay Webhook] Failed to complete cart:", medusaData)
         return NextResponse.json(
           { error: "Failed to complete Medusa order" },
@@ -51,73 +63,23 @@ export async function POST(req: NextRequest) {
         )
       }
 
-    console.error(
-      `[Aurpay Webhook] Order placed successfully: ${medusaData?.order?.id}`
-    )
+      console.log(
+        `[Aurpay Webhook] Order placed successfully: ${medusaData?.order?.id}`
+      )
       return NextResponse.json({
         received: true,
         orderId: medusaData?.order?.id,
       })
     }
 
-    console.error(`[Aurpay Webhook] Payment not succeeded (status: ${status})`)
+    console.log(`[Aurpay Webhook] Payment not succeeded (status: ${status})`)
     return NextResponse.json({ received: true, status })
   } catch (err: any) {
     console.error("[Aurpay Webhook] Error:", err)
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: "Internal error" }, { status: 500 })
   }
 }
 
-export async function GET(req: NextRequest) {
-  try {
-    const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown"
-    if (!checkRateLimit(`aurpay-webhook-get:${ip}`, 10, 60000)) {
-      return NextResponse.json({ error: "Too many requests" }, { status: 429 })
-    }
-
-    const auth = validateWebhookSecret(req, AURPAY_WEBHOOK_SECRET)
-    if (!auth.valid) {
-      console.warn("[Aurpay Webhook] GET auth failed:", auth.reason)
-      return NextResponse.json({ error: auth.reason }, { status: 403 })
-    }
-
-    const cartId = req.nextUrl.searchParams.get("cart_id")
-
-    if (!cartId) {
-      return NextResponse.json({ error: "Missing cart_id" }, { status: 400 })
-    }
-
-    const medusaRes = await fetch(
-      `${MEDUSA_BACKEND_URL}/store/carts/${cartId}/complete`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-publishable-api-key": MEDUSA_API_KEY,
-        },
-      }
-    )
-
-    const medusaData = await medusaRes.json()
-
-    if (!medusaRes.ok) {
-      console.error("[Aurpay Webhook] Failed to complete cart via GET:", medusaData)
-      return NextResponse.json(
-        { error: "Failed to complete Medusa order" },
-        { status: 500 }
-      )
-    }
-
-    console.error(
-      `[Aurpay Webhook] Order placed successfully via GET: ${medusaData?.order?.id}`
-    )
-
-    return NextResponse.json({
-      received: true,
-      orderId: medusaData?.order?.id,
-    })
-  } catch (err: any) {
-    console.error("[Aurpay Webhook] GET Error:", err)
-    return NextResponse.json({ error: err.message }, { status: 500 })
-  }
+export async function GET() {
+  return NextResponse.json({ error: "Method not allowed" }, { status: 405 })
 }

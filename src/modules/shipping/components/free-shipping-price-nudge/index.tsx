@@ -81,7 +81,7 @@ export default function ShippingPriceNudge({
   shippingOptions: StoreCartShippingOption[]
 }) {
   if (!cart || !shippingOptions?.length) {
-    return
+    return null
   }
 
   // Check if any shipping options have a conditional price based on item_total
