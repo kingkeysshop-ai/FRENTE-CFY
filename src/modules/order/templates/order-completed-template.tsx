@@ -4,6 +4,7 @@ import Items from "@modules/order/components/items"
 import OrderDetails from "@modules/order/components/order-details"
 import ShippingDetails from "@modules/order/components/shipping-details"
 import PaymentDetails from "@modules/order/components/payment-details"
+import LicenseKeysDisplay from "@modules/order/components/license-keys"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
 
@@ -68,6 +69,9 @@ export default async function OrderCompletedTemplate({ order }: OrderCompletedTe
               </div>
               <Items order={order} />
             </div>
+
+            {/* Licencias */}
+            <LicenseKeysDisplay orderId={order.id} />
 
             {/* Resumen */}
             <div>
