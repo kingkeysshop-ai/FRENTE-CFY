@@ -57,8 +57,8 @@ const Hero = () => {
             transform: mounted ? "translateY(0)" : "translateY(-16px)",
           }}
         >
-          <span className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs font-bold tracking-widest uppercase backdrop-blur-sm hover:bg-yellow-400/20 transition-colors duration-300 cursor-default">
-            <span style={{ display: "inline-block", animation: "heroSpin 8s linear infinite" }}>🔑</span>
+          <span className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-black/40 border border-yellow-400/60 text-white text-xs font-bold tracking-widest uppercase backdrop-blur-md hover:bg-yellow-400/20 transition-all duration-300 cursor-default shadow-[0_0_20px_rgba(250,204,21,0.2)]">
+            <span className="text-yellow-400" style={{ display: "inline-block", animation: "heroSpin 8s linear infinite" }}>🔑</span>
             Licencias Digitales Originales
           </span>
         </div>
@@ -100,9 +100,9 @@ const Hero = () => {
             transform: mounted ? "translateY(0)" : "translateY(24px)",
           }}
         >
-          <p className="text-lg md:text-xl text-gray-400 max-w-lg leading-relaxed">
+          <p className="text-lg md:text-xl text-gray-300 max-w-xl leading-loose">
             Las mejores licencias digitales al mejor precio.{" "}
-            <span className="text-yellow-400/80 font-semibold">Windows, Office, antivirus y más</span>
+            <span className="text-yellow-400/90 font-semibold">Windows, Office, antivirus y más</span>
             {" "}— activación inmediata garantizada.
           </p>
         </div>
@@ -118,14 +118,14 @@ const Hero = () => {
         >
           <Link
             href="/store"
-            className="group relative px-9 py-3.5 bg-yellow-400 text-gray-900 font-black rounded-xl text-base overflow-hidden hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(250,204,21,0.45)] transition-all duration-300"
+            className="group relative px-9 py-3.5 bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 font-black rounded-full text-base overflow-hidden hover:-translate-y-1 hover:shadow-[0_0_35px_rgba(250,204,21,0.5)] transition-all duration-300"
           >
-            <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12 pointer-events-none" />
+            <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 pointer-events-none" />
             <span className="relative">🛒 Ver Productos</span>
           </Link>
           <Link
             href="/account"
-            className="px-9 py-3.5 border-2 border-yellow-400/60 text-yellow-400 font-bold rounded-xl text-base hover:border-yellow-400 hover:bg-yellow-400/10 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(250,204,21,0.15)] transition-all duration-300"
+            className="px-9 py-3.5 border-2 border-white/40 text-white font-bold rounded-full text-base hover:border-white hover:bg-white/10 hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(255,255,255,0.1)] transition-all duration-300"
           >
             Mi Cuenta
           </Link>

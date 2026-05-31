@@ -46,7 +46,7 @@ export default async function Nav() {
               </Suspense>
               <LocalizedClientLink
                 href="/wishlist"
-                className="flex items-center gap-1 text-sm text-gray-400 hover:text-yellow-400 transition-colors"
+                className="flex items-center gap-1 text-sm text-white/80 hover:text-yellow-400 transition-colors"
                 aria-label="Favoritos"
               >
                 <span>❤️</span>

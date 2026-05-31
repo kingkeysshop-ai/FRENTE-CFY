@@ -24,7 +24,7 @@ const NavLinks = () => {
           >
             <span
               className="transition-colors duration-200 font-medium"
-              style={{ color: active ? "#facc15" : "#9ca3af" }}
+              style={{ color: active ? "#facc15" : "#ffffffcc" }}
             >
               {label}
             </span>

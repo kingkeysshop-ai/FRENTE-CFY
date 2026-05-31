@@ -16,13 +16,13 @@ export default function ScrollAwareHeader({ children }: { children: React.ReactN
     <div
       className={`sticky top-0 inset-x-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-gray-900/95 backdrop-blur-md shadow-lg shadow-black/30"
-          : "bg-gray-900/30 backdrop-blur-sm"
+          ? "bg-gray-950/95 backdrop-blur-md shadow-lg shadow-black/50 border-b border-yellow-500/20"
+          : "bg-transparent"
       }`}
     >
       <header
         className={`relative h-16 mx-auto transition-all duration-500 border-b ${
-          scrolled ? "border-yellow-400/20" : "border-transparent"
+          scrolled ? "border-yellow-500/10" : "border-transparent"
         }`}
       >
         {children}
