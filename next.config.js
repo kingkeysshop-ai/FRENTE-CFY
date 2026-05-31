@@ -14,7 +14,7 @@ const isDev = process.env.NODE_ENV === "development"
 const FRONTEND_URL = process.env.NEXT_PUBLIC_BASE_URL || (isDev ? "http://localhost:3000" : "https://front.cfynet.xyz")
 
 const ALLOWED_ORIGINS = isDev
-  ? ["localhost:3000"]
+  ? ["localhost:3000", "localhost:8000"]
   : [new URL(FRONTEND_URL).host, "backend.cfynet.xyz"]
 
 const securityHeaders = [

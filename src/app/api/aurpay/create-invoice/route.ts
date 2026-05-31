@@ -5,6 +5,8 @@ const AURPAY_API_BASE = process.env.AURPAY_API_BASE || "https://dashboard.aurpay
 const AURPAY_API_KEY = process.env.AURPAY_API_KEY
 const AURPAY_API_SECRET = process.env.AURPAY_API_SECRET
 const AURPAY_WEBHOOK_SECRET = process.env.AURPAY_WEBHOOK_SECRET
+const MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
+const MEDUSA_API_KEY = process.env.MEDUSA_API_KEY
 const NEXT_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 export async function POST(req: NextRequest) {
@@ -28,6 +30,29 @@ export async function POST(req: NextRequest) {
         { error: "Missing required fields: amount, currency, orderId, cartId" },
         { status: 400 }
       )
+    }
+
+    if (MEDUSA_BACKEND_URL && MEDUSA_API_KEY) {
+      try {
+        const cartRes = await fetch(
+          `${MEDUSA_BACKEND_URL}/store/carts/${cartId}`,
+          { headers: { "x-publishable-api-key": MEDUSA_API_KEY } }
+        )
+        if (cartRes.ok) {
+          const { cart: actualCart } = await cartRes.json()
+          const expectedAmount = actualCart?.total != null
+            ? (actualCart.total / 100).toFixed(2)
+            : null
+          if (expectedAmount && Number(amount).toFixed(2) !== expectedAmount) {
+            return NextResponse.json(
+              { error: "Amount does not match cart total" },
+              { status: 400 }
+            )
+          }
+        }
+      } catch {
+        console.warn("[Aurpay] Could not verify cart amount against backend")
+      }
     }
 
     const webhookSecretParam = AURPAY_WEBHOOK_SECRET ? `&secret=${AURPAY_WEBHOOK_SECRET}` : ""

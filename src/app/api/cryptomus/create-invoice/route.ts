@@ -4,6 +4,8 @@ import { checkRateLimit } from "@lib/rate-limit"
 
 const CRYPTOMUS_MERCHANT_ID = process.env.CRYPTOMUS_MERCHANT_ID
 const CRYPTOMUS_PAYMENT_KEY = process.env.CRYPTOMUS_PAYMENT_KEY
+const MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
+const MEDUSA_API_KEY = process.env.MEDUSA_API_KEY
 const NEXT_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 function generateSign(data: Record<string, unknown>, apiKey: string): string {
@@ -33,6 +35,29 @@ export async function POST(req: NextRequest) {
         { error: "Missing required fields: amount, currency, orderId, cartId" },
         { status: 400 }
       )
+    }
+
+    if (MEDUSA_BACKEND_URL && MEDUSA_API_KEY) {
+      try {
+        const cartRes = await fetch(
+          `${MEDUSA_BACKEND_URL}/store/carts/${cartId}`,
+          { headers: { "x-publishable-api-key": MEDUSA_API_KEY } }
+        )
+        if (cartRes.ok) {
+          const { cart: actualCart } = await cartRes.json()
+          const expectedAmount = actualCart?.total != null
+            ? (actualCart.total / 100).toFixed(2)
+            : null
+          if (expectedAmount && Number(amount).toFixed(2) !== expectedAmount) {
+            return NextResponse.json(
+              { error: "Amount does not match cart total" },
+              { status: 400 }
+            )
+          }
+        }
+      } catch {
+        console.warn("[Cryptomus] Could not verify cart amount against backend")
+      }
     }
 
     const payload: Record<string, unknown> = {

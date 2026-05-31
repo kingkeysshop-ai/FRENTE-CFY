@@ -512,6 +512,10 @@ export async function placeOrder(cartId?: string) {
  * Used for testing the full flow without a real payment gateway.
  */
 export async function testPaymentAndCapture(cartId?: string) {
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("Test payment is not available in production")
+  }
+
   const id = cartId || (await getCartId())
 
   if (!id) {

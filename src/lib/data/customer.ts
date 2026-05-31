@@ -13,6 +13,8 @@ import {
   removeCartId,
   setAuthToken,
 } from "./cookies"
+import { checkRateLimit } from "@lib/rate-limit"
+import { headers } from "next/headers"
 
 // ─── Recuperar cliente autenticado ───────────────────────────────────────────
 export const retrieveCustomer =
@@ -61,6 +63,12 @@ export const updateCustomer = async (body: any) => {
 
 // ─── Registro de nuevo cliente ────────────────────────────────────────────────
 export async function signup(_currentState: unknown, formData: FormData) {
+  const h = await headers()
+  const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"
+  if (!checkRateLimit(`signup:${ip}`, 3, 60000)) {
+    return "Demasiados registros desde esta IP. Intenta de nuevo en 1 minuto."
+  }
+
   const password = formData.get("password") as string
   const customerForm = {
     email: formData.get("email") as string,
@@ -92,7 +100,13 @@ export async function signup(_currentState: unknown, formData: FormData) {
 
 // ─── Login de cliente ─────────────────────────────────────────────────────────
 export async function login(_currentState: unknown, formData: FormData) {
+  const h = await headers()
+  const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"
   const email = formData.get("email") as string
+  if (!checkRateLimit(`login:${email}:${ip}`, 5, 60000)) {
+    return "Demasiados intentos. Intenta de nuevo en 1 minuto."
+  }
+
   const password = formData.get("password") as string
 
   try {
