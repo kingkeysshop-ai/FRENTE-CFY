@@ -139,7 +139,7 @@ export async function middleware(request: NextRequest) {
             maxAge: 60 * 60 * 24,
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
+            sameSite: "strict",
             path: "/",
           })
         }
@@ -184,7 +184,7 @@ export async function middleware(request: NextRequest) {
     return response
 
   } catch (error) {
-    console.error("Middleware error:", error)
+    console.error("[Middleware] Error:", error)
     return NextResponse.next()
   }
 }

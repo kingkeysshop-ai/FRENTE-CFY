@@ -22,6 +22,7 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
       const freshCart = await retrieveCart(cart.id)
 
       const session = getActivePaymentSession(freshCart)
+      const providerId = session?.provider_id || "aurapay"
 
       const redirectUrl = session?.data?.redirect_url
         || session?.data?.url
@@ -35,7 +36,7 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
           && !session?.data?.pay_url)
 
       if (isCorrupted) {
-        await initiatePaymentSession(freshCart, { provider_id: "aurapay" })
+        await initiatePaymentSession(freshCart, { provider_id: providerId })
 
         const updatedCart = await retrieveCart(cart.id)
         const updatedSession = getActivePaymentSession(updatedCart)

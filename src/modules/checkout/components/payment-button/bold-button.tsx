@@ -22,6 +22,7 @@ const BoldPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Props)
       const freshCart = await retrieveCart(cart.id)
 
       const session = getActivePaymentSession(freshCart)
+      const providerId = session?.provider_id || "bold"
 
       const redirectUrl = session?.data?.redirect_url
 
@@ -29,7 +30,7 @@ const BoldPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Props)
         || (typeof session?.data === "object" && !session?.data?.redirect_url)
 
       if (isCorrupted) {
-        await initiatePaymentSession(freshCart, { provider_id: "bold" })
+        await initiatePaymentSession(freshCart, { provider_id: providerId })
 
         const updatedCart = await retrieveCart(cart.id)
         const updatedSession = getActivePaymentSession(updatedCart)

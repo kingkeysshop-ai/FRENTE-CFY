@@ -1,3 +1,5 @@
+// In-memory rate limiter — funciona para single-instance Docker.
+// Para multi-instancia/serverless, reemplazar con Upstash Redis/Vercel KV.
 const store = new Map<string, { count: number; resetAt: number }>()
 
 setInterval(() => {
