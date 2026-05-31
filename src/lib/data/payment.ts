@@ -26,9 +26,11 @@ export const listCartPaymentMethods = async (regionId: string) => {
       }
     )
     .then(({ region }) =>
-      (region.payment_providers || []).sort((a: any, b: any) => {
-        return a.id > b.id ? 1 : -1
-      })
+      (region.payment_providers || [])
+        .filter((pp: any) => process.env.NODE_ENV !== "production" || pp.id !== "test-payment")
+        .sort((a: any, b: any) => {
+          return a.id > b.id ? 1 : -1
+        })
     )
     .catch(() => {
       return null

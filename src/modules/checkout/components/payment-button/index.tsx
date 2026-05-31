@@ -66,6 +66,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
         />
       )
     case isTestPayment(paymentSession?.provider_id):
+      if (process.env.NODE_ENV === "production") return null
       return (
         <TestPaymentButton
           cart={cart}
