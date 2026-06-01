@@ -189,6 +189,12 @@ export const updateCustomerPassword = async (
   _currentState: Record<string, unknown>,
   formData: FormData
 ): Promise<{ success: boolean; error: string | null }> => {
+  const h = await headers()
+  const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"
+  if (!checkRateLimit(`update-password:${ip}`, 5, 60000)) {
+    return { success: false, error: "Too many attempts. Please try again later." }
+  }
+
   const oldPassword = formData.get("old_password") as string
   const newPassword = formData.get("new_password") as string
   const confirmPassword = formData.get("confirm_password") as string

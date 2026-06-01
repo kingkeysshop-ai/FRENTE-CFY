@@ -14,6 +14,8 @@ import {
 } from "./cookies"
 import { getRegion } from "./regions"
 import { getLocale } from "@lib/data/locale-actions"
+import { checkRateLimit } from "@lib/rate-limit"
+import { headers } from "next/headers"
 
 /**
  * Retrieves a cart by its ID. If no ID is provided, it will use the cart ID from the cookies.
@@ -98,6 +100,12 @@ export async function getOrSetCart(countryCode: string) {
 }
 
 export async function updateCart(data: any) {
+  const h = await headers()
+  const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"
+  if (!checkRateLimit(`cart-update:${ip}`, 10, 60000)) {
+    throw new Error("Too many requests. Please try again later.")
+  }
+
   const cartId = await getCartId()
 
   if (!cartId) {
@@ -134,6 +142,12 @@ export async function addToCart({
   quantity: number
   countryCode: string
 }) {
+  const h = await headers()
+  const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"
+  if (!checkRateLimit(`cart-add:${ip}`, 10, 60000)) {
+    throw new Error("Too many requests. Please try again later.")
+  }
+
   if (!variantId) {
     throw new Error("Missing variant ID when adding to cart")
   }
@@ -193,6 +207,12 @@ export async function updateLineItem({
   lineId: string
   quantity: number
 }) {
+  const h = await headers()
+  const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"
+  if (!checkRateLimit(`cart-update-line:${ip}`, 20, 60000)) {
+    throw new Error("Too many requests. Please try again later.")
+  }
+
   if (!lineId) {
     throw new Error("Missing lineItem ID when updating line item")
   }
@@ -224,6 +244,12 @@ export async function updateLineItem({
 }
 
 export async function deleteLineItem(lineId: string) {
+  const h = await headers()
+  const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"
+  if (!checkRateLimit(`cart-delete-line:${ip}`, 20, 60000)) {
+    throw new Error("Too many requests. Please try again later.")
+  }
+
   if (!lineId) {
     throw new Error("Missing lineItem ID when deleting line item")
   }
@@ -261,6 +287,12 @@ export async function setShippingMethod({
   cartId: string
   shippingMethodId: string
 }) {
+  const h = await headers()
+  const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"
+  if (!checkRateLimit(`cart-set-shipping:${ip}`, 10, 60000)) {
+    throw new Error("Too many requests. Please try again later.")
+  }
+
   const headers = {
     ...(await getAuthHeaders()),
   }
@@ -285,6 +317,12 @@ export async function initiatePaymentSession(
   cart: any,
   data: any
 ) {
+  const h = await headers()
+  const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"
+  if (!checkRateLimit(`cart-init-payment:${ip}`, 10, 60000)) {
+    throw new Error("Too many requests. Please try again later.")
+  }
+
   const headers = {
     ...(await getAuthHeaders()),
   }
@@ -304,6 +342,12 @@ export async function initiatePaymentSession(
 }
 
 export async function applyPromotions(codes: string[]) {
+  const h = await headers()
+  const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"
+  if (!checkRateLimit(`cart-apply-promo:${ip}`, 5, 60000)) {
+    throw new Error("Too many requests. Please try again later.")
+  }
+
   const cartId = await getCartId()
 
   if (!cartId) {
@@ -346,6 +390,12 @@ export async function submitPromotionForm(
 
 // TODO: Pass a POJO instead of a form entity here
 export async function setAddresses(currentState: unknown, formData: FormData) {
+  const h = await headers()
+  const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"
+  if (!checkRateLimit(`cart-set-addresses:${ip}`, 10, 60000)) {
+    return "Too many requests. Please try again later."
+  }
+
   try {
     if (!formData) {
       throw new Error("No form data found when setting addresses")
@@ -403,6 +453,12 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
 }
 
 export async function setDigitalInfo(currentState: unknown, formData: FormData) {
+  const h = await headers()
+  const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"
+  if (!checkRateLimit(`cart-set-digital:${ip}`, 10, 60000)) {
+    return "Too many requests. Please try again later."
+  }
+
   let countryCode = process.env.DEFAULT_REGION || process.env.NEXT_PUBLIC_DEFAULT_REGION || "gb"
 
   try {
@@ -470,6 +526,12 @@ export async function setDigitalInfo(currentState: unknown, formData: FormData) 
  * @returns The cart object if the order was successful, or null if not.
  */
 export async function placeOrder(cartId?: string) {
+  const h = await headers()
+  const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"
+  if (!checkRateLimit(`cart-place-order:${ip}`, 5, 60000)) {
+    throw new Error("Too many requests. Please try again later.")
+  }
+
   const id = cartId || (await getCartId())
 
   if (!id) {
