@@ -47,6 +47,14 @@ export const paymentInfoMap: Record<
     title: "Aurpay (Crypto)",
     icon: <CreditCard />,
   },
+  pp_aurapay_aurapay: {
+    title: "Aurpay (Crypto)",
+    icon: <CreditCard />,
+  },
+  aurapay: {
+    title: "Aurpay (Crypto)",
+    icon: <CreditCard />,
+  },
   pp_bold_bold: {
     title: "Bold (Colombia)",
     icon: <CreditCard />,
@@ -81,6 +89,7 @@ export const isCryptomus = (providerId?: string) => {
 
 export const isAurapay = (providerId?: string) => {
   return providerId?.startsWith("pp_aurpay") || providerId === "aurpay"
+    || providerId?.startsWith("pp_aurapay") || providerId === "aurapay"
 }
 
 export const isBold = (providerId?: string) => {
@@ -95,11 +104,16 @@ export function getActivePaymentSession(cart: any) {
   if (cart?.payment_session?.status === "pending") {
     return cart.payment_session
   }
+  if (cart?.payment_session) {
+    return cart.payment_session
+  }
   if (cart?.payment_collection?.payment_sessions) {
     return cart.payment_collection.payment_sessions.find((s: any) => s.status === "pending")
+      || cart.payment_collection.payment_sessions[0]
   }
   if (cart?.payment_sessions) {
     return cart.payment_sessions.find((s: any) => s.status === "pending")
+      || cart.payment_sessions[0]
   }
   return null
 }
