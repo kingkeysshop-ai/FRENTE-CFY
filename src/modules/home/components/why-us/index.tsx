@@ -60,6 +60,14 @@ const WhyUs = () => {
     return () => observer.disconnect()
   }, [])
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = ((e.clientX - rect.left) / rect.width) * 100
+    const y = ((e.clientY - rect.top) / rect.height) * 100
+    e.currentTarget.style.setProperty('--mx', `${x}%`)
+    e.currentTarget.style.setProperty('--my', `${y}%`)
+  }
+
   return (
     <section ref={ref} className="relative py-20 overflow-hidden">
 
@@ -78,10 +86,11 @@ const WhyUs = () => {
           }}
         >
           <span className="px-4 py-1.5 rounded-full bg-[#facc15]/10 border border-[#facc15]/30 text-[#facc15] text-xs font-bold tracking-widest uppercase">
-            ⭐ ¿Por qué elegirnos?
+            👑 ¿Por qué elegirnos?
           </span>
-          <h2 className="text-3xl md:text-4xl font-black text-white">
-            La elección <span className="text-[#facc15]">inteligente</span>
+          <h2 className="text-3xl md:text-4xl font-black font-display text-white">
+            Diseñado para quienes exigen<br/>
+            <span className="text-gold">calidad y confianza</span>
           </h2>
           <p className="text-[#888888] max-w-lg text-sm leading-relaxed">
             Miles de clientes ya confiaron en King Keys. Estas son las razones por las que nos eligen.
@@ -93,7 +102,8 @@ const WhyUs = () => {
           {REASONS.map((r, i) => (
             <div
               key={r.title}
-              className="group relative bg-[#111111] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col gap-4 hover:border-[#facc15]/50 hover:shadow-[0_0_30px_rgba(250,204,21,0.07)] transition-all duration-300"
+              onMouseMove={handleMouseMove}
+              className="card-glow group relative bg-[#111111] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col gap-4 hover:border-[#facc15]/50 hover:shadow-[0_0_30px_rgba(250,204,21,0.07)] hover:-translate-y-0.5 transition-all duration-300"
               style={{
                 transition: `opacity 600ms ease-out ${i * 100}ms, transform 600ms ease-out ${i * 100}ms, border-color 300ms, box-shadow 300ms`,
                 opacity: visible ? 1 : 0,
@@ -104,16 +114,16 @@ const WhyUs = () => {
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-yellow-400/0 to-yellow-400/0 group-hover:from-yellow-400/5 group-hover:to-transparent transition-all duration-300 pointer-events-none" />
 
               {/* Icono + stat */}
-              <div className="flex items-start justify-between">
+              <div className="flex items-start justify-between relative z-[1]">
                 <span className="text-3xl">{r.icon}</span>
                 <div className="flex flex-col items-end">
-                  <span className="text-xl font-black text-[#facc15] leading-none">{r.stat}</span>
+                  <span className="text-xl font-black text-gold leading-none">{r.stat}</span>
                   <span className="text-[10px] text-[#888888] uppercase tracking-wider">{r.statLabel}</span>
                 </div>
               </div>
 
               {/* Texto */}
-              <div className="flex flex-col gap-1.5">
+              <div className="flex flex-col gap-1.5 relative z-[1]">
                 <h3 className="text-white font-bold text-base">{r.title}</h3>
                 <p className="text-[#888888] text-sm leading-relaxed">{r.desc}</p>
               </div>

@@ -32,7 +32,7 @@ export default async function Nav() {
             {/* Centro - Logo */}
             <LocalizedClientLink
               href="/"
-              className="text-xl font-black tracking-widest uppercase hover:opacity-80 transition-opacity duration-200"
+              className="text-2xl font-black tracking-normal uppercase hover:opacity-90 transition-opacity duration-200"
               data-testid="nav-store-link"
             >
               <span className="text-white">KING</span>

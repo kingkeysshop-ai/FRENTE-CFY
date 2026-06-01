@@ -13,7 +13,7 @@ export default async function PreviewPrice({ price }: { price: VariantPrice }) {
       <span
         className={
           price.price_type === "sale"
-            ? "text-[#facc15] font-black text-base"
+            ? "text-gold font-black text-base font-mono"
             : "text-white font-bold text-base"
         }
         data-testid="price"

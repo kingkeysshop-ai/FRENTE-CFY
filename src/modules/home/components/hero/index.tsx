@@ -1,7 +1,7 @@
 "use client"
 
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, useCallback } from "react"
 
 const PLATFORMS = [
   { name: "Windows", icon: "💠" },
@@ -12,10 +12,18 @@ const PLATFORMS = [
   { name: "Antivirus", icon: "🛡️" },
 ]
 
-const STATS = [
-  { value: "100%", label: "Original" },
-  { value: "24/7", label: "Soporte" },
-  { value: "5K+", label: "Clientes" },
+const HERO_PRODUCTS = [
+  { icon: "🪟", name: "Windows 11 Pro", tags: "#licencia #vitalicia #1pc", price: "$12.90", old: "$89.99" },
+  { icon: "📊", name: "Office 2024 Pro", tags: "#word #excel #ppt #1pc", price: "$18.50", old: "$119.99" },
+  { icon: "🛡️", name: "ESET Internet Security", tags: "#antivirus #3devices #1year", price: "$9.90", old: "$39.99" },
+]
+
+const TERMINAL_LINES = [
+  { prompt: "$", cmd: "./productos --list --top-sellers" },
+  { prompt: "", cmd: "Cargando catálogo...", isOutput: true, ok: true },
+  { prompt: "", cmd: "Mostrando 3 de 24 productos", isOutput: true, highlight: true },
+  { prompt: "$", cmd: "./comprar --id windows-11-pro" },
+  { prompt: "", cmd: "Procesando pago seguro... listo", isOutput: true, done: true },
 ]
 
 type HeroProps = {
@@ -25,20 +33,66 @@ type HeroProps = {
 const Hero = ({ productCount }: HeroProps) => {
   const [mounted, setMounted] = useState(false)
   const [scrollY, setScrollY] = useState(0)
+  const [typewriterDone, setTypewriterDone] = useState(false)
+  const [visibleLines, setVisibleLines] = useState(0)
+  const [hoverBtn, setHoverBtn] = useState(false)
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 50)
     const onScroll = () => setScrollY(window.scrollY)
     window.addEventListener("scroll", onScroll, { passive: true })
-
     return () => {
       clearTimeout(t)
       window.removeEventListener("scroll", onScroll)
     }
   }, [])
 
+  useEffect(() => {
+    if (!mounted) return
+    let i = 0
+    const interval = setInterval(() => {
+      i++
+      setVisibleLines(i)
+      if (i >= TERMINAL_LINES.length) {
+        clearInterval(interval)
+        setTimeout(() => setTypewriterDone(true), 300)
+      }
+    }, 350)
+    return () => clearInterval(interval)
+  }, [mounted])
+
   return (
     <div className="relative w-full min-h-[90vh] bg-gradient-to-br from-[#0a0a0a] via-[#111111] to-black overflow-hidden flex items-center justify-center">
+
+      {/* Subtle grid pattern */}
+      <div className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage: [
+            "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px)",
+            "linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)",
+          ].join(", "),
+          backgroundSize: "60px 60px",
+          maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 70%)",
+          WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 70%)",
+        }}
+      />
+
+      {/* Corner gold particles */}
+      <div className="absolute top-0 left-0 w-64 h-64 pointer-events-none"
+        style={{
+          background: "radial-gradient(circle at 0% 0%, rgba(250,204,21,0.04) 0%, transparent 60%)",
+        }}
+      />
+      <div className="absolute top-0 right-0 w-64 h-64 pointer-events-none"
+        style={{
+          background: "radial-gradient(circle at 100% 0%, rgba(250,204,21,0.03) 0%, transparent 60%)",
+        }}
+      />
+      <div className="absolute bottom-0 left-1/4 w-96 h-64 pointer-events-none"
+        style={{
+          background: "radial-gradient(circle at 50% 100%, rgba(250,204,21,0.025) 0%, transparent 60%)",
+        }}
+      />
 
       {/* Section glow divs */}
       <div
@@ -47,180 +101,208 @@ const Hero = ({ productCount }: HeroProps) => {
       />
       <div className="absolute bottom-0 right-[-10%] w-[400px] h-[400px] rounded-full bg-[#facc15] opacity-[0.04] blur-[100px] pointer-events-none" />
 
-      {/* Canvas de particulas interactivas */}
+      {/* Particle canvas */}
       <ParticleCanvas />
 
-      {/* Grid de puntos de fondo */}
+      {/* Grid de puntos */}
       <div className="absolute inset-0 hero-grid-bg" />
 
-      {/* Contenido principal */}
-      <div className="relative z-10 flex flex-col items-center justify-center text-center px-6 md:px-12 gap-6 py-24">
+      {/* Contenido - split layout con terminal */}
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center py-24 lg:py-0 min-h-[90vh]">
 
-        {/* Badge */}
+        {/* LEFT: Brand copy */}
         <div
+          className="flex flex-col gap-5"
           style={{
             transition: "opacity 700ms ease-out, transform 700ms ease-out",
-            transitionDelay: "0ms",
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? "translateY(0)" : "translateY(-16px)",
-          }}
-        >
-          <span className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-[#0a0a0a]/40 border border-[#facc15]/60 text-white text-xs font-bold tracking-widest uppercase backdrop-blur-md hover:bg-[#facc15]/20 transition-all duration-300 cursor-default shadow-glow-yellow-sm">
-            <span className="text-[#facc15]" style={{ display: "inline-block", animation: "heroSpin 8s linear infinite" }}>🔑</span>
-            Licencias Digitales Originales
-          </span>
-        </div>
-
-        {/* Platform badges */}
-        <div
-          className="flex flex-wrap items-center justify-center gap-2"
-          style={{
-            transition: "opacity 700ms ease-out 80ms, transform 700ms ease-out 80ms",
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? "translateY(0)" : "translateY(-12px)",
-          }}
-        >
-          {PLATFORMS.map((p, i) => (
-            <span
-              key={p.name}
-              className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[#888888] text-[11px] font-semibold hover:bg-[#facc15]/10 hover:border-[#facc15]/30 hover:text-[#facc15] transition-all duration-300 cursor-default"
-              style={{ animation: mounted ? `heroFloat 4s ease-in-out ${i * 0.3}s infinite` : "none" }}
-            >
-              {p.icon} {p.name}
-            </span>
-          ))}
-        </div>
-
-        {/* Titulo KING / KEYS */}
-        <div
-          className="flex flex-col items-center leading-none"
-          style={{
-            transition: "opacity 700ms ease-out 150ms, transform 700ms ease-out 150ms",
             opacity: mounted ? 1 : 0,
             transform: mounted ? "translateY(0)" : "translateY(24px)",
           }}
         >
-          <h1
-            className="text-7xl md:text-8xl lg:text-9xl font-black text-white tracking-tight leading-none text-glow-yellow"
-          >
-            KING
-          </h1>
-          <h1
-            className="text-7xl md:text-8xl lg:text-9xl font-black tracking-tight leading-none"
-            style={{
-              background: "linear-gradient(135deg, #facc15 0%, #fde68a 50%, #f59e0b 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              filter: "drop-shadow(0 0 30px rgba(250,204,21,0.4))",
-            }}
-          >
-            KEYS
-          </h1>
-        </div>
+          {/* Badge tipo terminal */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-[#0a0a0a]/40 border border-[#facc15]/20 text-white text-xs font-mono tracking-wider backdrop-blur-md w-fit shadow-glow-yellow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-ping" />
+            <span className="text-[#facc15] font-medium">$</span>
+            <span>KING KEYS v2.0 · ONLINE</span>
+          </div>
 
-        {/* Subtitulo */}
-        <div
-          style={{
-            transition: "opacity 700ms ease-out 300ms, transform 700ms ease-out 300ms",
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? "translateY(0)" : "translateY(24px)",
-          }}
-        >
-          <p className="text-lg md:text-xl text-[#888888] max-w-xl leading-loose">
-            Las mejores licencias digitales al mejor precio.{" "}
-            <span className="text-[#facc15]/90 font-semibold">Windows, Office, antivirus y más</span>
-            {" "}— activación inmediata garantizada.
+          {/* Platform badges */}
+          <div className="flex flex-wrap items-center gap-2">
+            {PLATFORMS.map((p, i) => (
+              <span
+                key={p.name}
+                className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[#888888] text-[11px] font-semibold hover:bg-[#facc15]/10 hover:border-[#facc15]/30 hover:text-[#facc15] transition-all duration-300 cursor-default"
+                style={{ animation: mounted ? `heroFloat 4s ease-in-out ${i * 0.3}s infinite` : "none" }}
+              >
+                {p.icon} {p.name}
+              </span>
+            ))}
+          </div>
+
+          {/* Titulo */}
+          <div>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none">
+              Terminal <span className="text-gold">de Licencias</span>
+            </h1>
+          </div>
+
+          {/* Subtitulo */}
+          <p className="text-sm md:text-base text-[#888888] max-w-lg leading-relaxed font-mono">
+            <span className="text-[#facc15]/70">$</span> Sistema de activación inmediata — licencias originales{" "}
+            <span className="text-[#facc15]/90 font-semibold">Windows, Office, antivirus y gaming</span>
+            {" "}al mejor precio garantizado.
           </p>
-        </div>
 
-        {/* Product count badge */}
-        {productCount !== null && (
-          <div
-            style={{
-              transition: "opacity 700ms ease-out 400ms, transform 700ms ease-out 400ms",
-              opacity: mounted ? 1 : 0,
-            }}
-          >
-            <span className="inline-flex items-center gap-1.5 text-xs text-[#888888]">
+          {/* Product count */}
+          {productCount !== null && (
+            <div className="flex items-center gap-2 text-xs text-[#888888] font-mono">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
               {productCount}+ productos disponibles · Envío instantáneo
-            </span>
-          </div>
-        )}
+            </div>
+          )}
 
-        {/* Botones */}
-        <div
-          className="flex flex-col sm:flex-row gap-4 mt-2"
-          style={{
-            transition: "opacity 700ms ease-out 450ms, transform 700ms ease-out 450ms",
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? "translateY(0)" : "translateY(24px)",
-          }}
-        >
-          <LocalizedClientLink
-            href="/store"
-            className="group relative px-9 py-3.5 bg-[#facc15] text-gray-900 font-black rounded-full text-base overflow-hidden hover:-translate-y-1 hover:shadow-glow-yellow transition-all duration-300"
-          >
-            <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 pointer-events-none" />
-            <span className="relative">🛒 Ver Productos</span>
-          </LocalizedClientLink>
-          <LocalizedClientLink
-            href="/store?sortBy=price_asc"
-            className="px-9 py-3.5 border-2 border-[#facc15]/40 text-[#facc15] font-bold rounded-full text-base hover:border-[#facc15] hover:bg-[#facc15]/10 hover:-translate-y-1 hover:shadow-glow-yellow-sm transition-all duration-300"
-          >
-            🔥 Ver Ofertas del Día
-          </LocalizedClientLink>
-          <LocalizedClientLink
-            href="/account"
-            className="px-9 py-3.5 border-2 border-white/20 text-white font-bold rounded-full text-base hover:border-white/60 hover:bg-white/10 hover:-translate-y-1 transition-all duration-300"
-          >
-            Mi Cuenta
-          </LocalizedClientLink>
+          {/* Botones con prefijo $ */}
+          <div className="flex flex-col sm:flex-row gap-3 mt-1">
+            <LocalizedClientLink
+              href="/store"
+              onMouseEnter={() => setHoverBtn(true)}
+              onMouseLeave={() => setHoverBtn(false)}
+              className="group relative px-8 py-3.5 bg-gradient-to-r from-[#facc15] to-[#f59e0b] text-gray-900 font-black rounded-[10px] text-sm overflow-hidden hover:-translate-y-0.5 transition-all duration-300 font-mono tracking-wide shadow-[0_1px_0_rgba(255,255,255,0.3)_inset,0_-1px_0_rgba(0,0,0,0.2)_inset,0_4px_16px_rgba(250,204,21,0.25)] hover:shadow-[0_1px_0_rgba(255,255,255,0.3)_inset,0_-1px_0_rgba(0,0,0,0.2)_inset,0_8px_32px_rgba(250,204,21,0.45)] active:shadow-[0_1px_0_rgba(255,255,255,0.1)_inset,0_-1px_0_rgba(0,0,0,0.3)_inset,0_2px_8px_rgba(250,204,21,0.15)]"
+            >
+              <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 pointer-events-none" />
+              <span className="relative flex items-center gap-1.5">
+                <span className="opacity-70">$</span>
+                <span>./explorar-tienda</span>
+                {hoverBtn && <span className="w-[3px] h-4 bg-gray-900/60 animate-pulse" />}
+              </span>
+            </LocalizedClientLink>
+            <LocalizedClientLink
+              href="/store?sortBy=price_asc"
+              className="group relative px-8 py-3.5 border border-[#facc15]/30 text-[#facc15] font-bold rounded-[10px] text-sm hover:border-[#facc15] hover:bg-[#facc15]/10 hover:-translate-y-0.5 transition-all duration-300 inline-flex items-center justify-center gap-2 font-mono tracking-wide"
+            >
+              <span className="opacity-70">$</span>
+              <span>./ofertas --today</span>
+              <span className="w-[3px] h-4 bg-[#facc15] opacity-0 group-hover:opacity-100 animate-pulse transition-opacity" />
+            </LocalizedClientLink>
+          </div>
+
+          {/* Stats como comandos */}
+          <div className="flex gap-8 md:gap-12 pt-4 border-t border-white/5">
+            <div className="flex flex-col items-start gap-0.5 group cursor-default">
+              <span className="text-[10px] text-[#555] font-mono tracking-tight">&gt; garantia.check()</span>
+              <span className="text-xl font-black text-gold group-hover:scale-110 transition-transform duration-200">100%</span>
+            </div>
+            <div className="flex flex-col items-start gap-0.5 group cursor-default">
+              <span className="text-[10px] text-[#555] font-mono tracking-tight">&gt; soporte.status()</span>
+              <span className="text-xl font-black text-gold group-hover:scale-110 transition-transform duration-200">24/7</span>
+            </div>
+            <div className="flex flex-col items-start gap-0.5 group cursor-default">
+              <span className="text-[10px] text-[#555] font-mono tracking-tight">&gt; clientes.total()</span>
+              <span className="text-xl font-black text-gold group-hover:scale-110 transition-transform duration-200">5K+</span>
+            </div>
+          </div>
         </div>
 
-        {/* Stats */}
+        {/* RIGHT: Terminal window */}
         <div
-          className="flex gap-8 md:gap-16 mt-6 pt-6 border-t border-[#2a2a2a]/60"
+          className="hidden lg:flex items-center justify-center"
           style={{
-            transition: "opacity 700ms ease-out 600ms, transform 700ms ease-out 600ms",
+            transition: "opacity 800ms ease-out 200ms, transform 800ms ease-out 200ms",
             opacity: mounted ? 1 : 0,
             transform: mounted ? "translateY(0)" : "translateY(24px)",
           }}
         >
-          {STATS.map((stat) => (
-            <div key={stat.label} className="flex flex-col items-center gap-1 group cursor-default">
-              <span className="text-2xl font-black text-[#facc15] group-hover:scale-110 transition-transform duration-200">
-                {stat.value}
-              </span>
-              <span className="text-xs text-[#888888] uppercase tracking-widest group-hover:text-[#888888]/80 transition-colors duration-200">
-                {stat.label}
-              </span>
+          <div
+            className="terminal-win w-full max-w-[480px] relative"
+            style={{
+              animation: "heroFloatCard 6s ease-in-out infinite",
+              boxShadow: "0 0 40px rgba(250,204,21,0.06), 0 0 80px rgba(0,255,136,0.02)",
+            }}
+          >
+            {/* Title bar */}
+            <div className="terminal-bar">
+              <div className="terminal-dots">
+                <span className="terminal-dot terminal-dot-red" />
+                <span className="terminal-dot terminal-dot-yellow" />
+                <span className="terminal-dot terminal-dot-green" />
+              </div>
+              <span className="terminal-title">king@keys:<span className="text-[#facc15]">~</span>$ bash productos.sh</span>
+              <span className="w-[52px]" />
             </div>
-          ))}
+
+            {/* Body with typewriter */}
+            <div className="terminal-body min-h-[280px]">
+              {TERMINAL_LINES.slice(0, visibleLines).map((line, i) => {
+                if (line.isOutput) {
+                  return (
+                    <div key={i} className="terminal-out" style={{ marginBottom: line.done ? 0 : 12 }}>
+                      {line.ok && <span className="text-green-400">✔</span>}
+                      {line.highlight && <span className="text-[#facc15]">▶</span>}
+                      {" "}{line.cmd}
+                      {line.done && <span className="text-green-400"> listo</span>}
+                    </div>
+                  )
+                }
+                return (
+                  <div key={i} className="terminal-line">
+                    <span className="terminal-prompt">{line.prompt}</span>
+                    <span className="terminal-cmd">{line.cmd}</span>
+                    {i === visibleLines - 1 && !typewriterDone && i < TERMINAL_LINES.length - 1 && (
+                      <span className="terminal-cursor" />
+                    )}
+                    {i === TERMINAL_LINES.length - 1 && typewriterDone && (
+                      <span className="terminal-cursor" />
+                    )}
+                  </div>
+                )
+              })}
+
+              {/* Product rows after typewriter */}
+              {typewriterDone && (
+                <div className="flex flex-col gap-2 mt-3 mb-3">
+                  {HERO_PRODUCTS.map((p, i) => (
+                    <div
+                      key={p.name}
+                      className="flex items-center gap-2.5 p-2.5 rounded-lg border border-[rgba(250,204,21,0.08)] bg-[rgba(250,204,21,0.02)] hover:bg-[rgba(250,204,21,0.04)] hover:border-[rgba(250,204,21,0.15)] hover:translate-x-1 transition-all duration-300 cursor-default"
+                      style={{ animation: `fadeSlideUp 0.5s ${i * 0.12}s both` }}
+                    >
+                      <span className="text-xl flex-shrink-0">{p.icon}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-semibold">{p.name}</div>
+                        <div className="text-xs text-[#555] font-mono">{p.tags}</div>
+                      </div>
+                      <div className="text-right flex-shrink-0">
+                        <div className="text-base font-bold font-mono text-gold">{p.price}</div>
+                        <div className="text-[11px] text-[#444] font-mono line-through">{p.old}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Scroll Indicator */}
       <div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none z-20"
         style={{
-          transition: "opacity 700ms ease-out 900ms, transform 700ms ease-out 900ms",
+          transition: "opacity 700ms ease-out 900ms",
           opacity: mounted && scrollY < 80 ? 1 : 0,
-          transform: mounted && scrollY < 80 ? "translateY(0)" : "translateY(12px)",
         }}
       >
-        <span className="text-[10px] text-[#888888] uppercase tracking-[0.2em]">Scroll</span>
-        <div className="w-5 h-8 rounded-full border-2 border-[#2a2a2a] flex items-start justify-center p-1">
+        <span className="text-[10px] text-[#555] uppercase tracking-[0.2em] font-medium font-mono">Scroll</span>
+        <div className="w-5 h-8 rounded-full border border-white/10 flex items-start justify-center p-1">
           <div
-            className="w-1 h-2 bg-[#facc15] rounded-full"
-            style={{ animation: "scrollDot 1.8s ease-in-out infinite" }}
+            className="w-1 h-2 rounded-full"
+            style={{ background: "#facc15", animation: "scrollDot 1.8s ease-in-out infinite" }}
           />
         </div>
       </div>
 
       {/* Linea decorativa inferior */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#facc15]/30 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#facc15]/20 to-transparent z-20" />
 
       {/* Keyframes */}
       <style>{`
@@ -229,14 +311,18 @@ const Hero = ({ productCount }: HeroProps) => {
           50%  { transform: translateY(-18px) translateX(8px) scale(1.15); }
           100% { transform: translateY(-30px) translateX(-6px) scale(0.85); }
         }
+        @keyframes heroFloatCard {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
         @keyframes scrollDot {
           0%   { transform: translateY(0); opacity: 1; }
           80%  { transform: translateY(12px); opacity: 0; }
           100% { transform: translateY(0); opacity: 0; }
         }
-        @keyframes heroSpin {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
+        @keyframes fadeSlideUp {
+          from { opacity: 0; transform: translateY(12px); }
+          to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </div>

@@ -57,6 +57,9 @@ module.exports = {
       boxShadow: {
         "glow-yellow": "0 0 30px rgba(250,204,21,0.25)",
         "glow-yellow-sm": "0 0 12px rgba(250,204,21,0.15)",
+        "glow-gold": "0 0 40px rgba(250,204,21,0.15)",
+        "glow-gold-lg": "0 0 80px rgba(250,204,21,0.08)",
+        "card-hover": "0 20px 60px rgba(0,0,0,0.4)",
       },
       maxWidth: {
         "8xl": "100rem",
@@ -83,6 +86,22 @@ module.exports = {
           "Helvetica Neue",
           "Ubuntu",
           "sans-serif",
+        ],
+        display: [
+          "Playfair Display",
+          "Georgia",
+          "serif",
+        ],
+        mono: [
+          "JetBrains Mono",
+          "Menlo",
+          "Monaco",
+          "monospace",
+        ],
+        tech: [
+          "Anonymous Pro",
+          "Courier New",
+          "monospace",
         ],
       },
       keyframes: {
@@ -139,6 +158,10 @@ module.exports = {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(6px)" },
         },
+        "gold-shimmer": {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
       },
       animation: {
         ring: "ring 2.2s cubic-bezier(0.5, 0, 0.5, 1) infinite",
@@ -158,6 +181,7 @@ module.exports = {
         float: "float 3.5s ease-in-out infinite",
         "pulse-glow": "pulse-glow 4s ease-in-out infinite",
         "bounce-scroll": "bounce-scroll 1.4s ease-in-out infinite",
+        "gold-shimmer": "gold-shimmer 3s ease-in-out infinite",
       },
     },
   },

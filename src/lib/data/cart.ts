@@ -555,7 +555,7 @@ export async function placeOrder(cartId?: string) {
 
   if (cartRes?.type === "order") {
     const countryCode =
-      cartRes.order.shipping_address?.country_code?.toLowerCase() || "gb"
+      cartRes.order?.shipping_address?.country_code?.toLowerCase() || "gb"
 
     const orderCacheTag = await getCacheTag("orders")
     revalidateTag(orderCacheTag)

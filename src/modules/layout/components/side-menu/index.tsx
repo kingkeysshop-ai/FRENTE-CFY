@@ -115,7 +115,7 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                     {/* ── Header ── */}
                     <div>
                       <div className="flex justify-between items-center mb-8">
-                        <span className="text-lg font-black tracking-widest">
+                        <span className="text-lg font-black tracking-normal uppercase">
                           <span className="text-white">KING</span>
                           <span className="text-[#facc15]"> KEYS</span>
                         </span>

@@ -23,7 +23,7 @@ const NavLinks = () => {
             data-testid={href === "/account" ? "nav-account-link" : undefined}
           >
             <span
-              className={`transition-colors duration-200 font-medium ${active ? "text-[#facc15]" : "text-[#888888]"}`}
+              className={`transition-colors duration-200 font-medium hover:text-[#F5C518] ${active ? "text-[#F5C518]" : "text-[#888888]"}`}
             >
               {label}
             </span>

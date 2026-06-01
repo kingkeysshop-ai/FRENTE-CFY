@@ -27,7 +27,7 @@ export default function CheckoutLayout({
           {/* Logo */}
           <LocalizedClientLink
             href="/"
-            className="text-xl font-black tracking-widest uppercase"
+            className="text-xl font-black tracking-normal uppercase"
             data-testid="store-link"
           >
             <span className="text-white">KING</span>
@@ -52,7 +52,7 @@ export default function CheckoutLayout({
       {/* Footer minimo */}
       <div className="py-6 w-full flex items-center justify-center border-t border-[#1a1a1a]">
         <span className="text-xs text-[#888888]">
-          © {new Date().getFullYear()} <span className="text-[#facc15] font-bold">King Keys</span> · Todos los derechos reservados
+          © {new Date().getFullYear()} <span className="font-bold text-gold">King Keys</span> · Todos los derechos reservados
         </span>
       </div>
 

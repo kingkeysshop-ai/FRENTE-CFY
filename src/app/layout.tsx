@@ -9,8 +9,8 @@ export const metadata: Metadata = {
     default: "KING KEYS - Claves Digitales al Instante",
     template: "%s | KING KEYS",
   },
-  description: "King Keys es tu tienda de confianza para claves digitales: Windows, Office, Xbox, PlayStation y mas. Entrega inmediata, precios imbatibles y soporte 24/7.",
-  keywords: ["claves digitales", "licencias windows", "office barato", "xbox game pass", "playstation plus", "steam keys", "king keys", "software original"],
+  description: "King Keys — El Reino Digital. Licencias originales para Windows, Office, Xbox, PlayStation y más. Entrega inmediata, precios sin competencia y soporte 24/7 en Colombia.",
+  keywords: ["claves digitales", "licencias windows", "office barato", "xbox game pass", "playstation plus", "steam keys", "king keys", "software original", "reino digital", "licencias colombia"],
   authors: [{ name: "King Keys" }],
   creator: "King Keys",
   manifest: "/manifest.json",
@@ -33,13 +33,13 @@ export const metadata: Metadata = {
     url: getBaseURL(),
     siteName: "King Keys",
     title: "KING KEYS - Claves Digitales al Instante",
-    description: "Compra claves digitales originales al mejor precio. Windows, Office, Xbox, PlayStation y mas. Entrega inmediata.",
-    images: [{ url: "/opengraph-image.jpg", width: 1200, height: 630, alt: "King Keys - Claves Digitales" }],
+    description: "El Reino Digital — Licencias originales para Windows, Office, Xbox, PlayStation y más. Entrega inmediata, mejor precio garantizado.",
+    images: [{ url: "/opengraph-image.jpg", width: 1200, height: 630, alt: "King Keys — El Reino Digital" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "KING KEYS - Claves Digitales al Instante",
-    description: "Compra claves digitales originales al mejor precio. Entrega inmediata.",
+    description: "El Reino Digital — Licencias originales al mejor precio. Entrega inmediata.",
     images: ["/twitter-image.jpg"],
   },
   robots: {
@@ -58,16 +58,20 @@ export const metadata: Metadata = {
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <body suppressHydrationWarning>
+      <body suppressHydrationWarning className="premium-scrollbar">
         <KingKeysChakraProvider>
-          {/* Ambient glow */}
+          {/* Noise overlay texture */}
+          <div className="noise-overlay" />
+
+          {/* Enhanced ambient glow */}
           <div
+            className="pointer-events-none fixed inset-0 z-0"
             style={{
-              position: "fixed",
-              inset: 0,
-              zIndex: 0,
-              pointerEvents: "none",
-              background: "radial-gradient(circle at 50% 50%, rgba(250,204,21,0.03) 0%, transparent 70%)",
+              background: [
+                "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(250,204,21,0.05) 0%, transparent 70%)",
+                "radial-gradient(ellipse 60% 50% at 80% 90%, rgba(250,204,21,0.03) 0%, transparent 60%)",
+                "radial-gradient(ellipse 50% 40% at 20% 80%, rgba(250,204,21,0.02) 0%, transparent 50%)",
+              ].join(", "),
             }}
           />
           <main className="relative">

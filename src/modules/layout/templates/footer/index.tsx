@@ -16,7 +16,7 @@ export default async function Footer() {
 
           {/* Logo y descripcion */}
           <div className="flex flex-col gap-4 max-w-xs">
-            <LocalizedClientLink href="/" className="text-2xl font-black tracking-widest uppercase">
+            <LocalizedClientLink href="/" className="text-2xl font-black tracking-normal uppercase">
               <span className="text-white">KING</span>
               <span className="text-[#facc15]"> KEYS</span>
             </LocalizedClientLink>
@@ -153,7 +153,7 @@ export default async function Footer() {
 
         {/* Parte inferior */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-8 text-xs text-[#888888]">
-          <p>© {new Date().getFullYear()} <span className="text-[#facc15] font-bold">King Keys</span>. Todos los derechos reservados.</p>
+          <p>© {new Date().getFullYear()} <span className="font-bold text-gold">King Keys</span>. Todos los derechos reservados.</p>
           <div className="flex gap-6">
             <LocalizedClientLink href="/privacy" className="hover:text-[#facc15] transition-colors duration-200">Privacidad</LocalizedClientLink>
             <LocalizedClientLink href="/terms" className="hover:text-[#facc15] transition-colors duration-200">Términos</LocalizedClientLink>

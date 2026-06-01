@@ -56,7 +56,7 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
 
         {/* Contenido */}
         <div className="relative z-10 w-full max-w-2xl flex flex-col items-center gap-8">
-          <a href="/" className="text-3xl font-black tracking-widest uppercase">
+          <a href="/" className="text-3xl font-black tracking-normal uppercase">
             <span className="text-white">KING</span>
             <span className="text-[#facc15]"> KEYS</span>
           </a>
