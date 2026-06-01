@@ -7,16 +7,16 @@ export default function CheckoutLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="w-full bg-gray-950 relative min-h-screen">
+    <div className="w-full bg-[#0a0a0a] relative min-h-screen">
 
       {/* Navbar del checkout */}
-      <div className="h-16 bg-gray-900/95 backdrop-blur-md border-b border-yellow-400/20 sticky top-0 z-50">
+      <div className="h-16 bg-[#111111]/95 backdrop-blur-md border-b border-[#facc15]/20 sticky top-0 z-50">
         <nav className="flex h-full items-center content-container justify-between">
 
           {/* Volver al carrito */}
           <LocalizedClientLink
             href="/cart"
-            className="flex items-center gap-x-2 text-gray-400 hover:text-yellow-400 transition-colors duration-200 flex-1 basis-0 text-sm"
+            className="flex items-center gap-x-2 text-[#888888] hover:text-[#facc15] transition-colors duration-200 flex-1 basis-0 text-sm"
             data-testid="back-to-cart-link"
           >
             <ChevronDown className="rotate-90" size={16} />
@@ -31,12 +31,12 @@ export default function CheckoutLayout({
             data-testid="store-link"
           >
             <span className="text-white">KING</span>
-            <span className="text-yellow-400"> KEYS</span>
+            <span className="text-[#facc15]"> KEYS</span>
           </LocalizedClientLink>
 
           {/* Seguridad */}
           <div className="flex-1 basis-0 flex justify-end">
-            <span className="text-xs text-gray-500 flex items-center gap-1">
+            <span className="text-xs text-[#888888] flex items-center gap-1">
               🔒 Pago Seguro
             </span>
           </div>
@@ -50,9 +50,9 @@ export default function CheckoutLayout({
       </div>
 
       {/* Footer minimo */}
-      <div className="py-6 w-full flex items-center justify-center border-t border-gray-800">
-        <span className="text-xs text-gray-600">
-          © {new Date().getFullYear()} <span className="text-yellow-400 font-bold">King Keys</span> · Todos los derechos reservados
+      <div className="py-6 w-full flex items-center justify-center border-t border-[#1a1a1a]">
+        <span className="text-xs text-[#888888]">
+          © {new Date().getFullYear()} <span className="text-[#facc15] font-bold">King Keys</span> · Todos los derechos reservados
         </span>
       </div>
 

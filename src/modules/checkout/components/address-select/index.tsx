@@ -35,7 +35,7 @@ const AddressSelect = ({
     <Listbox onChange={handleSelect} value={selectedAddress?.id}>
       <div className="relative">
         <Listbox.Button
-          className="relative w-full flex justify-between items-center px-4 py-[10px] text-left bg-gray-800 cursor-default focus:outline-none border border-gray-600 rounded-xl focus-visible:ring-2 focus-visible:ring-yellow-400/50 focus-visible:border-yellow-400 text-sm text-white"
+          className="relative w-full flex justify-between items-center px-4 py-[10px] text-left bg-[#1a1a1a] cursor-default focus:outline-none border border-[#2a2a2a] rounded-xl focus-visible:ring-2 focus-visible:ring-yellow-400/50 focus-visible:border-[#facc15] text-sm text-white"
           data-testid="shipping-address-select"
         >
           {({ open }) => (
@@ -58,7 +58,7 @@ const AddressSelect = ({
           leaveTo="opacity-0"
         >
           <Listbox.Options
-            className="absolute z-20 w-full overflow-auto text-sm bg-gray-800 border border-gray-600 rounded-xl max-h-60 focus:outline-none mt-1"
+            className="absolute z-20 w-full overflow-auto text-sm bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl max-h-60 focus:outline-none mt-1"
             data-testid="shipping-address-options"
           >
             {addresses.map((address: any) => {
@@ -66,7 +66,7 @@ const AddressSelect = ({
                 <Listbox.Option
                   key={address.id}
                   value={address.id}
-                  className="cursor-default select-none relative pl-6 pr-10 hover:bg-gray-700 py-4 border-b border-gray-700 last:border-0"
+                  className="cursor-default select-none relative pl-6 pr-10 hover:bg-[#2a2a2a] py-4 border-b border-[#2a2a2a] last:border-0"
                   data-testid="shipping-address-option"
                 >
                   <div className="flex gap-x-4 items-start">
@@ -79,11 +79,11 @@ const AddressSelect = ({
                         {address.first_name} {address.last_name}
                       </span>
                       {address.company && (
-                        <span className="text-sm text-gray-400">
+                        <span className="text-sm text-[#888888]">
                           {address.company}
                         </span>
                       )}
-                      <div className="flex flex-col text-left text-sm text-gray-400 mt-2">
+                      <div className="flex flex-col text-left text-sm text-[#888888] mt-2">
                         <span>
                           {address.address_1}
                           {address.address_2 && (

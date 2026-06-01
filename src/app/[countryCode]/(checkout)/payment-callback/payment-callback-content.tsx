@@ -46,7 +46,7 @@ export default function PaymentCallbackContent() {
             </svg>
           </div>
           <h1 className="text-2xl font-black text-white">¡Pago exitoso!</h1>
-          <p className="text-gray-400">Redirigiendo a la confirmación de tu orden...</p>
+          <p className="text-[#888888]">Redirigiendo a la confirmación de tu orden...</p>
         </>
       )}
       {status === "failed" && (
@@ -57,14 +57,14 @@ export default function PaymentCallbackContent() {
             </svg>
           </div>
           <h1 className="text-2xl font-black text-white">Pago cancelado</h1>
-          <p className="text-gray-400">Redirigiendo al checkout...</p>
+          <p className="text-[#888888]">Redirigiendo al checkout...</p>
         </>
       )}
       {status === "processing" && (
         <>
-          <span className="inline-block w-10 h-10 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin" />
+          <span className="inline-block w-10 h-10 border-4 border-[#facc15] border-t-transparent rounded-full animate-spin" />
           <h1 className="text-2xl font-black text-white">Procesando pago...</h1>
-          <p className="text-gray-400">Espera mientras confirmamos tu pago.</p>
+          <p className="text-[#888888]">Espera mientras confirmamos tu pago.</p>
         </>
       )}
     </div>

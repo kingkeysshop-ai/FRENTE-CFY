@@ -33,16 +33,16 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
       }
 
       return (
-        <div className="flex items-center justify-center min-h-[400px] bg-gray-950 rounded-xl border border-gray-700 p-8">
+        <div className="flex items-center justify-center min-h-[400px] bg-[#0a0a0a] rounded-xl border border-[#2a2a2a] p-8">
           <div className="text-center max-w-md">
             <span className="text-4xl mb-4 block">⚠️</span>
             <h2 className="text-white font-black text-lg mb-2">Algo sali&oacute; mal</h2>
-            <p className="text-gray-400 text-sm mb-4">
+            <p className="text-[#888888] text-sm mb-4">
               Ocurri&oacute; un error inesperado. Por favor, intenta de nuevo.
             </p>
             <button
               onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-yellow-400 text-gray-900 font-bold rounded-xl hover:bg-yellow-300 transition-colors"
+              className="px-6 py-3 bg-[#facc15] text-[#0a0a0a] font-bold rounded-xl hover:bg-[#e6b800] transition-colors"
             >
               Reintentar
             </button>

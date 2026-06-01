@@ -17,11 +17,11 @@ const CheckoutSummary = ({ cart }: { cart: any }) => {
 
   return (
     <div className="sticky top-0 flex flex-col-reverse small:flex-col gap-y-6 py-8 small:py-0">
-      <div className="w-full bg-gray-900 border border-yellow-400/20 rounded-xl p-6 flex flex-col gap-y-5">
+      <div className="w-full bg-[#111111] border border-[#2a2a2a] rounded-xl p-6 flex flex-col gap-y-5">
 
         {/* Titulo */}
-        <div className="flex items-center gap-2 pb-4 border-b border-gray-700">
-          <span className="text-yellow-400 text-lg">🛒</span>
+        <div className="flex items-center gap-2 pb-4 border-b border-[#2a2a2a]">
+          <span className="text-[#facc15] text-lg">🛒</span>
           <h2 className="text-white font-black text-lg">Tu Pedido</h2>
         </div>
 
@@ -29,10 +29,10 @@ const CheckoutSummary = ({ cart }: { cart: any }) => {
         <ItemsPreviewTemplate cart={cart} />
 
         {/* Divider */}
-        <div className="w-full h-px bg-gray-600" />
+        <div className="w-full h-px bg-[#2a2a2a]" />
 
         {/* Totales */}
-        <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
+        <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-4">
           <CartTotals totals={cartTotals} />
         </div>
 
@@ -40,7 +40,7 @@ const CheckoutSummary = ({ cart }: { cart: any }) => {
         <DiscountCode cart={cart} />
 
         {/* Garantias */}
-        <div className="flex flex-col gap-2 pt-3 border-t border-gray-700">
+        <div className="flex flex-col gap-2 pt-3 border-t border-[#2a2a2a]">
           {[
             { icon: "✅", text: "Licencias 100% Originales" },
             { icon: "⚡", text: "Entrega Inmediata por Email" },
@@ -48,7 +48,7 @@ const CheckoutSummary = ({ cart }: { cart: any }) => {
           ].map((g) => (
             <div key={g.text} className="flex items-center gap-2">
               <span className="text-sm">{g.icon}</span>
-              <span className="text-xs text-gray-300 font-medium">{g.text}</span>
+              <span className="text-xs text-[#888888] font-medium">{g.text}</span>
             </div>
           ))}
         </div>

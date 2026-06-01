@@ -40,8 +40,8 @@ const LicenseKeysDisplay = ({ orderId }: { orderId: string }) => {
 
   return (
     <div>
-      <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-700">
-        <span className="text-yellow-400 font-black text-sm uppercase tracking-wider">
+      <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[#2a2a2a]">
+        <span className="text-[#facc15] font-black text-sm uppercase tracking-wider">
           🔑 Tus Licencias
         </span>
       </div>
@@ -49,11 +49,11 @@ const LicenseKeysDisplay = ({ orderId }: { orderId: string }) => {
         {keys.map((lk) => (
           <div
             key={lk.id}
-            className="bg-gray-800/60 border border-gray-700 rounded-xl overflow-hidden"
+            className="bg-[#1a1a1a]/60 border border-[#2a2a2a] rounded-xl overflow-hidden"
           >
             <div className="p-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-gray-400 text-xs uppercase tracking-wider">
+                <span className="text-[#888888] text-xs uppercase tracking-wider">
                   Producto
                 </span>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
@@ -61,14 +61,14 @@ const LicenseKeysDisplay = ({ orderId }: { orderId: string }) => {
                     ? "bg-green-500/20 text-green-400 border border-green-500/30"
                     : lk.delivery_status === "failed"
                     ? "bg-red-500/20 text-red-400 border border-red-500/30"
-                    : "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
+                    : "bg-yellow-500/20 text-[#facc15] border border-yellow-500/30"
                 }`}>
                   {lk.delivery_status === "sent" ? "Enviado" : lk.delivery_status === "failed" ? "Error" : "Pendiente"}
                 </span>
               </div>
               <p className="text-white font-bold text-sm mb-3">{lk.product_id}</p>
-              <div className="bg-gray-900 border border-yellow-400/20 rounded-lg p-3 mb-3">
-                <span className="text-yellow-400 font-mono font-bold text-sm tracking-wider break-all select-all">
+              <div className="bg-[#111111] border border-[#facc15]/20 rounded-lg p-3 mb-3">
+                <span className="text-[#facc15] font-mono font-bold text-sm tracking-wider break-all select-all">
                   {lk.key}
                 </span>
               </div>
@@ -76,7 +76,7 @@ const LicenseKeysDisplay = ({ orderId }: { orderId: string }) => {
                 <button
                   onClick={() => handleResend(lk.id)}
                   disabled={resending === lk.id}
-                  className="text-xs text-yellow-400 hover:text-yellow-300 font-bold transition-colors disabled:opacity-50"
+                  className="text-xs text-[#facc15] hover:text-[#e6b800] font-bold transition-colors disabled:opacity-50"
                 >
                   {resending === lk.id ? "Reenviando..." : sent === lk.id ? "✅ Reenviado" : "🔄 Reenviar al correo"}
                 </button>

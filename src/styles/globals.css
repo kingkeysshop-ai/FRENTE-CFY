@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-gray-950 text-white;
+    @apply bg-[#0a0a0a] text-white;
   }
 }
 
@@ -52,6 +52,26 @@
   input[type="search"]::-webkit-search-results-button,
   input[type="search"]::-webkit-search-results-decoration {
     -webkit-appearance: none;
+  }
+
+  .hero-grid-bg {
+    background-image:
+      linear-gradient(rgba(250,204,21,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(250,204,21,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  .text-glow-yellow {
+    text-shadow: 0 0 30px rgba(250,204,21,0.4);
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .animate-marquee {
+    animation: marquee 25s linear infinite;
   }
 }
 

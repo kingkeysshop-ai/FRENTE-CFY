@@ -12,7 +12,7 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
       {product.collection && (
         <LocalizedClientLink
           href={`/collections/${product.collection.handle}`}
-          className="text-xs text-yellow-400/70 hover:text-yellow-400 uppercase tracking-widest font-bold transition-colors"
+          className="text-xs text-[#facc15]/70 hover:text-[#facc15] uppercase tracking-widest font-bold transition-colors"
         >
           📦 {product.collection.title}
         </LocalizedClientLink>
@@ -28,7 +28,7 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
 
       {/* Badge digital */}
       <div className="flex gap-2 flex-wrap">
-        <span className="px-3 py-1 bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs rounded-full font-bold">
+        <span className="px-3 py-1 bg-[#facc15]/10 border border-[#facc15]/30 text-[#facc15] text-xs rounded-full font-bold">
           🔑 Licencia Digital
         </span>
         <span className="px-3 py-1 bg-green-400/10 border border-green-400/30 text-green-400 text-xs rounded-full font-bold">
@@ -38,7 +38,7 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
 
       {/* Descripcion */}
       <p
-        className="text-sm text-gray-400 leading-relaxed whitespace-pre-line"
+        className="text-sm text-[#888888] leading-relaxed whitespace-pre-line"
         data-testid="product-description"
       >
         {product.description}

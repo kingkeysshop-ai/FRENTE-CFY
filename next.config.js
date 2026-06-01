@@ -59,6 +59,18 @@ module.exports = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "**.amazonaws.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "medusa-public-images.s3.eu-west-1.amazonaws.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
   async headers() {

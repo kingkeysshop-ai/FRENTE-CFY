@@ -45,7 +45,7 @@ export default function SearchBar() {
     <div ref={containerRef} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="text-sm text-gray-400 hover:text-yellow-400 transition-colors duration-200"
+        className="text-sm text-[#888888] hover:text-[#facc15] transition-colors duration-200"
         aria-label="Buscar"
       >
         🔍
@@ -69,11 +69,11 @@ export default function SearchBar() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Buscar productos…"
-            className="w-72 bg-gray-900 border border-yellow-400/40 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-yellow-400 shadow-lg shadow-black/30"
+            className="w-72 bg-[#111111] border border-[#facc15]/40 rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#888888] focus:outline-none focus:border-[#facc15] shadow-lg shadow-black/30"
           />
           <button
             type="submit"
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-yellow-400 hover:text-yellow-300 transition-colors"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-[#facc15] hover:text-[#e6b800] transition-colors"
           >
             🔍
           </button>

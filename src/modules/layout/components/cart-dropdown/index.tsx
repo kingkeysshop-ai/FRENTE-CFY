@@ -53,12 +53,12 @@ const CartDropdown = ({ cart: cartState }: { cart?: HttpTypes.StoreCart | null }
           <LocalizedClientLink
             href="/cart"
             data-testid="nav-cart-link"
-            className="flex items-center gap-2 text-sm text-gray-400 hover:text-yellow-400 transition-colors duration-200"
+            className="flex items-center gap-2 text-sm text-[#888888] hover:text-[#facc15] transition-colors duration-200"
           >
             <span className="text-lg">🛒</span>
             <span className="hidden small:inline">Carrito</span>
             {totalItems > 0 && (
-              <span className="w-5 h-5 rounded-full bg-yellow-400 text-gray-900 text-xs font-black flex items-center justify-center">
+              <span className="w-5 h-5 rounded-full bg-[#facc15] text-gray-900 text-xs font-black flex items-center justify-center">
                 {totalItems}
               </span>
             )}
@@ -77,45 +77,45 @@ const CartDropdown = ({ cart: cartState }: { cart?: HttpTypes.StoreCart | null }
         >
           <PopoverPanel
             static
-            className="hidden small:flex flex-col absolute top-[calc(100%+1px)] right-0 w-[380px] bg-gray-900 border border-yellow-400/20 rounded-xl shadow-2xl shadow-black overflow-hidden"
+            className="hidden small:flex flex-col absolute top-[calc(100%+1px)] right-0 w-[380px] bg-[#111111] border border-[#2a2a2a] rounded-xl shadow-2xl shadow-black overflow-hidden"
             data-testid="nav-cart-dropdown"
           >
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-700">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#2a2a2a]">
               <div className="flex items-center gap-2">
                 <span>🛒</span>
                 <h3 className="text-white font-black text-sm">Tu Carrito</h3>
               </div>
               {totalItems > 0 && (
-                <span className="text-xs text-gray-500">{totalItems} {totalItems === 1 ? "producto" : "productos"}</span>
+                <span className="text-xs text-[#888888]">{totalItems} {totalItems === 1 ? "producto" : "productos"}</span>
               )}
             </div>
 
             {cartState && cartState.items?.length ? (
               <>
-                <div className="overflow-y-auto max-h-[320px] flex flex-col divide-y divide-gray-700/50 no-scrollbar">
+                <div className="overflow-y-auto max-h-[320px] flex flex-col divide-y divide-[#2a2a2a]/50 no-scrollbar">
                   {cartState.items
                     .sort((a: any, b: any) => ((a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1))
                     .map((item: any) => (
                       <div className="flex gap-3 p-4" key={item.id} data-testid="cart-item">
                         <LocalizedClientLink href={`/products/${item.product_handle}`} className="w-14 shrink-0">
-                          <div className="rounded-lg overflow-hidden border border-gray-700">
+                          <div className="rounded-lg overflow-hidden border border-[#2a2a2a]">
                             <Thumbnail thumbnail={item.thumbnail} images={item.variant?.product?.images} size="square" />
                           </div>
                         </LocalizedClientLink>
                         <div className="flex flex-col flex-1 min-w-0 gap-1">
                           <LocalizedClientLink href={`/products/${item.product_handle}`} data-testid="product-link">
-                            <p className="text-white text-xs font-semibold truncate hover:text-yellow-400 transition-colors">
+                            <p className="text-white text-xs font-semibold truncate hover:text-[#facc15] transition-colors">
                               {item.title}
                             </p>
                           </LocalizedClientLink>
                           <LineItemOptions variant={item.variant} data-testid="cart-item-variant" data-value={item.variant} />
                           <div className="flex items-center justify-between mt-1">
-                            <span className="text-xs text-gray-500" data-testid="cart-item-quantity">x{item.quantity}</span>
-                            <span className="text-yellow-400 font-bold text-xs">
+                            <span className="text-xs text-[#888888]" data-testid="cart-item-quantity">x{item.quantity}</span>
+                            <span className="text-[#facc15] font-bold text-xs">
                               <LineItemPrice item={item} style="tight" currencyCode={cartState.currency_code} />
                             </span>
                           </div>
-                          <DeleteButton id={item.id} className="mt-1 text-xs text-gray-600 hover:text-red-400 transition-colors w-fit" data-testid="cart-item-remove-button">
+                          <DeleteButton id={item.id} className="mt-1 text-xs text-[#888888] hover:text-red-400 transition-colors w-fit" data-testid="cart-item-remove-button">
                             Eliminar
                           </DeleteButton>
                         </div>
@@ -123,20 +123,20 @@ const CartDropdown = ({ cart: cartState }: { cart?: HttpTypes.StoreCart | null }
                     ))}
                 </div>
 
-                <div className="p-4 flex flex-col gap-3 border-t border-gray-700 bg-gray-800/50">
+                <div className="p-4 flex flex-col gap-3 border-t border-[#2a2a2a] bg-[#1a1a1a]/50">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-400 text-xs">Subtotal</span>
+                    <span className="text-[#888888] text-xs">Subtotal</span>
                     <span className="text-white font-black text-sm" data-testid="cart-subtotal">
                       {convertToLocale({ amount: subtotal, currency_code: cartState.currency_code })}
                     </span>
                   </div>
                   <LocalizedClientLink href="/cart" onClick={close}>
-                    <button className="w-full py-2.5 bg-yellow-400 text-gray-900 font-black text-sm rounded-lg hover:bg-yellow-300 transition-colors" data-testid="go-to-cart-button">
+                    <button className="w-full py-2.5 bg-[#facc15] text-gray-900 font-black text-sm rounded-lg hover:bg-[#e6b800] transition-colors" data-testid="go-to-cart-button">
                       🛒 Ver Carrito
                     </button>
                   </LocalizedClientLink>
                   <LocalizedClientLink href="/checkout" onClick={close}>
-                    <button className="w-full py-2.5 border border-yellow-400/40 text-yellow-400 text-xs font-bold rounded-lg hover:bg-yellow-400/10 transition-colors">
+                    <button className="w-full py-2.5 border border-[#facc15]/40 text-[#facc15] text-xs font-bold rounded-lg hover:bg-[#facc15]/10 transition-colors">
                       🔒 Ir al Checkout
                     </button>
                   </LocalizedClientLink>
@@ -145,9 +145,9 @@ const CartDropdown = ({ cart: cartState }: { cart?: HttpTypes.StoreCart | null }
             ) : (
               <div className="flex flex-col items-center justify-center py-12 gap-4">
                 <span className="text-5xl">🛒</span>
-                <p className="text-gray-500 text-sm">Tu carrito está vacío</p>
+                <p className="text-[#888888] text-sm">Tu carrito está vacío</p>
                 <LocalizedClientLink href="/store" onClick={close}>
-                  <button className="px-5 py-2 bg-yellow-400 text-gray-900 text-xs font-bold rounded-lg hover:bg-yellow-300 transition-colors">
+                  <button className="px-5 py-2 bg-[#facc15] text-gray-900 text-xs font-bold rounded-lg hover:bg-[#e6b800] transition-colors">
                     🔑 Ver Productos
                   </button>
                 </LocalizedClientLink>

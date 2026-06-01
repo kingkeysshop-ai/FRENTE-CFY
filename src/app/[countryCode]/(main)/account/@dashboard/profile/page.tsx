@@ -24,14 +24,14 @@ export default async function Profile() {
     <div className="w-full flex flex-col gap-6" data-testid="profile-page-wrapper">
 
       {/* Page header */}
-      <div className="bg-gray-900 border border-yellow-400/20 rounded-xl p-6">
+      <div className="bg-[#111111] border border-yellow-400/20 rounded-xl p-6">
         <div className="flex items-center gap-3 mb-1">
-          <span className="text-yellow-400 text-lg">👤</span>
+          <span className="text-[#facc15] text-lg">👤</span>
           <h1 className="text-2xl font-black text-white">
-            Mi <span className="text-yellow-400">Perfil</span>
+            Mi <span className="text-[#facc15]">Perfil</span>
           </h1>
         </div>
-        <p className="text-gray-400 text-sm ml-8">
+        <p className="text-[#888888] text-sm ml-8">
           Administra tu información personal, contraseña y dirección de facturación.
         </p>
       </div>
@@ -39,7 +39,7 @@ export default async function Profile() {
       {/* Section: Personal info */}
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
-          <div className="w-1 h-5 bg-yellow-400 rounded-full" />
+          <div className="w-1 h-5 bg-[#facc15] rounded-full" />
           <h2 className="text-white font-black text-sm uppercase tracking-widest">Información Personal</h2>
         </div>
         <ProfileName customer={customer} />
@@ -50,7 +50,7 @@ export default async function Profile() {
       {/* Section: Security */}
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
-          <div className="w-1 h-5 bg-yellow-400 rounded-full" />
+          <div className="w-1 h-5 bg-[#facc15] rounded-full" />
           <h2 className="text-white font-black text-sm uppercase tracking-widest">Seguridad</h2>
         </div>
         <ProfilePassword customer={customer} />
@@ -59,7 +59,7 @@ export default async function Profile() {
       {/* Section: Billing */}
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
-          <div className="w-1 h-5 bg-yellow-400 rounded-full" />
+          <div className="w-1 h-5 bg-[#facc15] rounded-full" />
           <h2 className="text-white font-black text-sm uppercase tracking-widest">Dirección de Facturación</h2>
         </div>
         <ProfileBillingAddress customer={customer} regions={regions} />

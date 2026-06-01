@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="min-h-[calc(100vh-200px)] bg-gray-950 flex items-center justify-center px-4">
+    <div className="min-h-[calc(100vh-200px)] bg-[#0a0a0a] flex items-center justify-center px-4">
       <div className="flex flex-col items-center text-center gap-6 max-w-lg">
 
         {/* Glowing 404 */}
@@ -28,9 +28,9 @@ export default function NotFound() {
 
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-black text-white">
-            Página <span className="text-yellow-400">no encontrada</span>
+            Página <span className="text-[#facc15]">no encontrada</span>
           </h1>
-          <p className="text-gray-400 text-sm leading-relaxed">
+          <p className="text-[#888888] text-sm leading-relaxed">
             La página que intentas visitar no existe o fue movida.
             <br />
             Vuelve al inicio y sigue explorando King Keys.
@@ -40,13 +40,13 @@ export default function NotFound() {
         <div className="flex flex-col small:flex-row gap-3 w-full small:w-auto">
           <Link
             href="/"
-            className="px-6 py-3 bg-yellow-400 text-gray-900 font-black rounded-xl text-sm hover:bg-yellow-300 transition-all duration-200 hover:shadow-lg hover:shadow-yellow-400/20 active:scale-95"
+            className="px-6 py-3 bg-[#facc15] text-[#0a0a0a] font-black rounded-xl text-sm hover:bg-[#e6b800] transition-all duration-200 hover:shadow-lg hover:shadow-yellow-400/20 active:scale-95"
           >
             🏠 Ir al Inicio
           </Link>
           <Link
             href="/store"
-            className="px-6 py-3 border border-gray-700 text-gray-300 font-bold rounded-xl text-sm hover:border-yellow-400/40 hover:text-white transition-all duration-200"
+            className="px-6 py-3 border border-[#2a2a2a] text-[#888888] font-bold rounded-xl text-sm hover:border-yellow-400/40 hover:text-white transition-all duration-200"
           >
             🔑 Ver Productos
           </Link>

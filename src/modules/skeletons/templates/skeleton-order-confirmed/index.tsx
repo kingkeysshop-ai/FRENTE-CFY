@@ -5,7 +5,7 @@ import SkeletonCartTotals from "@modules/skeletons/components/skeleton-cart-tota
 
 const SkeletonOrderConfirmed = () => {
   return (
-    <div className="bg-gray-950 min-h-screen py-12">
+    <div className="bg-[#0a0a0a] min-h-screen py-12">
       <div className="content-container max-w-4xl mx-auto flex flex-col gap-8">
         <SkeletonOrderConfirmedHeader />
         <div className="grid grid-cols-1 small:grid-cols-[1fr_280px] gap-8">
@@ -13,7 +13,7 @@ const SkeletonOrderConfirmed = () => {
             <SkeletonOrderItems />
             <SkeletonOrderInformation />
           </div>
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+          <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
             <SkeletonCartTotals header={true} />
           </div>
         </div>

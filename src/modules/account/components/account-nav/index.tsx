@@ -32,7 +32,7 @@ const AccountNav = ({ customer }: { customer: HttpTypes.StoreCustomer | null }) 
         {route !== `/${countryCode}/account` ? (
           <LocalizedClientLink
             href="/account"
-            className="flex items-center gap-x-2 text-sm text-gray-400 hover:text-yellow-400 py-2 transition-colors"
+            className="flex items-center gap-x-2 text-sm text-[#888888] hover:text-[#facc15] py-2 transition-colors"
             data-testid="account-main-link"
           >
             <ChevronDown className="rotate-90" />
@@ -46,8 +46,8 @@ const AccountNav = ({ customer }: { customer: HttpTypes.StoreCustomer | null }) 
                 <li key={item.href}>
                   <LocalizedClientLink
                     href={item.href}
-                    className={`flex items-center justify-between py-3 px-4 border-b border-gray-700 transition-colors ${
-                      active ? "text-yellow-400 font-bold" : "text-gray-400 hover:text-yellow-400"
+                    className={`flex items-center justify-between py-3 px-4 border-b border-[#2a2a2a] transition-colors ${
+                      active ? "text-[#facc15] font-bold" : "text-[#888888] hover:text-[#facc15]"
                     }`}
                     data-testid={item.testid}
                   >
@@ -63,7 +63,7 @@ const AccountNav = ({ customer }: { customer: HttpTypes.StoreCustomer | null }) 
             <li>
               <button
                 type="button"
-                className="flex items-center gap-2 py-3 px-4 w-full text-gray-500 hover:text-red-400 transition-colors text-sm"
+                className="flex items-center gap-2 py-3 px-4 w-full text-[#888888] hover:text-red-400 transition-colors text-sm"
                 onClick={handleLogout}
                 data-testid="logout-button"
               >
@@ -86,8 +86,8 @@ const AccountNav = ({ customer }: { customer: HttpTypes.StoreCustomer | null }) 
                   href={item.href}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 ${
                     active
-                      ? "bg-yellow-400/10 text-yellow-400 font-bold border border-yellow-400/30"
-                      : "text-gray-400 hover:text-yellow-400 hover:bg-gray-800"
+                      ? "bg-[#facc15]/10 text-[#facc15] font-bold border border-[#facc15]/30"
+                      : "text-[#888888] hover:text-[#facc15] hover:bg-[#1a1a1a]"
                   }`}
                   data-testid={item.testid}
                 >
@@ -97,11 +97,11 @@ const AccountNav = ({ customer }: { customer: HttpTypes.StoreCustomer | null }) 
               </li>
             )
           })}
-          <li className="mt-2 pt-2 border-t border-gray-700">
+          <li className="mt-2 pt-2 border-t border-[#2a2a2a]">
             <button
               type="button"
               onClick={handleLogout}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-500 hover:text-red-400 hover:bg-red-400/10 transition-all duration-200 w-full"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#888888] hover:text-red-400 hover:bg-red-400/10 transition-all duration-200 w-full"
               data-testid="logout-button"
             >
               <ArrowRightOnRectangle />

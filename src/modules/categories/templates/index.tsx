@@ -33,19 +33,19 @@ export default function CategoryTemplate({
   getParents(category)
 
   return (
-    <div className="min-h-screen bg-gray-950">
+    <div className="min-h-screen bg-[#0a0a0a]">
 
       {/* Hero de categoria */}
-      <div className="bg-gradient-to-b from-gray-900 to-gray-950 border-b border-yellow-400/20 py-10">
+      <div className="bg-gradient-to-b from-[#111111] to-[#0a0a0a] border-b border-yellow-400/20 py-10">
         <div className="content-container flex flex-col gap-3">
 
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-xs text-gray-500">
-            <LocalizedClientLink href="/" className="hover:text-yellow-400 transition-colors">
+          <div className="flex items-center gap-2 text-xs text-[#888888]">
+            <LocalizedClientLink href="/" className="hover:text-[#facc15] transition-colors">
               Inicio
             </LocalizedClientLink>
             <span>›</span>
-            <LocalizedClientLink href="/store" className="hover:text-yellow-400 transition-colors">
+            <LocalizedClientLink href="/store" className="hover:text-[#facc15] transition-colors">
               Tienda
             </LocalizedClientLink>
             {parents.reverse().map((parent) => (
@@ -54,26 +54,26 @@ export default function CategoryTemplate({
                 <LocalizedClientLink
                   key={parent.id}
                   href={`/categories/${parent.handle}`}
-                  className="hover:text-yellow-400 transition-colors"
+                  className="hover:text-[#facc15] transition-colors"
                 >
                   {parent.name}
                 </LocalizedClientLink>
               </>
             ))}
             <span>›</span>
-            <span className="text-yellow-400 font-medium">{category.name}</span>
+            <span className="text-[#facc15] font-medium">{category.name}</span>
           </div>
 
           {/* Titulo */}
           <div className="flex flex-col gap-2">
-            <span className="text-xs text-yellow-400 font-bold uppercase tracking-widest">
+            <span className="text-xs text-[#facc15] font-bold uppercase tracking-widest">
               📦 Categoría
             </span>
             <h1 className="text-4xl font-black text-white" data-testid="category-page-title">
               {category.name}
             </h1>
             {category.description && (
-              <p className="text-gray-400 text-sm max-w-xl">{category.description}</p>
+              <p className="text-[#888888] text-sm max-w-xl">{category.description}</p>
             )}
           </div>
 
@@ -84,7 +84,7 @@ export default function CategoryTemplate({
                 <LocalizedClientLink
                   key={c.id}
                   href={`/categories/${c.handle}`}
-                  className="px-3 py-1.5 bg-gray-800 border border-gray-700 hover:border-yellow-400/60 hover:text-yellow-400 text-gray-400 text-xs rounded-lg font-medium transition-all duration-200"
+                  className="px-3 py-1.5 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-yellow-400/60 hover:text-[#facc15] text-[#888888] text-xs rounded-lg font-medium transition-all duration-200"
                 >
                   {c.name}
                 </LocalizedClientLink>
@@ -98,8 +98,8 @@ export default function CategoryTemplate({
       <div className="flex flex-col small:flex-row small:items-start py-8 content-container gap-6" data-testid="category-container">
 
         {/* Filtros */}
-        <div className="small:min-w-[220px] bg-gray-900 border border-gray-700 rounded-xl p-4">
-          <p className="text-xs text-yellow-400 font-bold uppercase tracking-widest mb-4">🔧 Filtros</p>
+        <div className="small:min-w-[220px] bg-[#111111] border border-[#2a2a2a] rounded-xl p-4">
+          <p className="text-xs text-[#facc15] font-bold uppercase tracking-widest mb-4">🔧 Filtros</p>
           <RefinementList sortBy={sort} data-testid="sort-by-container" />
         </div>
 

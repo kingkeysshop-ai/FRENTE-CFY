@@ -34,8 +34,8 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
       disabled={disabled}
       className={`flex flex-col gap-y-2 text-sm cursor-pointer py-4 border rounded-xl px-5 mb-2 transition-colors ${
         selectedPaymentOptionId === paymentProviderId
-          ? "border-yellow-400 bg-yellow-400/10"
-          : "border-gray-600 hover:border-gray-500"
+          ? "border-[#facc15] bg-[#facc15]/10"
+          : "border-[#2a2a2a] hover:border-[#888888]"
       }`}
     >
       <div className="flex items-center justify-between">
@@ -48,7 +48,7 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
             <PaymentTest className="hidden small:block" />
           )}
         </div>
-        <span className="text-gray-400">
+        <span className="text-[#888888]">
           {paymentInfoMap[paymentProviderId]?.icon}
         </span>
       </div>
@@ -89,7 +89,7 @@ export const StripeCardContainer = ({
         },
       },
       classes: {
-        base: "pt-3 pb-1 block w-full h-11 px-4 mt-0 bg-gray-800 border border-gray-600 rounded-xl appearance-none focus:outline-none focus:ring-0 focus:border-yellow-400 transition-all duration-300 ease-in-out",
+        base: "pt-3 pb-1 block w-full h-11 px-4 mt-0 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl appearance-none focus:outline-none focus:ring-0 focus:border-[#facc15] transition-all duration-300 ease-in-out",
       },
     }
   }, [])

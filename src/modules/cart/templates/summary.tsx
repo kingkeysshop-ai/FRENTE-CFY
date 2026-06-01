@@ -39,8 +39,8 @@ const Summary = ({ cart }: SummaryProps) => {
     <div className="flex flex-col gap-y-5">
 
       {/* Titulo */}
-      <div className="flex items-center gap-2 pb-4 border-b border-gray-700">
-        <span className="text-yellow-400 text-lg">👑</span>
+      <div className="flex items-center gap-2 pb-4 border-b border-[#2a2a2a]">
+        <span className="text-[#facc15] text-lg">👑</span>
         <h2 className="text-white font-black text-xl">Resumen del Pedido</h2>
       </div>
 
@@ -48,7 +48,7 @@ const Summary = ({ cart }: SummaryProps) => {
       <DiscountCode cart={cart} />
 
       {/* Totales */}
-      <div className="bg-gray-800/50 rounded-lg p-4">
+      <div className="bg-[#1a1a1a]/50 rounded-lg p-4">
         <CartTotals totals={cartTotals} />
       </div>
 
@@ -57,7 +57,7 @@ const Summary = ({ cart }: SummaryProps) => {
         href={"/checkout?step=" + step}
         data-testid="checkout-button"
       >
-        <button className="w-full py-4 bg-yellow-400 text-gray-900 font-black text-base rounded-xl hover:bg-yellow-300 hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2">
+        <button className="w-full py-4 bg-[#facc15] text-[#0a0a0a] font-black text-base rounded-xl hover:bg-[#e6b800] hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2">
           🔒 Ir al Checkout
         </button>
       </LocalizedClientLink>
@@ -67,7 +67,7 @@ const Summary = ({ cart }: SummaryProps) => {
         {["💳", "🏦", "💰"].map((icon, i) => (
           <span key={i} className="text-lg">{icon}</span>
         ))}
-        <span className="text-xs text-gray-600 ml-1">Pago 100% seguro</span>
+        <span className="text-xs text-[#888888] ml-1">Pago 100% seguro</span>
       </div>
 
     </div>

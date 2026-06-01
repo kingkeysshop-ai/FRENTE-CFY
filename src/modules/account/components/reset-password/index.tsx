@@ -22,19 +22,19 @@ const ResetPassword = ({
       <h1 className="text-2xl font-black text-white uppercase mb-2 tracking-tight">
         Nueva Contraseña 🔑
       </h1>
-      <p className="text-center text-sm text-gray-400 mb-8">
+      <p className="text-center text-sm text-[#888888] mb-8">
         Ingresa tu nueva contraseña para restablecer el acceso a tu cuenta.
       </p>
 
       {isSuccess ? (
-        <div className="w-full bg-gray-800/60 border border-green-500/30 rounded-xl p-6 text-center">
+        <div className="w-full bg-[#1a1a1a]/60 border border-green-500/30 rounded-xl p-6 text-center">
           <span className="text-4xl block mb-3">✅</span>
           <p className="text-white font-bold text-sm mb-2">Contraseña actualizada</p>
-          <p className="text-gray-400 text-sm mb-4">
+          <p className="text-[#888888] text-sm mb-4">
             Tu contraseña se ha restablecido correctamente.
           </p>
           <LocalizedClientLink href="/account">
-            <button className="w-full py-3 bg-yellow-400 text-gray-900 font-black rounded-xl hover:bg-yellow-300 transition-all text-sm">
+            <button className="w-full py-3 bg-[#facc15] text-[#0a0a0a] font-black rounded-xl hover:bg-[#e6b800] transition-all text-sm">
               Iniciar sesión
             </button>
           </LocalizedClientLink>
@@ -68,7 +68,7 @@ const ResetPassword = ({
 
       <LocalizedClientLink
         href="/account"
-        className="text-gray-500 text-sm mt-6 hover:text-yellow-400 transition-colors"
+        className="text-[#888888] text-sm mt-6 hover:text-[#facc15] transition-colors"
       >
         ← Volver a iniciar sesión
       </LocalizedClientLink>

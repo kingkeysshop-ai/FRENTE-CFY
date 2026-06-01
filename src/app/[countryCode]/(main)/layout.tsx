@@ -11,6 +11,8 @@ import Footer from "@modules/layout/templates/footer"
 import Nav from "@modules/layout/templates/nav"
 import FreeShippingPriceNudge from "@modules/shipping/components/free-shipping-price-nudge"
 import AbandonedCartPopup from "@modules/common/components/abandoned-cart-popup"
+import AnnouncementBar from "@modules/common/components/announcement-bar"
+import RecentActivityToast from "@modules/common/components/recent-activity"
 import ScrollToTop from "@components/ScrollToTop"
 
 export const metadata: Metadata = {
@@ -30,6 +32,7 @@ export default async function PageLayout(props: { children: React.ReactNode }) {
 
   return (
     <ToastProvider>
+      <AnnouncementBar />
       <Nav />
       {customer && cart && (
         <CartMismatchBanner customer={customer} cart={cart} />
@@ -47,6 +50,7 @@ export default async function PageLayout(props: { children: React.ReactNode }) {
       <ScrollToTop />
       <ToastContainer />
       <AbandonedCartPopup itemCount={cart?.items?.length ?? 0} />
+      <RecentActivityToast />
     </ToastProvider>
   )
 }

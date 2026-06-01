@@ -18,13 +18,13 @@ export default async function WishlistPage(props: {
   if (!region) return null
 
   return (
-    <div className="min-h-screen bg-gray-950">
+    <div className="min-h-screen bg-[#0a0a0a]">
       <div className="content-container py-8 small:py-12">
         <div className="mb-8">
           <h1 className="text-2xl small:text-3xl font-black text-white uppercase tracking-wider">
             ❤️ Mis Favoritos
           </h1>
-          <p className="text-gray-400 text-sm mt-2">
+          <p className="text-[#888888] text-sm mt-2">
             Productos que te han gustado, guardados para más tarde.
           </p>
         </div>

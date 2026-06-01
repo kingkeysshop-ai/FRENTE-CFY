@@ -19,7 +19,7 @@ const MobileBottomNav = () => {
       : pathname.includes(href)
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-50 small:hidden bg-gray-900/95 backdrop-blur-md border-t border-yellow-400/20">
+    <nav className="fixed bottom-0 inset-x-0 z-50 small:hidden bg-[#111111]/95 backdrop-blur-md border-t border-[#facc15]/20">
       <div className="flex items-center justify-around h-16 px-2">
         {NAV_ITEMS.map(({ href, icon, label }) => {
           const active = isActive(href)
@@ -31,7 +31,7 @@ const MobileBottomNav = () => {
             >
               {/* Linea indicadora superior */}
               <span
-                className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 rounded-full bg-yellow-400 transition-all duration-300"
+                className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 rounded-full bg-[#facc15] transition-all duration-300"
                 style={{ width: active ? "60%" : "0%" }}
               />
 
@@ -53,7 +53,7 @@ const MobileBottomNav = () => {
 
               {/* Fondo sutil activo */}
               {active && (
-                <span className="absolute inset-0 rounded-xl bg-yellow-400/10 pointer-events-none" />
+                <span className="absolute inset-0 rounded-xl bg-[#facc15]/10 pointer-events-none" />
               )}
             </LocalizedClientLink>
           )

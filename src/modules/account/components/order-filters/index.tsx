@@ -67,7 +67,7 @@ const OrderFilters = () => {
         <select
           value={currentStatus}
           onChange={(e) => handleStatusChange(e.target.value)}
-          className="bg-gray-800 border border-gray-600 text-white text-sm rounded-xl px-4 py-2.5 appearance-none hover:bg-gray-700 transition-colors focus:outline-none focus:border-yellow-400 cursor-pointer"
+          className="bg-[#1a1a1a] border border-[#2a2a2a] text-white text-sm rounded-xl px-4 py-2.5 appearance-none hover:bg-[#2a2a2a] transition-colors focus:outline-none focus:border-[#facc15] cursor-pointer"
         >
           {STATUS_OPTIONS.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -79,7 +79,7 @@ const OrderFilters = () => {
         <select
           value={currentDays}
           onChange={(e) => handleDaysChange(e.target.value)}
-          className="bg-gray-800 border border-gray-600 text-white text-sm rounded-xl px-4 py-2.5 appearance-none hover:bg-gray-700 transition-colors focus:outline-none focus:border-yellow-400 cursor-pointer"
+          className="bg-[#1a1a1a] border border-[#2a2a2a] text-white text-sm rounded-xl px-4 py-2.5 appearance-none hover:bg-[#2a2a2a] transition-colors focus:outline-none focus:border-[#facc15] cursor-pointer"
         >
           {DATE_OPTIONS.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -91,7 +91,7 @@ const OrderFilters = () => {
         {hasActiveFilters && (
           <button
             onClick={clearFilters}
-            className="text-xs text-gray-400 hover:text-yellow-400 transition-colors font-semibold"
+            className="text-xs text-[#888888] hover:text-[#facc15] transition-colors font-semibold"
           >
             ✕ Limpiar filtros
           </button>

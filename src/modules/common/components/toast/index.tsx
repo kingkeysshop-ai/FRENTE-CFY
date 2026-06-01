@@ -43,12 +43,12 @@ const ToastItem = ({ toast }: { toast: ToastType }) => {
           {toast.message}
         </p>
         {toast.subtitle && (
-          <p className="text-xs text-gray-400 truncate">{toast.subtitle}</p>
+          <p className="text-xs text-[#888888] truncate">{toast.subtitle}</p>
         )}
         {isSuccess && (
           <LocalizedClientLink
             href="/cart"
-            className="text-xs text-gray-500 hover:text-yellow-400 transition-colors duration-200 mt-1 w-fit"
+            className="text-xs text-[#888888] hover:text-[#facc15] transition-colors duration-200 mt-1 w-fit"
           >
             Ver carrito →
           </LocalizedClientLink>
@@ -58,7 +58,7 @@ const ToastItem = ({ toast }: { toast: ToastType }) => {
       {/* Cerrar */}
       <button
         onClick={() => removeToast(toast.id)}
-        className="shrink-0 text-gray-600 hover:text-gray-300 transition-colors duration-200 text-base leading-none mt-0.5"
+        className="shrink-0 text-[#888888] hover:text-[#888888] transition-colors duration-200 text-base leading-none mt-0.5"
         aria-label="Cerrar"
       >
         ×

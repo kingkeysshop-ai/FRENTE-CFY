@@ -59,7 +59,7 @@ export default function PaymentSuccessContent() {
       <div className="flex items-center justify-center min-h-screen bg-black">
         <div className="text-center max-w-md px-4">
           <h1 className="text-white text-xl font-bold mb-2">Error</h1>
-          <p className="text-gray-400">No se recibió el ID del carrito</p>
+          <p className="text-[#888888]">No se recibió el ID del carrito</p>
         </div>
       </div>
     )
@@ -70,11 +70,11 @@ export default function PaymentSuccessContent() {
       <div className="text-center max-w-md px-4">
         {status === "loading" || status === "retrying" ? (
           <>
-            <div className="w-8 h-8 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <div className="w-8 h-8 border-2 border-[#facc15] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
             <h1 className="text-white text-xl font-bold">
               {status === "retrying" ? "Reintentando..." : "Procesando tu pago..."}
             </h1>
-            <p className="text-gray-400 mt-2">
+            <p className="text-[#888888] mt-2">
               {status === "retrying"
                 ? "El pago aún no se ha confirmado. Reintentando..."
                 : "Estamos verificando el estado de tu pago. Esto puede tomar unos segundos."}
@@ -83,10 +83,10 @@ export default function PaymentSuccessContent() {
         ) : (
           <>
             <h1 className="text-white text-xl font-bold mb-2">Error al procesar el pago</h1>
-            <p className="text-gray-400 mb-4">{errorMessage}</p>
+            <p className="text-[#888888] mb-4">{errorMessage}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-yellow-400 text-gray-900 font-bold rounded-xl hover:bg-yellow-300 transition-colors"
+              className="px-6 py-3 bg-[#facc15] text-[#0a0a0a] font-bold rounded-xl hover:bg-[#e6b800] transition-colors"
             >
               Reintentar
             </button>

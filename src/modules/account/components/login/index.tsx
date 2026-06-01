@@ -17,7 +17,7 @@ const Login = ({ setCurrentView }: Props) => {
       <h1 className="text-2xl font-black text-white uppercase mb-2 tracking-tight">
         Bienvenido de vuelta 👑
       </h1>
-      <p className="text-center text-sm text-gray-400 mb-8">
+      <p className="text-center text-sm text-[#888888] mb-8">
         Inicia sesión para acceder a tus licencias y pedidos.
       </p>
       <form className="w-full" action={formAction}>
@@ -44,7 +44,7 @@ const Login = ({ setCurrentView }: Props) => {
         <div className="flex justify-end mt-2">
           <a
             href="/forgot-password"
-            className="text-xs text-gray-500 hover:text-yellow-400 transition-colors"
+            className="text-xs text-[#888888] hover:text-[#facc15] transition-colors"
           >
             ¿Olvidaste tu contraseña?
           </a>
@@ -53,11 +53,11 @@ const Login = ({ setCurrentView }: Props) => {
           Iniciar Sesión
         </SubmitButton>
       </form>
-      <span className="text-center text-gray-500 text-sm mt-6">
+      <span className="text-center text-[#888888] text-sm mt-6">
         ¿Aún no tienes cuenta?{" "}
         <button
           onClick={() => setCurrentView(LOGIN_VIEW.REGISTER)}
-          className="text-yellow-400 hover:text-yellow-300 font-bold transition-colors"
+          className="text-[#facc15] hover:text-[#e6b800] font-bold transition-colors"
           data-testid="register-button"
         >
           Regístrate aquí

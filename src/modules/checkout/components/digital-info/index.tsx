@@ -24,7 +24,7 @@ const DigitalInfo = ({
 
   return (
     <form action={formAction}>
-      <div className="text-gray-400 text-sm mb-6 leading-relaxed">
+      <div className="text-[#888888] text-sm mb-6 leading-relaxed">
         Todos tus productos son digitales. Solo necesitamos tu nombre y email para enviarte las claves.
       </div>
       <div className="grid grid-cols-2 gap-4">
@@ -54,7 +54,7 @@ const DigitalInfo = ({
         />
       </div>
       <ErrorMessage error={message && !message.startsWith("/") ? message : null} />
-      <SubmitButton className="mt-6 w-full py-3 bg-yellow-400 text-gray-900 font-black rounded-xl hover:bg-yellow-300 transition-all text-sm">
+      <SubmitButton className="mt-6 w-full py-3 bg-[#facc15] text-[#0a0a0a] font-black rounded-xl hover:bg-[#e6b800] transition-all text-sm">
         Continuar al Pago
       </SubmitButton>
     </form>

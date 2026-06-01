@@ -1,7 +1,16 @@
 "use client"
 
-import Link from "next/link"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { useEffect, useState, useRef } from "react"
+
+const PLATFORMS = [
+  { name: "Windows", icon: "💠" },
+  { name: "Office", icon: "📊" },
+  { name: "Xbox", icon: "🎮" },
+  { name: "PlayStation", icon: "🎮" },
+  { name: "Steam", icon: "💎" },
+  { name: "Antivirus", icon: "🛡️" },
+]
 
 const STATS = [
   { value: "100%", label: "Original" },
@@ -9,7 +18,11 @@ const STATS = [
   { value: "5K+", label: "Clientes" },
 ]
 
-const Hero = () => {
+type HeroProps = {
+  productCount?: number
+}
+
+const Hero = ({ productCount }: HeroProps) => {
   const [mounted, setMounted] = useState(false)
   const [scrollY, setScrollY] = useState(0)
 
@@ -17,6 +30,7 @@ const Hero = () => {
     const t = setTimeout(() => setMounted(true), 50)
     const onScroll = () => setScrollY(window.scrollY)
     window.addEventListener("scroll", onScroll, { passive: true })
+
     return () => {
       clearTimeout(t)
       window.removeEventListener("scroll", onScroll)
@@ -24,26 +38,20 @@ const Hero = () => {
   }, [])
 
   return (
-    <div className="relative w-full min-h-[90vh] bg-gradient-to-br from-gray-950 via-gray-900 to-black overflow-hidden flex items-center justify-center">
+    <div className="relative w-full min-h-[90vh] bg-gradient-to-br from-[#0a0a0a] via-[#111111] to-black overflow-hidden flex items-center justify-center">
 
-      {/* Brillo dorado parallax */}
+      {/* Section glow divs */}
       <div
-        className="absolute top-[-15%] left-1/2 w-[700px] h-[700px] rounded-full bg-yellow-400 opacity-[0.06] blur-[120px] pointer-events-none"
+        className="absolute top-[-15%] left-1/2 w-[700px] h-[700px] rounded-full bg-[#facc15] opacity-[0.06] blur-[120px] pointer-events-none"
         style={{ transform: `translateY(${scrollY * 0.25}px) translateX(-50%)` }}
       />
-      <div className="absolute bottom-0 right-[-10%] w-[400px] h-[400px] rounded-full bg-yellow-500 opacity-[0.04] blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 right-[-10%] w-[400px] h-[400px] rounded-full bg-[#facc15] opacity-[0.04] blur-[100px] pointer-events-none" />
 
       {/* Canvas de particulas interactivas */}
       <ParticleCanvas />
 
       {/* Grid de puntos de fondo */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.03]"
-        style={{
-          backgroundImage: "radial-gradient(circle, #facc15 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      />
+      <div className="absolute inset-0 hero-grid-bg" />
 
       {/* Contenido principal */}
       <div className="relative z-10 flex flex-col items-center justify-center text-center px-6 md:px-12 gap-6 py-24">
@@ -57,10 +65,30 @@ const Hero = () => {
             transform: mounted ? "translateY(0)" : "translateY(-16px)",
           }}
         >
-          <span className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-black/40 border border-yellow-400/60 text-white text-xs font-bold tracking-widest uppercase backdrop-blur-md hover:bg-yellow-400/20 transition-all duration-300 cursor-default shadow-[0_0_20px_rgba(250,204,21,0.2)]">
-            <span className="text-yellow-400" style={{ display: "inline-block", animation: "heroSpin 8s linear infinite" }}>🔑</span>
+          <span className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-[#0a0a0a]/40 border border-[#facc15]/60 text-white text-xs font-bold tracking-widest uppercase backdrop-blur-md hover:bg-[#facc15]/20 transition-all duration-300 cursor-default shadow-glow-yellow-sm">
+            <span className="text-[#facc15]" style={{ display: "inline-block", animation: "heroSpin 8s linear infinite" }}>🔑</span>
             Licencias Digitales Originales
           </span>
+        </div>
+
+        {/* Platform badges */}
+        <div
+          className="flex flex-wrap items-center justify-center gap-2"
+          style={{
+            transition: "opacity 700ms ease-out 80ms, transform 700ms ease-out 80ms",
+            opacity: mounted ? 1 : 0,
+            transform: mounted ? "translateY(0)" : "translateY(-12px)",
+          }}
+        >
+          {PLATFORMS.map((p, i) => (
+            <span
+              key={p.name}
+              className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[#888888] text-[11px] font-semibold hover:bg-[#facc15]/10 hover:border-[#facc15]/30 hover:text-[#facc15] transition-all duration-300 cursor-default"
+              style={{ animation: mounted ? `heroFloat 4s ease-in-out ${i * 0.3}s infinite` : "none" }}
+            >
+              {p.icon} {p.name}
+            </span>
+          ))}
         </div>
 
         {/* Titulo KING / KEYS */}
@@ -73,8 +101,7 @@ const Hero = () => {
           }}
         >
           <h1
-            className="text-7xl md:text-8xl lg:text-9xl font-black text-white tracking-tight leading-none"
-            style={{ filter: "drop-shadow(0 0 40px rgba(250,204,21,0.12))" }}
+            className="text-7xl md:text-8xl lg:text-9xl font-black text-white tracking-tight leading-none text-glow-yellow"
           >
             KING
           </h1>
@@ -100,12 +127,27 @@ const Hero = () => {
             transform: mounted ? "translateY(0)" : "translateY(24px)",
           }}
         >
-          <p className="text-lg md:text-xl text-gray-300 max-w-xl leading-loose">
+          <p className="text-lg md:text-xl text-[#888888] max-w-xl leading-loose">
             Las mejores licencias digitales al mejor precio.{" "}
-            <span className="text-yellow-400/90 font-semibold">Windows, Office, antivirus y más</span>
+            <span className="text-[#facc15]/90 font-semibold">Windows, Office, antivirus y más</span>
             {" "}— activación inmediata garantizada.
           </p>
         </div>
+
+        {/* Product count badge */}
+        {productCount !== null && (
+          <div
+            style={{
+              transition: "opacity 700ms ease-out 400ms, transform 700ms ease-out 400ms",
+              opacity: mounted ? 1 : 0,
+            }}
+          >
+            <span className="inline-flex items-center gap-1.5 text-xs text-[#888888]">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              {productCount}+ productos disponibles · Envío instantáneo
+            </span>
+          </div>
+        )}
 
         {/* Botones */}
         <div
@@ -116,24 +158,30 @@ const Hero = () => {
             transform: mounted ? "translateY(0)" : "translateY(24px)",
           }}
         >
-          <Link
+          <LocalizedClientLink
             href="/store"
-            className="group relative px-9 py-3.5 bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 font-black rounded-full text-base overflow-hidden hover:-translate-y-1 hover:shadow-[0_0_35px_rgba(250,204,21,0.5)] transition-all duration-300"
+            className="group relative px-9 py-3.5 bg-[#facc15] text-gray-900 font-black rounded-full text-base overflow-hidden hover:-translate-y-1 hover:shadow-glow-yellow transition-all duration-300"
           >
             <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 pointer-events-none" />
             <span className="relative">🛒 Ver Productos</span>
-          </Link>
-          <Link
+          </LocalizedClientLink>
+          <LocalizedClientLink
+            href="/store?sortBy=price_asc"
+            className="px-9 py-3.5 border-2 border-[#facc15]/40 text-[#facc15] font-bold rounded-full text-base hover:border-[#facc15] hover:bg-[#facc15]/10 hover:-translate-y-1 hover:shadow-glow-yellow-sm transition-all duration-300"
+          >
+            🔥 Ver Ofertas del Día
+          </LocalizedClientLink>
+          <LocalizedClientLink
             href="/account"
-            className="px-9 py-3.5 border-2 border-white/40 text-white font-bold rounded-full text-base hover:border-white hover:bg-white/10 hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(255,255,255,0.1)] transition-all duration-300"
+            className="px-9 py-3.5 border-2 border-white/20 text-white font-bold rounded-full text-base hover:border-white/60 hover:bg-white/10 hover:-translate-y-1 transition-all duration-300"
           >
             Mi Cuenta
-          </Link>
+          </LocalizedClientLink>
         </div>
 
         {/* Stats */}
         <div
-          className="flex gap-8 md:gap-16 mt-6 pt-6 border-t border-gray-700/60"
+          className="flex gap-8 md:gap-16 mt-6 pt-6 border-t border-[#2a2a2a]/60"
           style={{
             transition: "opacity 700ms ease-out 600ms, transform 700ms ease-out 600ms",
             opacity: mounted ? 1 : 0,
@@ -142,10 +190,10 @@ const Hero = () => {
         >
           {STATS.map((stat) => (
             <div key={stat.label} className="flex flex-col items-center gap-1 group cursor-default">
-              <span className="text-2xl font-black text-yellow-400 group-hover:scale-110 transition-transform duration-200">
+              <span className="text-2xl font-black text-[#facc15] group-hover:scale-110 transition-transform duration-200">
                 {stat.value}
               </span>
-              <span className="text-xs text-gray-500 uppercase tracking-widest group-hover:text-gray-400 transition-colors duration-200">
+              <span className="text-xs text-[#888888] uppercase tracking-widest group-hover:text-[#888888]/80 transition-colors duration-200">
                 {stat.label}
               </span>
             </div>
@@ -162,17 +210,17 @@ const Hero = () => {
           transform: mounted && scrollY < 80 ? "translateY(0)" : "translateY(12px)",
         }}
       >
-        <span className="text-[10px] text-gray-600 uppercase tracking-[0.2em]">Scroll</span>
-        <div className="w-5 h-8 rounded-full border-2 border-gray-700 flex items-start justify-center p-1">
+        <span className="text-[10px] text-[#888888] uppercase tracking-[0.2em]">Scroll</span>
+        <div className="w-5 h-8 rounded-full border-2 border-[#2a2a2a] flex items-start justify-center p-1">
           <div
-            className="w-1 h-2 bg-yellow-400 rounded-full"
+            className="w-1 h-2 bg-[#facc15] rounded-full"
             style={{ animation: "scrollDot 1.8s ease-in-out infinite" }}
           />
         </div>
       </div>
 
       {/* Linea decorativa inferior */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#facc15]/30 to-transparent" />
 
       {/* Keyframes */}
       <style>{`

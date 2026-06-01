@@ -13,7 +13,7 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
           return (
             <div
               key={image.id}
-              className="relative aspect-[29/34] w-full overflow-hidden bg-gray-800 rounded-xl group"
+              className="relative aspect-[29/34] w-full overflow-hidden bg-[#1a1a1a] rounded-xl group"
             >
               {!!image.url && (
                 <Image

@@ -11,8 +11,8 @@ type ItemProps = {
 
 const Item = ({ item, currencyCode }: ItemProps) => {
   return (
-    <div className="flex items-center gap-4 py-4 border-b border-gray-700 last:border-0" data-testid="product-row">
-      <div className="w-16 h-16 shrink-0 rounded-lg overflow-hidden border border-gray-700 bg-gray-800">
+    <div className="flex items-center gap-4 py-4 border-b border-[#2a2a2a] last:border-0" data-testid="product-row">
+      <div className="w-16 h-16 shrink-0 rounded-lg overflow-hidden border border-[#2a2a2a] bg-[#1a1a1a]">
         <Thumbnail thumbnail={item.thumbnail} size="square" />
       </div>
       <div className="flex-1 min-w-0">
@@ -22,10 +22,10 @@ const Item = ({ item, currencyCode }: ItemProps) => {
         <LineItemOptions variant={item.variant} data-testid="product-variant" />
       </div>
       <div className="flex flex-col items-end shrink-0 gap-1">
-        <span className="text-gray-300 text-xs" data-testid="product-quantity">
+        <span className="text-[#888888] text-xs" data-testid="product-quantity">
           {item.quantity}x <LineItemUnitPrice item={item} style="tight" currencyCode={currencyCode} />
         </span>
-        <span className="text-yellow-400 font-bold text-sm">
+        <span className="text-[#facc15] font-bold text-sm">
           <LineItemPrice item={item} style="tight" currencyCode={currencyCode} />
         </span>
       </div>

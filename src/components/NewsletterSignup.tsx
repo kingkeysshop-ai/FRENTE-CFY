@@ -14,9 +14,9 @@ export default function NewsletterSignup() {
   }
 
   return (
-    <div className="bg-gray-900/50 border border-yellow-400/10 rounded-xl p-6 w-full max-w-md">
+    <div className="bg-[#111111]/50 border border-[#facc15]/10 rounded-xl p-6 w-full max-w-md">
       <p className="text-white font-bold text-sm mb-1">📬 Ofertas exclusivas</p>
-      <p className="text-gray-500 text-xs mb-4">Recibe descuentos y novedades antes que nadie.</p>
+      <p className="text-[#888888] text-xs mb-4">Recibe descuentos y novedades antes que nadie.</p>
 
       {status === "success" ? (
         <p className="text-green-400 text-sm font-medium">✓ ¡Gracias por suscribirte!</p>
@@ -28,11 +28,11 @@ export default function NewsletterSignup() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="tu@email.com"
             required
-            className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-yellow-400/60 transition-colors"
+            className="flex-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-yellow-400/60 transition-colors"
           />
           <button
             type="submit"
-            className="px-4 py-2 bg-yellow-400 text-gray-900 text-sm font-bold rounded-lg hover:bg-yellow-300 transition-colors shrink-0"
+            className="px-4 py-2 bg-[#facc15] text-[#0a0a0a] text-sm font-bold rounded-lg hover:bg-[#e6b800] transition-colors shrink-0"
           >
             Suscribir
           </button>

@@ -53,7 +53,7 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({ customer, regions
   const currentInfo = useMemo(() => {
     if (!billingAddress) {
       return (
-        <span className="text-gray-500 italic text-xs">
+        <span className="text-[#888888] italic text-xs">
           Sin dirección de facturación registrada
         </span>
       )
@@ -66,13 +66,13 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({ customer, regions
     return (
       <div className="flex flex-col text-white text-sm font-semibold gap-0.5" data-testid="current-info">
         <span>{billingAddress.first_name} {billingAddress.last_name}</span>
-        {billingAddress.company && <span className="text-gray-400 text-xs">{billingAddress.company}</span>}
-        <span className="text-gray-300 text-xs">
+        {billingAddress.company && <span className="text-[#888888] text-xs">{billingAddress.company}</span>}
+        <span className="text-[#888888] text-xs">
           {billingAddress.address_1}
           {billingAddress.address_2 ? `, ${billingAddress.address_2}` : ""}
         </span>
-        <span className="text-gray-300 text-xs">{billingAddress.postal_code}, {billingAddress.city}</span>
-        <span className="text-gray-400 text-xs">{country}</span>
+        <span className="text-[#888888] text-xs">{billingAddress.postal_code}, {billingAddress.city}</span>
+        <span className="text-[#888888] text-xs">{country}</span>
       </div>
     )
   }, [billingAddress, regionOptions])

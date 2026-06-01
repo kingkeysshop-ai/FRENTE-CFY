@@ -12,14 +12,14 @@ const ItemsTemplate = ({ cart }: ItemsTemplateProps) => {
   return (
     <div className="w-full">
       {/* Tabla header - solo desktop */}
-      <div className="hidden small:grid grid-cols-[64px_1fr_96px_80px_64px] gap-4 px-6 py-3 border-b border-gray-700 text-xs text-gray-500 font-bold uppercase tracking-widest">
+      <div className="hidden small:grid grid-cols-[64px_1fr_96px_80px_64px] gap-4 px-6 py-3 border-b border-[#2a2a2a] text-xs text-[#888888] font-bold uppercase tracking-widest">
         <span></span>
         <span>Producto</span>
         <span className="text-center">Cantidad</span>
         <span className="text-right">Precio</span>
         <span className="text-right">Total</span>
       </div>
-      <div className="block divide-y divide-gray-700">
+      <div className="block divide-y divide-[#2a2a2a]">
         {items
           ? items
               .sort((a: any, b: any) => (a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1)

@@ -18,7 +18,7 @@ export function SubmitButton({
     <button
       type="submit"
       disabled={pending}
-      className={`py-3 bg-yellow-400 text-gray-900 font-black rounded-xl hover:bg-yellow-300 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2 text-sm ${className || ""}`}
+      className={`py-3 bg-[#facc15] text-[#0a0a0a] font-black rounded-xl hover:bg-[#e6b800] hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2 text-sm ${className || ""}`}
       data-testid={dataTestId}
     >
       {pending ? (

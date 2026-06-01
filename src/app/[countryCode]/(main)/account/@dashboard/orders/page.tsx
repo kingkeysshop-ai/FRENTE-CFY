@@ -35,9 +35,9 @@ export default async function Orders(props: {
     <div className="w-full" data-testid="orders-page-wrapper">
       <div className="mb-8 flex flex-col gap-y-2">
         <h1 className="text-2xl font-black text-white">
-          <span className="text-yellow-400">📋</span> Mis Pedidos
+          <span className="text-[#facc15]">📋</span> Mis Pedidos
         </h1>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-[#888888]">
           Revisa el estado de tus pedidos anteriores y licencias digitales adquiridas.
         </p>
       </div>
@@ -46,7 +46,7 @@ export default async function Orders(props: {
       </div>
       <div>
         <OrderOverview orders={orders} />
-        <Divider className="my-16 border-gray-700" />
+        <Divider className="my-16 border-[#2a2a2a]" />
         <TransferRequestForm />
       </div>
     </div>

@@ -36,7 +36,7 @@ export default async function Nav() {
               data-testid="nav-store-link"
             >
               <span className="text-white">KING</span>
-              <span className="text-yellow-400"> KEYS</span>
+              <span className="text-[#facc15]"> KEYS</span>
             </LocalizedClientLink>
 
             {/* Derecha */}
@@ -46,7 +46,7 @@ export default async function Nav() {
               </Suspense>
               <LocalizedClientLink
                 href="/wishlist"
-                className="flex items-center gap-1 text-sm text-white/80 hover:text-yellow-400 transition-colors"
+                className="flex items-center gap-1 text-sm text-[#888888] hover:text-[#facc15] transition-colors"
                 aria-label="Favoritos"
               >
                 <span>❤️</span>
@@ -56,7 +56,7 @@ export default async function Nav() {
               <Suspense
                 fallback={
                   <LocalizedClientLink
-                    className="flex items-center gap-2 text-sm text-gray-400 hover:text-yellow-400 transition-colors"
+                    className="flex items-center gap-2 text-sm text-[#888888] hover:text-[#facc15] transition-colors"
                     href="/cart"
                     data-testid="nav-cart-link"
                   >

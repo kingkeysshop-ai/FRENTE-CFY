@@ -29,12 +29,12 @@ export default async function ProductRail({
       {/* Header de coleccion */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <span className="w-1 h-6 bg-yellow-400 rounded-full" />
+          <span className="w-1 h-6 bg-[#facc15] rounded-full" />
           <h2 className="text-xl font-black text-white">{collection.title}</h2>
         </div>
         <LocalizedClientLink
           href={`/collections/${collection.handle}`}
-          className="text-xs text-yellow-400 hover:text-yellow-300 font-bold border border-yellow-400/30 px-3 py-1.5 rounded-lg hover:bg-yellow-400/10 transition-all duration-200"
+          className="text-xs text-[#facc15] hover:text-[#e6b800] font-bold border border-[#facc15]/30 px-3 py-1.5 rounded-lg hover:bg-[#facc15]/10 transition-all duration-200"
         >
           Ver todos →
         </LocalizedClientLink>
@@ -58,7 +58,7 @@ export default async function ProductRail({
       </div>
 
       {/* Fading edge hint */}
-      <div className="absolute top-[92px] right-0 w-20 h-[calc(100%-92px)] bg-gradient-to-l from-gray-950 via-gray-950/80 to-transparent pointer-events-none" />
+      <div className="absolute top-[92px] right-0 w-20 h-[calc(100%-92px)] bg-gradient-to-l from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent pointer-events-none" />
 
       <style>{`
         .hide-scrollbar::-webkit-scrollbar { display: none; }

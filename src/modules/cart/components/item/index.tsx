@@ -39,26 +39,26 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
   if (type === "preview") {
     return (
       <div
-        className="flex gap-4 p-4 border-b border-gray-700 last:border-b-0 hover:bg-gray-800/40 transition-colors duration-200"
+        className="flex gap-4 p-4 border-b border-[#2a2a2a] last:border-b-0 hover:bg-[#1a1a1a]/40 transition-colors duration-200"
         data-testid="product-row"
       >
         <LocalizedClientLink href={`/products/${item.product_handle}`} className="w-16 shrink-0">
-          <div className="rounded-lg overflow-hidden border border-gray-700">
+          <div className="rounded-lg overflow-hidden border border-[#2a2a2a]">
             <Thumbnail thumbnail={item.thumbnail} images={item.variant?.product?.images} size="square" />
           </div>
         </LocalizedClientLink>
         <div className="flex flex-1 flex-col gap-1 min-w-0">
           <LocalizedClientLink href={`/products/${item.product_handle}`}>
-            <p className="text-white font-semibold text-sm hover:text-yellow-400 transition-colors truncate" data-testid="product-title">
+            <p className="text-white font-semibold text-sm hover:text-[#facc15] transition-colors truncate" data-testid="product-title">
               {item.title || item.product_title}
             </p>
           </LocalizedClientLink>
           <LineItemOptions variant={item.variant} data-testid="product-variant" />
-          <span className="text-xs text-gray-600 bg-gray-800 px-2 py-0.5 rounded-md w-fit mt-1">Digital</span>
+          <span className="text-xs text-[#888888] bg-[#1a1a1a] px-2 py-0.5 rounded-md w-fit mt-1">Digital</span>
         </div>
         <div className="flex flex-col items-end justify-between shrink-0 gap-2">
-          <span className="text-xs text-gray-400">{item.quantity}x</span>
-          <div className="text-yellow-400 font-bold text-sm">
+          <span className="text-xs text-[#888888]">{item.quantity}x</span>
+          <div className="text-[#facc15] font-bold text-sm">
             <LineItemPrice item={item} style="tight" currencyCode={currencyCode} />
           </div>
         </div>
@@ -68,26 +68,26 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
 
   return (
     <div
-      className="flex flex-wrap small:flex-nowrap items-start small:items-center gap-3 small:gap-4 px-4 small:px-6 py-4 hover:bg-gray-800/40 transition-colors duration-200"
+      className="flex flex-wrap small:flex-nowrap items-start small:items-center gap-3 small:gap-4 px-4 small:px-6 py-4 hover:bg-[#1a1a1a]/40 transition-colors duration-200"
       data-testid="product-row"
     >
       {/* Thumbnail + info */}
       <div className="flex items-start gap-3 flex-1 min-w-0 w-full small:w-auto">
         <LocalizedClientLink href={`/products/${item.product_handle}`} className="w-16 shrink-0">
-          <div className="rounded-lg overflow-hidden border border-gray-700 w-16 h-16">
+          <div className="rounded-lg overflow-hidden border border-[#2a2a2a] w-16 h-16">
             <Thumbnail thumbnail={item.thumbnail} images={item.variant?.product?.images} size="square" />
           </div>
         </LocalizedClientLink>
         <div className="flex flex-col gap-1 min-w-0 flex-1">
           <LocalizedClientLink href={`/products/${item.product_handle}`}>
-            <p className="text-white font-semibold text-sm hover:text-yellow-400 transition-colors truncate" data-testid="product-title">
+            <p className="text-white font-semibold text-sm hover:text-[#facc15] transition-colors truncate" data-testid="product-title">
               {item.product_title}
             </p>
           </LocalizedClientLink>
           <LineItemOptions variant={item.variant} data-testid="product-variant" />
-          <span className="text-xs text-gray-600 bg-gray-800 px-2 py-0.5 rounded-md w-fit">Digital</span>
+          <span className="text-xs text-[#888888] bg-[#1a1a1a] px-2 py-0.5 rounded-md w-fit">Digital</span>
           {/* Unit price visible en mobile */}
-          <span className="text-gray-400 text-xs small:hidden">
+          <span className="text-[#888888] text-xs small:hidden">
             <LineItemUnitPrice item={item} style="tight" currencyCode={currencyCode} />
           </span>
         </div>
@@ -100,7 +100,7 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
           <CartItemSelect
             value={item.quantity}
             onChange={(value) => changeQuantity(parseInt(value.target.value))}
-            className="w-14 h-9 small:h-8 bg-gray-800 border border-gray-600 text-white text-xs rounded-lg text-center"
+            className="w-14 h-9 small:h-8 bg-[#1a1a1a] border border-[#2a2a2a] text-white text-xs rounded-lg text-center"
             data-testid="product-select-button"
           >
             {Array.from({ length: Math.min(maxQuantity, 10) }, (_, i) => (
@@ -110,8 +110,8 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
           {updating && <Spinner />}
         </div>
         <div className="flex flex-col items-end gap-0.5">
-          <span className="text-gray-400 text-xs">{item.quantity}x {convertToLocale({ amount: item.unit_price ?? 0, currency_code: currencyCode })}</span>
-          <span className="text-yellow-400 font-bold text-sm whitespace-nowrap">
+          <span className="text-[#888888] text-xs">{item.quantity}x {convertToLocale({ amount: item.unit_price ?? 0, currency_code: currencyCode })}</span>
+          <span className="text-[#facc15] font-bold text-sm whitespace-nowrap">
             <LineItemPrice item={item} style="tight" currencyCode={currencyCode} />
           </span>
         </div>

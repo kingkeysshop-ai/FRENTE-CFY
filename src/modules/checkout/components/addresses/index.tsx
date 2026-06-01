@@ -51,12 +51,12 @@ const Addresses = ({
       <div className="flex flex-row items-center justify-between mb-6">
         <h2 className="flex flex-row text-xl font-black text-white gap-x-2 items-center">
           Dirección de Entrega
-          {!isOpen && <CheckCircleSolid className="text-yellow-400" />}
+          {!isOpen && <CheckCircleSolid className="text-[#facc15]" />}
         </h2>
         {!isOpen && cart?.shipping_address && (
           <button
             onClick={handleEdit}
-            className="text-yellow-400 hover:text-yellow-300 text-sm font-semibold transition-colors"
+            className="text-[#facc15] hover:text-[#e6b800] text-sm font-semibold transition-colors"
             data-testid="edit-address-button"
           >
             Editar
@@ -82,7 +82,7 @@ const Addresses = ({
               </div>
             )}
             <SubmitButton
-              className="mt-6 w-full py-3 bg-yellow-400 text-gray-900 font-black rounded-xl hover:bg-yellow-300 transition-all"
+              className="mt-6 w-full py-3 bg-[#facc15] text-[#0a0a0a] font-black rounded-xl hover:bg-[#e6b800] transition-all"
               data-testid="submit-address-button"
             >
               Continuar con el Envío
@@ -97,26 +97,26 @@ const Addresses = ({
               <div className="flex items-start gap-x-1 w-full">
                 <div className="flex flex-col w-1/3" data-testid="shipping-address-summary">
                   <p className="font-bold text-white mb-1">Dirección de Envío</p>
-                  <p className="text-gray-400">{cart.shipping_address.first_name} {cart.shipping_address.last_name}</p>
-                  <p className="text-gray-400">{cart.shipping_address.address_1} {cart.shipping_address.address_2}</p>
-                  <p className="text-gray-400">{cart.shipping_address.postal_code}, {cart.shipping_address.city}</p>
-                  <p className="text-gray-400">{cart.shipping_address.country_code?.toUpperCase()}</p>
+                  <p className="text-[#888888]">{cart.shipping_address.first_name} {cart.shipping_address.last_name}</p>
+                  <p className="text-[#888888]">{cart.shipping_address.address_1} {cart.shipping_address.address_2}</p>
+                  <p className="text-[#888888]">{cart.shipping_address.postal_code}, {cart.shipping_address.city}</p>
+                  <p className="text-[#888888]">{cart.shipping_address.country_code?.toUpperCase()}</p>
                 </div>
                 <div className="flex flex-col w-1/3" data-testid="shipping-contact-summary">
                   <p className="font-bold text-white mb-1">Contacto</p>
-                  <p className="text-gray-400">{cart.shipping_address.phone}</p>
-                  <p className="text-gray-400">{cart.email}</p>
+                  <p className="text-[#888888]">{cart.shipping_address.phone}</p>
+                  <p className="text-[#888888]">{cart.email}</p>
                 </div>
                 <div className="flex flex-col w-1/3" data-testid="billing-address-summary">
                   <p className="font-bold text-white mb-1">Facturación</p>
                   {sameAsBilling ? (
-                    <p className="text-gray-400">Igual que la dirección de envío.</p>
+                    <p className="text-[#888888]">Igual que la dirección de envío.</p>
                   ) : (
                     <>
-                      <p className="text-gray-400">{cart.billing_address?.first_name} {cart.billing_address?.last_name}</p>
-                      <p className="text-gray-400">{cart.billing_address?.address_1} {cart.billing_address?.address_2}</p>
-                      <p className="text-gray-400">{cart.billing_address?.postal_code}, {cart.billing_address?.city}</p>
-                      <p className="text-gray-400">{cart.billing_address?.country_code?.toUpperCase()}</p>
+                      <p className="text-[#888888]">{cart.billing_address?.first_name} {cart.billing_address?.last_name}</p>
+                      <p className="text-[#888888]">{cart.billing_address?.address_1} {cart.billing_address?.address_2}</p>
+                      <p className="text-[#888888]">{cart.billing_address?.postal_code}, {cart.billing_address?.city}</p>
+                      <p className="text-[#888888]">{cart.billing_address?.country_code?.toUpperCase()}</p>
                     </>
                   )}
                 </div>

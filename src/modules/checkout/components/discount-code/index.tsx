@@ -48,7 +48,7 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
         <button
           onClick={() => setIsOpen(!isOpen)}
           type="button"
-          className="text-sm text-yellow-400 hover:text-yellow-300 font-semibold flex items-center gap-1 transition-colors"
+          className="text-sm text-[#facc15] hover:text-[#e6b800] font-semibold flex items-center gap-1 transition-colors"
           data-testid="add-discount-button"
         >
           {isOpen ? "▲" : "▼"} Agregar código de descuento
@@ -58,7 +58,7 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
           <div className="mt-3 flex flex-col gap-y-2">
             <div className="flex w-full gap-x-2">
               <input
-                className="flex-1 bg-gray-800 border border-gray-600 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-yellow-400 placeholder-gray-500"
+                className="flex-1 bg-[#1a1a1a] border border-[#2a2a2a] text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#facc15] placeholder-gray-500"
                 id="promotion-input"
                 name="code"
                 type="text"
@@ -80,20 +80,20 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
 
       {promotions.length > 0 && (
         <div className="flex flex-col gap-y-2">
-          <span className="text-xs text-gray-400 font-semibold uppercase tracking-wider">Promociones aplicadas:</span>
+          <span className="text-xs text-[#888888] font-semibold uppercase tracking-wider">Promociones aplicadas:</span>
           {promotions.map((promotion) => (
             <div
               key={promotion.id}
-              className="flex items-center justify-between bg-gray-800/60 border border-yellow-400/20 rounded-lg px-3 py-2"
+              className="flex items-center justify-between bg-[#1a1a1a]/60 border border-[#facc15]/20 rounded-lg px-3 py-2"
               data-testid="discount-row"
             >
               <span className="text-sm text-white flex items-center gap-2" data-testid="discount-code">
-                <span className="inline-flex px-2 py-0.5 rounded bg-yellow-400/20 text-yellow-400 text-xs font-mono font-bold">
+                <span className="inline-flex px-2 py-0.5 rounded bg-[#facc15]/20 text-[#facc15] text-xs font-mono font-bold">
                   {promotion.code}
                 </span>
                 {promotion.application_method?.value !== undefined &&
                   promotion.application_method.currency_code !== undefined && (
-                    <span className="text-yellow-400 text-xs">
+                    <span className="text-[#facc15] text-xs">
                       ({promotion.application_method.type === "percentage"
                         ? `${promotion.application_method.value}%`
                         : convertToLocale({
@@ -105,7 +105,7 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
               </span>
               {!promotion.is_automatic && (
                 <button
-                  className="text-gray-500 hover:text-red-400 transition-colors"
+                  className="text-[#888888] hover:text-red-400 transition-colors"
                   onClick={() => promotion.code && removePromotionCode(promotion.code)}
                   data-testid="remove-discount-button"
                 >

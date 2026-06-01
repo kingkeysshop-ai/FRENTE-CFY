@@ -38,6 +38,12 @@ module.exports = {
           80: "#1F2937",
           90: "#111827",
         },
+        "kk-black": "#0a0a0a",
+        "kk-card": "#111111",
+        "kk-elevated": "#1a1a1a",
+        "kk-border": "#2a2a2a",
+        "kk-yellow": "#facc15",
+        "kk-muted": "#888888",
       },
       borderRadius: {
         none: "0px",
@@ -46,6 +52,11 @@ module.exports = {
         rounded: "8px",
         large: "16px",
         circle: "9999px",
+        card: "12px",
+      },
+      boxShadow: {
+        "glow-yellow": "0 0 30px rgba(250,204,21,0.25)",
+        "glow-yellow-sm": "0 0 12px rgba(250,204,21,0.15)",
       },
       maxWidth: {
         "8xl": "100rem",

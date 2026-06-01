@@ -17,16 +17,16 @@ export default async function CheckoutForm({
 }) {
   if (!cart) {
     return (
-      <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 text-center">
-        <p className="text-gray-400">No hay carrito activo. Agrega productos primero.</p>
+      <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl p-6 text-center">
+        <p className="text-[#888888]">No hay carrito activo. Agrega productos primero.</p>
       </div>
     )
   }
 
   if (!cart.region?.id) {
     return (
-      <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 text-center">
-        <p className="text-gray-400">Error: región del carrito no disponible. Intenta recargar.</p>
+      <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl p-6 text-center">
+        <p className="text-[#888888]">Error: región del carrito no disponible. Intenta recargar.</p>
       </div>
     )
   }
@@ -36,8 +36,8 @@ export default async function CheckoutForm({
 
   if (!shippingMethods || !paymentMethods) {
     return (
-      <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 text-center">
-        <p className="text-gray-400">Error al cargar opciones de envío o pago. Intenta recargar.</p>
+      <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl p-6 text-center">
+        <p className="text-[#888888]">Error al cargar opciones de envío o pago. Intenta recargar.</p>
       </div>
     )
   }
@@ -50,9 +50,9 @@ export default async function CheckoutForm({
       {isDigital ? (
         <>
           {/* Productos digitales: solo email + nombre */}
-          <div className="bg-gray-900 border border-gray-700 rounded-xl overflow-hidden">
-            <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-700 bg-gray-800/50">
-              <span className="w-7 h-7 rounded-full bg-yellow-400 text-gray-900 text-xs font-black flex items-center justify-center">1</span>
+          <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl overflow-hidden">
+            <div className="flex items-center gap-3 px-6 py-4 border-b border-[#2a2a2a] bg-[#1a1a1a]/50">
+              <span className="w-7 h-7 rounded-full bg-[#facc15] text-[#0a0a0a] text-xs font-black flex items-center justify-center">1</span>
               <span className="text-white font-bold text-sm uppercase tracking-wider">📧 Tu Información</span>
             </div>
             <div className="p-6">
@@ -63,9 +63,9 @@ export default async function CheckoutForm({
       ) : (
         <>
           {/* Paso 1 - Direccion (productos fisicos) */}
-          <div className="bg-gray-900 border border-gray-700 rounded-xl overflow-hidden">
-            <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-700 bg-gray-800/50">
-              <span className="w-7 h-7 rounded-full bg-yellow-400 text-gray-900 text-xs font-black flex items-center justify-center">1</span>
+          <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl overflow-hidden">
+            <div className="flex items-center gap-3 px-6 py-4 border-b border-[#2a2a2a] bg-[#1a1a1a]/50">
+              <span className="w-7 h-7 rounded-full bg-[#facc15] text-[#0a0a0a] text-xs font-black flex items-center justify-center">1</span>
               <span className="text-white font-bold text-sm uppercase tracking-wider">Dirección de Entrega</span>
             </div>
             <div className="p-6">
@@ -74,9 +74,9 @@ export default async function CheckoutForm({
           </div>
 
           {/* Paso 2 - Envio */}
-          <div className="bg-gray-900 border border-gray-700 rounded-xl overflow-hidden">
-            <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-700 bg-gray-800/50">
-              <span className="w-7 h-7 rounded-full bg-yellow-400 text-gray-900 text-xs font-black flex items-center justify-center">2</span>
+          <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl overflow-hidden">
+            <div className="flex items-center gap-3 px-6 py-4 border-b border-[#2a2a2a] bg-[#1a1a1a]/50">
+              <span className="w-7 h-7 rounded-full bg-[#facc15] text-[#0a0a0a] text-xs font-black flex items-center justify-center">2</span>
               <span className="text-white font-bold text-sm uppercase tracking-wider">Método de Envío</span>
             </div>
             <div className="p-6">
@@ -87,9 +87,9 @@ export default async function CheckoutForm({
       )}
 
       {/* Paso de Pago (3 o 2 dependiendo del tipo) */}
-      <div className="bg-gray-900 border border-gray-700 rounded-xl overflow-hidden">
-        <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-700 bg-gray-800/50">
-          <span className={`w-7 h-7 rounded-full bg-yellow-400 text-gray-900 text-xs font-black flex items-center justify-center`}>
+      <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl overflow-hidden">
+        <div className="flex items-center gap-3 px-6 py-4 border-b border-[#2a2a2a] bg-[#1a1a1a]/50">
+          <span className={`w-7 h-7 rounded-full bg-[#facc15] text-[#0a0a0a] text-xs font-black flex items-center justify-center`}>
             {isDigital ? 2 : 3}
           </span>
           <span className="text-white font-bold text-sm uppercase tracking-wider">🔒 Método de Pago</span>
@@ -100,9 +100,9 @@ export default async function CheckoutForm({
       </div>
 
       {/* Paso de Revision (4 o 3 dependiendo del tipo) */}
-      <div className="bg-gray-900 border border-yellow-400/20 rounded-xl overflow-hidden">
-        <div className="flex items-center gap-3 px-6 py-4 border-b border-yellow-400/20 bg-yellow-400/5">
-          <span className={`w-7 h-7 rounded-full bg-yellow-400 text-gray-900 text-xs font-black flex items-center justify-center`}>
+      <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl overflow-hidden">
+        <div className="flex items-center gap-3 px-6 py-4 border-b border-[#2a2a2a] bg-[#facc15]/5">
+          <span className={`w-7 h-7 rounded-full bg-[#facc15] text-[#0a0a0a] text-xs font-black flex items-center justify-center`}>
             {isDigital ? 3 : 4}
           </span>
           <span className="text-white font-bold text-sm uppercase tracking-wider">👑 Revisar y Confirmar</span>

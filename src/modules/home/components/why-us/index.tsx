@@ -64,7 +64,7 @@ const WhyUs = () => {
     <section ref={ref} className="relative py-20 overflow-hidden">
 
       {/* Brillo de fondo */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-yellow-400 opacity-[0.04] blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#facc15] opacity-[0.04] blur-[120px] pointer-events-none" />
 
       <div className="content-container relative z-10 flex flex-col gap-12">
 
@@ -77,13 +77,13 @@ const WhyUs = () => {
             transform: visible ? "translateY(0)" : "translateY(24px)",
           }}
         >
-          <span className="px-4 py-1.5 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs font-bold tracking-widest uppercase">
+          <span className="px-4 py-1.5 rounded-full bg-[#facc15]/10 border border-[#facc15]/30 text-[#facc15] text-xs font-bold tracking-widest uppercase">
             ⭐ ¿Por qué elegirnos?
           </span>
           <h2 className="text-3xl md:text-4xl font-black text-white">
-            La elección <span className="text-yellow-400">inteligente</span>
+            La elección <span className="text-[#facc15]">inteligente</span>
           </h2>
-          <p className="text-gray-400 max-w-lg text-sm leading-relaxed">
+          <p className="text-[#888888] max-w-lg text-sm leading-relaxed">
             Miles de clientes ya confiaron en King Keys. Estas son las razones por las que nos eligen.
           </p>
         </div>
@@ -93,7 +93,7 @@ const WhyUs = () => {
           {REASONS.map((r, i) => (
             <div
               key={r.title}
-              className="group relative bg-gray-900 border border-gray-700 rounded-2xl p-6 flex flex-col gap-4 hover:border-yellow-400/50 hover:shadow-[0_0_30px_rgba(250,204,21,0.07)] transition-all duration-300"
+              className="group relative bg-[#111111] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col gap-4 hover:border-[#facc15]/50 hover:shadow-[0_0_30px_rgba(250,204,21,0.07)] transition-all duration-300"
               style={{
                 transition: `opacity 600ms ease-out ${i * 100}ms, transform 600ms ease-out ${i * 100}ms, border-color 300ms, box-shadow 300ms`,
                 opacity: visible ? 1 : 0,
@@ -107,15 +107,15 @@ const WhyUs = () => {
               <div className="flex items-start justify-between">
                 <span className="text-3xl">{r.icon}</span>
                 <div className="flex flex-col items-end">
-                  <span className="text-xl font-black text-yellow-400 leading-none">{r.stat}</span>
-                  <span className="text-[10px] text-gray-600 uppercase tracking-wider">{r.statLabel}</span>
+                  <span className="text-xl font-black text-[#facc15] leading-none">{r.stat}</span>
+                  <span className="text-[10px] text-[#888888] uppercase tracking-wider">{r.statLabel}</span>
                 </div>
               </div>
 
               {/* Texto */}
               <div className="flex flex-col gap-1.5">
                 <h3 className="text-white font-bold text-base">{r.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{r.desc}</p>
+                <p className="text-[#888888] text-sm leading-relaxed">{r.desc}</p>
               </div>
             </div>
           ))}
@@ -123,7 +123,7 @@ const WhyUs = () => {
 
         {/* Barra de confianza */}
         <div
-          className="flex flex-wrap items-center justify-center gap-6 pt-6 border-t border-gray-800"
+          className="flex flex-wrap items-center justify-center gap-6 pt-6 border-t border-[#1a1a1a]"
           style={{
             transition: "opacity 700ms ease-out 700ms, transform 700ms ease-out 700ms",
             opacity: visible ? 1 : 0,
@@ -136,7 +136,7 @@ const WhyUs = () => {
             { icon: "📦", text: "+10,000 licencias entregadas" },
             { icon: "🇨🇴", text: "Operamos desde Colombia" },
           ].map((b: any) => (
-            <div key={b.text} className="flex items-center gap-2 text-sm text-gray-500">
+            <div key={b.text} className="flex items-center gap-2 text-sm text-[#888888]">
               <span>{b.icon}</span>
               <span>{b.text}</span>
             </div>

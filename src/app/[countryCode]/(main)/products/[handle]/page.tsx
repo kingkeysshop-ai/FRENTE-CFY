@@ -90,16 +90,18 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     notFound()
   }
 
+  const firstImage = product.images?.[0]?.url || product.thumbnail
+
   return {
-    title: `${product.title} | Medusa Store`,
-    description: `${product.title}`,
+    title: `${product.title} | King Keys`,
+    description: `Compra ${product.title} al mejor precio. Activación inmediata garantizada. Solo en King Keys.`,
     alternates: {
       canonical: `${getBaseURL()}/${params.countryCode}/products/${params.handle}`,
     },
     openGraph: {
-      title: `${product.title} | Medusa Store`,
-      description: `${product.title}`,
-      images: product.thumbnail ? [product.thumbnail] : [],
+      title: `${product.title} | King Keys`,
+      description: `Compra ${product.title} al mejor precio. Activación inmediata garantizada. Solo en King Keys.`,
+      images: firstImage ? [firstImage] : [],
     },
   }
 }

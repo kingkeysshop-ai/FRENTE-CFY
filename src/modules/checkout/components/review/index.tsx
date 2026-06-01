@@ -31,7 +31,7 @@ const Review = ({ cart }: { cart: any }) => {
         })}>
           Revisar y Confirmar
           {isOpen && previousStepsCompleted && (
-            <CheckCircleSolid className="text-yellow-400" />
+            <CheckCircleSolid className="text-[#facc15]" />
           )}
         </h2>
       </div>
@@ -46,24 +46,24 @@ const Review = ({ cart }: { cart: any }) => {
               { icon: "⚡", title: "Entrega Inmediata", desc: "Por correo electronico" },
               { icon: "🔒", title: "Pago Seguro", desc: "Transaccion cifrada" },
             ].map((g) => (
-              <div key={g.title} className="bg-gray-800/60 border border-gray-700 rounded-xl p-4 flex flex-col gap-1">
+              <div key={g.title} className="bg-[#1a1a1a]/60 border border-[#2a2a2a] rounded-xl p-4 flex flex-col gap-1">
                 <span className="text-xl">{g.icon}</span>
                 <p className="text-white font-bold text-sm">{g.title}</p>
-                <p className="text-gray-400 text-xs">{g.desc}</p>
+                <p className="text-[#888888] text-xs">{g.desc}</p>
               </div>
             ))}
           </div>
 
           {/* Texto legal */}
-          <div className="bg-yellow-400/5 border border-yellow-400/20 rounded-xl p-4">
-            <p className="text-gray-300 text-sm leading-relaxed">
+          <div className="bg-[#facc15]/5 border border-[#facc15]/20 rounded-xl p-4">
+            <p className="text-[#888888] text-sm leading-relaxed">
               Al hacer clic en{" "}
-              <span className="text-yellow-400 font-bold">Realizar Pedido</span>
+              <span className="text-[#facc15] font-bold">Realizar Pedido</span>
               , confirmas que has leido y aceptas nuestros{" "}
-              <span className="text-yellow-400 font-semibold">Terminos de Uso</span>,{" "}
-              <span className="text-yellow-400 font-semibold">Terminos de Venta</span>{" "}
+              <span className="text-[#facc15] font-semibold">Terminos de Uso</span>,{" "}
+              <span className="text-[#facc15] font-semibold">Terminos de Venta</span>{" "}
               y{" "}
-              <span className="text-yellow-400 font-semibold">Politica de Privacidad</span>.
+              <span className="text-[#facc15] font-semibold">Politica de Privacidad</span>.
             </p>
           </div>
 

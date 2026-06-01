@@ -39,12 +39,12 @@ const AccountInfo = ({
 
   return (
     <div
-      className="bg-gray-900 border border-gray-700 rounded-xl p-5 transition-all duration-200 hover:border-yellow-400/30"
+      className="bg-[#111111] border border-[#2a2a2a] rounded-xl p-5 transition-all duration-200 hover:border-[#facc15]/30"
       data-testid={dataTestid}
     >
       <div className="flex items-center justify-between gap-4">
         <div className="flex flex-col gap-1 min-w-0">
-          <span className="text-xs text-gray-500 uppercase tracking-widest font-bold">{label}</span>
+          <span className="text-xs text-[#888888] uppercase tracking-widest font-bold">{label}</span>
           <div className="text-white font-semibold text-sm truncate" data-testid="current-info">
             {currentInfo}
           </div>
@@ -57,8 +57,8 @@ const AccountInfo = ({
           className={clx(
             "shrink-0 px-4 py-1.5 rounded-lg text-xs font-bold border transition-all duration-200",
             state
-              ? "border-gray-600 text-gray-400 hover:border-red-500/50 hover:text-red-400 bg-gray-800"
-              : "border-yellow-400/50 text-yellow-400 hover:bg-yellow-400 hover:text-gray-900 bg-transparent"
+              ? "border-[#2a2a2a] text-[#888888] hover:border-red-500/50 hover:text-red-400 bg-[#1a1a1a]"
+              : "border-[#facc15]/50 text-[#facc15] hover:bg-[#facc15] hover:text-[#0a0a0a] bg-transparent"
           )}
         >
           {state ? "Cancelar" : "Editar"}
@@ -103,7 +103,7 @@ const AccountInfo = ({
             { "max-h-[1000px] opacity-100": state, "max-h-0 opacity-0": !state }
           )}
         >
-          <div className="flex flex-col gap-4 pt-4 mt-4 border-t border-gray-700">
+          <div className="flex flex-col gap-4 pt-4 mt-4 border-t border-[#2a2a2a]">
             <div>{children}</div>
             <div className="flex justify-end">
               <button
@@ -113,8 +113,8 @@ const AccountInfo = ({
                 className={clx(
                   "px-6 py-2.5 rounded-lg text-sm font-black transition-all duration-200",
                   pending
-                    ? "bg-yellow-400/50 text-gray-900/50 cursor-not-allowed"
-                    : "bg-yellow-400 text-gray-900 hover:bg-yellow-300 hover:shadow-lg hover:shadow-yellow-400/20 active:scale-95"
+                    ? "bg-[#facc15]/50 text-[#0a0a0a]/50 cursor-not-allowed"
+                    : "bg-[#facc15] text-[#0a0a0a] hover:bg-[#e6b800] hover:shadow-lg hover:shadow-[#facc15]/20 active:scale-95"
                 )}
               >
                 {pending ? "Guardando..." : "Guardar Cambios"}

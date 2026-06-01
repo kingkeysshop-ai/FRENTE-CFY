@@ -40,8 +40,8 @@ const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
         <div
           onFocus={() => innerRef.current?.focus()}
           onBlur={() => innerRef.current?.blur()}
-          className={`relative flex items-center text-sm border border-gray-600 bg-gray-800 rounded-xl hover:bg-gray-700 transition-colors ${className || ""} ${
-            isPlaceholder ? "text-gray-500" : "text-white"
+          className={`relative flex items-center text-sm border border-[#2a2a2a] bg-[#1a1a1a] rounded-xl hover:bg-[#2a2a2a] transition-colors ${className || ""} ${
+            isPlaceholder ? "text-[#888888]" : "text-white"
           }`}
         >
           <select
@@ -55,7 +55,7 @@ const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
             </option>
             {children}
           </select>
-          <span className="absolute right-4 inset-y-0 flex items-center pointer-events-none text-gray-400">
+          <span className="absolute right-4 inset-y-0 flex items-center pointer-events-none text-[#888888]">
             <ChevronUpDown />
           </span>
         </div>

@@ -28,7 +28,7 @@ const ProfilePassword: React.FC<MyInformationProps> = ({ customer }) => {
       <AccountInfo
         label="Contraseña"
         currentInfo={
-          <span className="text-gray-500 italic text-xs">
+          <span className="text-[#888888] italic text-xs">
             🔒 La contraseña está oculta por seguridad
           </span>
         }

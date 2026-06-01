@@ -40,7 +40,7 @@ export default function CarouselArrows({ containerId }: { containerId: string })
       {canScrollLeft && (
         <button
           onClick={() => scroll("left")}
-          className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 bg-gray-900/80 border border-yellow-400/30 rounded-full flex items-center justify-center text-yellow-400 hover:bg-gray-800 hover:border-yellow-400/60 transition-all duration-200 z-10 -translate-x-1/2"
+          className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#111111]/80 border border-[#facc15]/30 rounded-full flex items-center justify-center text-[#facc15] hover:bg-[#1a1a1a] hover:border-[#facc15]/60 transition-all duration-200 z-10 -translate-x-1/2"
         >
           ‹
         </button>
@@ -48,7 +48,7 @@ export default function CarouselArrows({ containerId }: { containerId: string })
       {canScrollRight && (
         <button
           onClick={() => scroll("right")}
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 bg-gray-900/80 border border-yellow-400/30 rounded-full flex items-center justify-center text-yellow-400 hover:bg-gray-800 hover:border-yellow-400/60 transition-all duration-200 z-10 translate-x-1/2"
+          className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#111111]/80 border border-[#facc15]/30 rounded-full flex items-center justify-center text-[#facc15] hover:bg-[#1a1a1a] hover:border-[#facc15]/60 transition-all duration-200 z-10 translate-x-1/2"
         >
           ›
         </button>

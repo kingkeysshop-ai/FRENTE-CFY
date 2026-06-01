@@ -23,14 +23,12 @@ const NavLinks = () => {
             data-testid={href === "/account" ? "nav-account-link" : undefined}
           >
             <span
-              className="transition-colors duration-200 font-medium"
-              style={{ color: active ? "#facc15" : "#ffffffcc" }}
+              className={`transition-colors duration-200 font-medium ${active ? "text-[#facc15]" : "text-[#888888]"}`}
             >
               {label}
             </span>
-            {/* Linea inferior activa */}
             <span
-              className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-yellow-400 transition-all duration-300 origin-center"
+              className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-[#facc15] transition-all duration-300 origin-center"
               style={{ transform: active ? "scaleX(1)" : "scaleX(0)" }}
             />
           </LocalizedClientLink>

@@ -3,7 +3,7 @@ import SkeletonCartTotals from "@modules/skeletons/components/skeleton-cart-tota
 
 const SkeletonOrderSummary = () => {
   return (
-    <div className="flex flex-col gap-4 bg-gray-900 border border-gray-800 rounded-xl p-5">
+    <div className="flex flex-col gap-4 bg-[#111111] border border-gray-800 rounded-xl p-5">
       <SkeletonCartTotals header={false} />
       <SkeletonButton />
     </div>

@@ -88,12 +88,12 @@ const Payment = ({
           "opacity-50 pointer-events-none select-none": !isOpen && !paymentReady,
         })}>
           🔒 Método de Pago
-          {!isOpen && paymentReady && <CheckCircleSolid className="text-yellow-400" />}
+          {!isOpen && paymentReady && <CheckCircleSolid className="text-[#facc15]" />}
         </h2>
         {!isOpen && paymentReady && (
           <button
             onClick={handleEdit}
-            className="text-yellow-400 hover:text-yellow-300 text-sm font-semibold transition-colors"
+            className="text-[#facc15] hover:text-[#e6b800] text-sm font-semibold transition-colors"
             data-testid="edit-payment-button"
           >
             Editar
@@ -131,7 +131,7 @@ const Payment = ({
           {paidByGiftcard && (
             <div className="flex flex-col w-1/3">
               <p className="font-bold text-white mb-1">Método de pago</p>
-              <p className="text-gray-400" data-testid="payment-method-summary">Tarjeta de regalo</p>
+              <p className="text-[#888888]" data-testid="payment-method-summary">Tarjeta de regalo</p>
             </div>
           )}
 
@@ -145,7 +145,7 @@ const Payment = ({
               (!selectedPaymentMethod && !paidByGiftcard)
             }
             data-testid="submit-payment-button"
-            className="mt-6 w-full py-4 bg-yellow-400 text-gray-900 font-black text-base rounded-xl hover:bg-yellow-300 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2"
+            className="mt-6 w-full py-4 bg-[#facc15] text-[#0a0a0a] font-black text-base rounded-xl hover:bg-[#e6b800] hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2"
           >
             {isLoading ? (
               <span className="inline-block w-5 h-5 border-2 border-gray-900 border-t-transparent rounded-full animate-spin" />
@@ -162,14 +162,14 @@ const Payment = ({
             <div className="flex items-start gap-x-1 w-full">
               <div className="flex flex-col w-1/3">
                 <p className="font-bold text-white mb-1">Método de pago</p>
-                <p className="text-gray-400" data-testid="payment-method-summary">
+                <p className="text-[#888888]" data-testid="payment-method-summary">
                   {paymentInfoMap[liveActiveSession?.provider_id]?.title || liveActiveSession?.provider_id}
                 </p>
               </div>
               <div className="flex flex-col w-1/3">
                 <p className="font-bold text-white mb-1">Detalles de pago</p>
-                <div className="flex gap-2 text-sm text-gray-400 items-center" data-testid="payment-details-summary">
-                  <div className="flex items-center h-7 w-fit p-2 bg-gray-800 rounded-lg">
+                <div className="flex gap-2 text-sm text-[#888888] items-center" data-testid="payment-details-summary">
+                  <div className="flex items-center h-7 w-fit p-2 bg-[#1a1a1a] rounded-lg">
                     {paymentInfoMap[selectedPaymentMethod]?.icon || <CreditCard />}
                   </div>
                   <span>
@@ -183,7 +183,7 @@ const Payment = ({
           ) : paidByGiftcard ? (
             <div className="flex flex-col w-1/3">
               <p className="font-bold text-white mb-1">Método de pago</p>
-              <p className="text-gray-400" data-testid="payment-method-summary">Tarjeta de regalo</p>
+              <p className="text-[#888888]" data-testid="payment-method-summary">Tarjeta de regalo</p>
             </div>
           ) : null}
         </div>

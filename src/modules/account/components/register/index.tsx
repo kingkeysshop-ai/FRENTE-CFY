@@ -20,7 +20,7 @@ const Register = ({ setCurrentView }: Props) => {
       <h1 className="text-2xl font-black text-white uppercase mb-2 tracking-tight">
         ¡Bienvenido, Miembro King Keys! 👑
       </h1>
-      <p className="text-center text-sm text-gray-400 mb-8">
+      <p className="text-center text-sm text-[#888888] mb-8">
         Crea tu cuenta y accede a licencias digitales originales con activación inmediata.
       </p>
       <form className="w-full flex flex-col" action={formAction}>
@@ -64,13 +64,13 @@ const Register = ({ setCurrentView }: Props) => {
           />
         </div>
         <ErrorMessage error={message} data-testid="register-error" />
-        <span className="text-center text-gray-500 text-xs mt-6">
+        <span className="text-center text-[#888888] text-xs mt-6">
           Al crear una cuenta aceptas los{" "}
-          <LocalizedClientLink href="/content/privacy-policy" className="text-yellow-400 hover:text-yellow-300 transition-colors">
+          <LocalizedClientLink href="/content/privacy-policy" className="text-[#facc15] hover:text-[#e6b800] transition-colors">
             Términos de Privacidad
           </LocalizedClientLink>{" "}
           y los{" "}
-          <LocalizedClientLink href="/content/terms-of-use" className="text-yellow-400 hover:text-yellow-300 transition-colors">
+          <LocalizedClientLink href="/content/terms-of-use" className="text-[#facc15] hover:text-[#e6b800] transition-colors">
             Términos de Uso
           </LocalizedClientLink>{" "}
           de King Keys.
@@ -79,11 +79,11 @@ const Register = ({ setCurrentView }: Props) => {
           Crear mi Cuenta 🔑
         </SubmitButton>
       </form>
-      <span className="text-center text-gray-500 text-sm mt-6">
+      <span className="text-center text-[#888888] text-sm mt-6">
         ¿Ya tienes cuenta?{" "}
         <button
           onClick={() => setCurrentView(LOGIN_VIEW.SIGN_IN)}
-          className="text-yellow-400 hover:text-yellow-300 font-bold transition-colors"
+          className="text-[#facc15] hover:text-[#e6b800] font-bold transition-colors"
         >
           Inicia sesión aquí
         </button>

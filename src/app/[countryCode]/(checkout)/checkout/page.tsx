@@ -6,11 +6,13 @@ import CheckoutForm from "@modules/checkout/templates/checkout-form"
 import CheckoutSummary from "@modules/checkout/templates/checkout-summary"
 import SkeletonCheckoutForm from "@modules/skeletons/components/skeleton-checkout-form"
 import ErrorBoundary from "@modules/common/components/error-boundary"
+import Breadcrumbs from "@modules/common/components/breadcrumbs"
 import { Metadata } from "next"
 import { redirect } from "next/navigation"
 
 export const metadata: Metadata = {
   title: "Checkout",
+  description: "Finaliza tu compra en King Keys de forma segura. Aceptamos tarjeta, criptomonedas y Bold Colombia.",
 }
 
 type Props = {
@@ -28,6 +30,10 @@ export default async function Checkout(props: Props) {
   const customer = await retrieveCustomer().catch(() => null)
 
   return (
+    <>
+    <div className="content-container py-4">
+      <Breadcrumbs crumbs={[{ label: "Carrito", href: "/cart" }, { label: "Checkout" }]} />
+    </div>
     <div className="grid grid-cols-1 small:grid-cols-[1fr_416px] content-container gap-x-12 gap-y-8 py-8 small:py-12">
       <PaymentWrapper cart={cart}>
         <ErrorBoundary>
@@ -38,5 +44,6 @@ export default async function Checkout(props: Props) {
       </PaymentWrapper>
       <CheckoutSummary cart={cart} />
     </div>
+    </>
   )
 }

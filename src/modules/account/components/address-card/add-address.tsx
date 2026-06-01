@@ -44,14 +44,14 @@ const AddAddress = ({
   return (
     <>
       <button
-        className="group border-2 border-dashed border-gray-700 hover:border-yellow-400/50 rounded-xl p-5 min-h-[200px] h-full w-full flex flex-col items-center justify-center gap-3 transition-all duration-200 hover:bg-yellow-400/5"
+        className="group border-2 border-dashed border-[#2a2a2a] hover:border-[#facc15]/50 rounded-xl p-5 min-h-[200px] h-full w-full flex flex-col items-center justify-center gap-3 transition-all duration-200 hover:bg-[#facc15]/5"
         onClick={open}
         data-testid="add-address-button"
       >
-        <div className="w-12 h-12 rounded-full bg-gray-800 group-hover:bg-yellow-400/10 border border-gray-700 group-hover:border-yellow-400/40 flex items-center justify-center transition-all duration-200">
-          <Plus className="text-gray-500 group-hover:text-yellow-400 transition-colors" />
+        <div className="w-12 h-12 rounded-full bg-[#1a1a1a] group-hover:bg-[#facc15]/10 border border-[#2a2a2a] group-hover:border-[#facc15]/40 flex items-center justify-center transition-all duration-200">
+          <Plus className="text-[#888888] group-hover:text-[#facc15] transition-colors" />
         </div>
-        <span className="text-sm font-bold text-gray-500 group-hover:text-yellow-400 transition-colors">
+        <span className="text-sm font-bold text-[#888888] group-hover:text-[#facc15] transition-colors">
           Nueva Dirección
         </span>
       </button>
@@ -89,7 +89,7 @@ const AddAddress = ({
               <button
                 type="reset"
                 onClick={close}
-                className="flex-1 h-10 rounded-lg border border-gray-600 text-gray-400 text-sm font-bold hover:border-gray-500 hover:text-white transition-all duration-200"
+                className="flex-1 h-10 rounded-lg border border-[#2a2a2a] text-[#888888] text-sm font-bold hover:border-[#888888] hover:text-white transition-all duration-200"
                 data-testid="cancel-button"
               >
                 Cancelar

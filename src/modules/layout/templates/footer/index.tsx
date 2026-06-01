@@ -8,30 +8,29 @@ export default async function Footer() {
   const productCategories = await listCategories().catch(() => [])
 
   return (
-    <footer className="bg-gray-900 border-t border-yellow-400/20 w-full">
+    <footer className="bg-[#111111] border-t border-[#2a2a2a] w-full">
       <div className="content-container flex flex-col w-full py-16">
 
         {/* Parte superior */}
-        <div className="flex flex-col gap-y-10 lg:flex-row items-start justify-between pb-12 border-b border-gray-700">
+        <div className="flex flex-col gap-y-10 lg:flex-row items-start justify-between pb-12 border-b border-[#2a2a2a]">
 
           {/* Logo y descripcion */}
           <div className="flex flex-col gap-4 max-w-xs">
             <LocalizedClientLink href="/" className="text-2xl font-black tracking-widest uppercase">
               <span className="text-white">KING</span>
-              <span className="text-yellow-400"> KEYS</span>
+              <span className="text-[#facc15]"> KEYS</span>
             </LocalizedClientLink>
-            <p className="text-sm text-gray-500 leading-relaxed">
+            <p className="text-sm text-[#888888] leading-relaxed">
               Licencias digitales originales al mejor precio. Activación inmediata y soporte 24/7.
             </p>
-            {/* Badges */}
             <div className="flex gap-2 flex-wrap mt-2">
-              <span className="px-3 py-1 bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs rounded-full font-medium">
+              <span className="px-3 py-1 bg-[#facc15]/10 border border-[#facc15]/30 text-[#facc15] text-xs rounded-full font-medium">
                 ✅ 100% Original
               </span>
-              <span className="px-3 py-1 bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs rounded-full font-medium">
+              <span className="px-3 py-1 bg-[#facc15]/10 border border-[#facc15]/30 text-[#facc15] text-xs rounded-full font-medium">
                 ⚡ Entrega Inmediata
               </span>
-              <span className="px-3 py-1 bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs rounded-full font-medium">
+              <span className="px-3 py-1 bg-[#facc15]/10 border border-[#facc15]/30 text-[#facc15] text-xs rounded-full font-medium">
                 🔒 Pago Seguro
               </span>
             </div>
@@ -51,7 +50,7 @@ export default async function Footer() {
               </span>
               <ul className="flex flex-col gap-2">
                 <li>
-                  <LocalizedClientLink href="/store" className="text-gray-400 hover:text-yellow-400 transition-colors duration-200">
+                  <LocalizedClientLink href="/store" className="text-[#888888] hover:text-[#facc15] transition-colors duration-200">
                     Todos los productos
                   </LocalizedClientLink>
                 </li>
@@ -59,7 +58,7 @@ export default async function Footer() {
                   <li key={c.id}>
                     <LocalizedClientLink
                       href={`/categories/${c.handle}`}
-                      className="text-gray-400 hover:text-yellow-400 transition-colors duration-200"
+                      className="text-[#888888] hover:text-[#facc15] transition-colors duration-200"
                     >
                       {c.name}
                     </LocalizedClientLink>
@@ -77,12 +76,12 @@ export default async function Footer() {
                 <ul className="flex flex-col gap-2">
                   {collections.slice(0, 5).map((c: any) => (
                     <li key={c.id}>
-                      <LocalizedClientLink
-                        href={`/collections/${c.handle}`}
-                        className="text-gray-400 hover:text-yellow-400 transition-colors duration-200"
-                      >
-                        {c.title}
-                      </LocalizedClientLink>
+                  <LocalizedClientLink
+                    href={`/collections/${c.handle}`}
+                    className="text-[#888888] hover:text-[#facc15] transition-colors duration-200"
+                  >
+                    {c.title}
+                  </LocalizedClientLink>
                     </li>
                   ))}
                 </ul>
@@ -104,7 +103,7 @@ export default async function Footer() {
                   <li key={item.href}>
                     <LocalizedClientLink
                       href={item.href}
-                      className="text-gray-400 hover:text-yellow-400 transition-colors duration-200"
+                      className="text-[#888888] hover:text-[#facc15] transition-colors duration-200"
                     >
                       {item.label}
                     </LocalizedClientLink>
@@ -116,14 +115,57 @@ export default async function Footer() {
           </div>
         </div>
 
-        {/* Parte inferior */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-8 text-xs text-gray-600">
-          <p>© {new Date().getFullYear()} <span className="text-yellow-400 font-bold">King Keys</span>. Todos los derechos reservados.</p>
-          <div className="flex gap-6">
-            <LocalizedClientLink href="/privacy" className="hover:text-yellow-400 transition-colors duration-200">Privacidad</LocalizedClientLink>
-            <LocalizedClientLink href="/terms" className="hover:text-yellow-400 transition-colors duration-200">Términos</LocalizedClientLink>
-            <LocalizedClientLink href="/support" className="hover:text-yellow-400 transition-colors duration-200">Soporte</LocalizedClientLink>
+        {/* Métodos de Pago */}
+        <div className="flex flex-col gap-4 py-8 border-b border-[#2a2a2a]">
+          <span className="text-white font-bold uppercase tracking-wider text-xs text-center">
+            💳 Métodos de Pago
+          </span>
+          <div className="flex items-center justify-center gap-6 flex-wrap">
+            <span className="text-[#888888] text-sm flex items-center gap-1.5">💳 Tarjeta</span>
+            <span className="text-[#2a2a2a]">|</span>
+            <span className="text-[#888888] text-sm flex items-center gap-1.5">₿ Crypto (Aurpay)</span>
+            <span className="text-[#2a2a2a]">|</span>
+            <span className="text-[#888888] text-sm flex items-center gap-1.5">🟢 Bold (Colombia)</span>
+            <span className="text-[#2a2a2a]">|</span>
+            <span className="text-[#888888] text-sm flex items-center gap-1.5">🔷 Cryptomus</span>
           </div>
+        </div>
+
+        {/* Garantías */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 py-6 text-xs text-[#888888] border-b border-[#2a2a2a]">
+          <span className="flex items-center gap-1.5">✅ 100% Original</span>
+          <span className="hidden sm:inline text-[#2a2a2a]">•</span>
+          <span className="flex items-center gap-1.5">🔄 Reembolso Garantizado</span>
+          <span className="hidden sm:inline text-[#2a2a2a]">•</span>
+          <span className="flex items-center gap-1.5">🎧 Soporte 24/7</span>
+          <span className="hidden sm:inline text-[#2a2a2a]">•</span>
+          <span className="flex items-center gap-1.5">⚡ Entrega Inmediata</span>
+        </div>
+
+        {/* Redes Sociales */}
+        <div className="flex items-center justify-center gap-4 py-6 border-b border-[#2a2a2a]">
+          <span className="text-[#888888] text-xs uppercase tracking-widest">Síguenos:</span>
+          <a href="#" className="text-[#888888] hover:text-[#facc15] transition-colors text-lg" aria-label="Twitter/X">𝕏</a>
+          <a href="#" className="text-[#888888] hover:text-[#facc15] transition-colors text-lg" aria-label="Instagram">📷</a>
+          <a href="#" className="text-[#888888] hover:text-[#facc15] transition-colors text-lg" aria-label="TikTok">♪</a>
+          <a href="#" className="text-[#888888] hover:text-[#facc15] transition-colors text-lg" aria-label="WhatsApp">💬</a>
+        </div>
+
+        {/* Parte inferior */}
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-8 text-xs text-[#888888]">
+          <p>© {new Date().getFullYear()} <span className="text-[#facc15] font-bold">King Keys</span>. Todos los derechos reservados.</p>
+          <div className="flex gap-6">
+            <LocalizedClientLink href="/privacy" className="hover:text-[#facc15] transition-colors duration-200">Privacidad</LocalizedClientLink>
+            <LocalizedClientLink href="/terms" className="hover:text-[#facc15] transition-colors duration-200">Términos</LocalizedClientLink>
+            <LocalizedClientLink href="/support" className="hover:text-[#facc15] transition-colors duration-200">Soporte</LocalizedClientLink>
+          </div>
+        </div>
+
+        {/* Texto legal */}
+        <div className="text-center pt-4 text-[10px] text-[#888888]/40 leading-relaxed max-w-2xl mx-auto">
+          King Keys es distribuidor autorizado de licencias digitales. Todos los productos son 100% originales con garantía de activación.
+          Los nombres de marcas, logotipos y productos mencionados son marcas registradas de sus respectivos dueños.
+          El uso de este sitio web implica la aceptación de nuestros términos y condiciones.
         </div>
 
       </div>

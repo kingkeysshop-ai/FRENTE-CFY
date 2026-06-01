@@ -132,12 +132,12 @@ function FreeShippingInline({
   }
 }) {
   return (
-    <div className="bg-gray-900 border border-yellow-400/20 p-3 rounded-xl">
+    <div className="bg-[#111111] border border-[#facc15]/20 p-3 rounded-xl">
       <div className="space-y-2">
-        <div className="flex justify-between text-xs text-gray-400">
+        <div className="flex justify-between text-xs text-[#888888]">
           <div>
             {price.target_reached ? (
-              <div className="flex items-center gap-1.5 text-yellow-400 font-semibold">
+              <div className="flex items-center gap-1.5 text-[#facc15] font-semibold">
                 ✓ Envío gratis desbloqueado
               </div>
             ) : (
@@ -171,7 +171,7 @@ function FreeShippingInline({
             )}
             style={{ width: `${Math.min(price.remaining_percentage, 100)}%` }}
           />
-          <div className="h-1 rounded-full flex-grow bg-gray-700" />
+          <div className="h-1 rounded-full flex-grow bg-[#2a2a2a]" />
         </div>
       </div>
     </div>
@@ -199,18 +199,18 @@ function FreeShippingPopup({
       )}
     >
       <button
-        className="w-7 h-7 rounded-full bg-gray-800 border border-gray-600 flex items-center justify-center text-gray-400 hover:text-white hover:border-gray-400 transition-all"
+        className="w-7 h-7 rounded-full bg-[#1a1a1a] border border-[#2a2a2a] flex items-center justify-center text-[#888888] hover:text-white hover:border-gray-400 transition-all"
         onClick={() => setIsClosed(true)}
       >
         ✕
       </button>
 
-      <div className="w-[380px] bg-gray-900 border border-yellow-400/20 rounded-xl p-5 shadow-lg shadow-yellow-400/5">
+      <div className="w-[380px] bg-[#111111] border border-[#facc15]/20 rounded-xl p-5 shadow-lg shadow-yellow-400/5">
         <div className="space-y-3">
-          <div className="flex justify-between text-sm text-gray-400">
+          <div className="flex justify-between text-sm text-[#888888]">
             <div>
               {price.target_reached ? (
-                <div className="flex items-center gap-1.5 text-yellow-400 font-semibold">
+                <div className="flex items-center gap-1.5 text-[#facc15] font-semibold">
                   ✓ Envío gratis desbloqueado
                 </div>
               ) : (
@@ -244,20 +244,20 @@ function FreeShippingPopup({
               )}
               style={{ width: `${Math.min(price.remaining_percentage, 100)}%` }}
             />
-            <div className="h-1.5 rounded-full flex-grow bg-gray-700" />
+            <div className="h-1.5 rounded-full flex-grow bg-[#2a2a2a]" />
           </div>
         </div>
 
         <div className="flex gap-3 mt-4">
           <LocalizedClientLink
-            className="flex-1 rounded-lg bg-transparent border border-yellow-400/40 text-yellow-400 text-sm font-bold py-2.5 px-4 text-center hover:bg-yellow-400/10 hover:border-yellow-400 transition-all"
+            className="flex-1 rounded-lg bg-transparent border border-yellow-400/40 text-[#facc15] text-sm font-bold py-2.5 px-4 text-center hover:bg-yellow-400/10 hover:border-[#facc15] transition-all"
             href="/cart"
           >
             Ver carrito
           </LocalizedClientLink>
 
           <LocalizedClientLink
-            className="flex-1 rounded-lg bg-yellow-400 text-gray-900 text-sm font-bold py-2.5 px-4 text-center hover:bg-yellow-300 transition-all"
+            className="flex-1 rounded-lg bg-[#facc15] text-[#0a0a0a] text-sm font-bold py-2.5 px-4 text-center hover:bg-[#e6b800] transition-all"
             href="/store"
           >
             Ver productos

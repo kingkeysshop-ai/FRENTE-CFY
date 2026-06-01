@@ -59,13 +59,13 @@ function Line({
 
   return (
     <div className="flex items-center gap-2 text-sm sm:text-base leading-relaxed animate-fadeIn">
-      <span className="text-yellow-400/70 shrink-0">$</span>
+      <span className="text-[#facc15]/70 shrink-0">$</span>
       <span className="text-yellow-300/90 font-mono">{label}</span>
-      <span className="text-gray-600 flex-1 min-w-[20px] text-center">..</span>
-      <span className="text-yellow-400 font-mono font-bold tabular-nums shrink-0">
+      <span className="text-[#888888] flex-1 min-w-[20px] text-center">..</span>
+      <span className="text-[#facc15] font-mono font-bold tabular-nums shrink-0">
         [{<Counter target={value} active={show} />}]
       </span>
-      <span className="text-yellow-400/60 font-mono text-xs hidden sm:inline">
+      <span className="text-[#facc15]/60 font-mono text-xs hidden sm:inline">
         {suffix}
       </span>
     </div>
@@ -109,16 +109,16 @@ export default function StatsTerminal() {
           <span className="w-3 h-3 rounded-full bg-red-500/80" />
           <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
           <span className="w-3 h-3 rounded-full bg-yellow-400/80" />
-          <span className="ml-3 text-xs font-mono text-yellow-400/60">licenses.sh — bash</span>
+          <span className="ml-3 text-xs font-mono text-[#facc15]/60">licenses.sh — bash</span>
         </div>
 
         {/* Content */}
         <div className="px-4 sm:px-6 py-6 sm:py-8 space-y-1.5">
-          <p className="text-yellow-400/50 font-mono text-xs mb-4">
+          <p className="text-[#facc15]/50 font-mono text-xs mb-4">
             <span className="text-yellow-300">root</span>
-            <span className="text-gray-600">@</span>
-            <span className="text-yellow-400">king-keys</span>
-            <span className="text-gray-600">:~$</span> ./licenses.sh --stats
+            <span className="text-[#888888]">@</span>
+            <span className="text-[#facc15]">king-keys</span>
+            <span className="text-[#888888]">:~$</span> ./licenses.sh --stats
           </p>
 
           {LINES.map((line, i) => (
@@ -126,7 +126,7 @@ export default function StatsTerminal() {
           ))}
 
           <div className="flex items-center gap-2 mt-4 text-sm">
-            <span className="text-yellow-400 font-mono">root@king-keys:~$</span>
+            <span className="text-[#facc15] font-mono">root@king-keys:~$</span>
             <span className={`font-mono text-yellow-300/90 ${cursor ? "opacity-100" : "opacity-0"}`}>_</span>
           </div>
         </div>

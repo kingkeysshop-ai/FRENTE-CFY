@@ -104,12 +104,12 @@ const Shipping: React.FC<ShippingProps> = ({ cart, availableShippingMethods }) =
           "opacity-50 pointer-events-none select-none": !isOpen && cart.shipping_methods?.length === 0,
         })}>
           Método de Envío
-          {!isOpen && (cart.shipping_methods?.length ?? 0) > 0 && <CheckCircleSolid className="text-yellow-400" />}
+          {!isOpen && (cart.shipping_methods?.length ?? 0) > 0 && <CheckCircleSolid className="text-[#facc15]" />}
         </h2>
         {!isOpen && cart?.shipping_address && cart?.billing_address && cart?.email && (
           <button
             onClick={handleEdit}
-            className="text-yellow-400 hover:text-yellow-300 text-sm font-semibold transition-colors"
+            className="text-[#facc15] hover:text-[#e6b800] text-sm font-semibold transition-colors"
             data-testid="edit-delivery-button"
           >
             Editar
@@ -122,7 +122,7 @@ const Shipping: React.FC<ShippingProps> = ({ cart, availableShippingMethods }) =
           <div className="grid">
             <div className="flex flex-col mb-4">
               <span className="font-bold text-white">Método de envío</span>
-              <span className="text-gray-400 text-sm">¿Cómo quieres recibir tu pedido?</span>
+              <span className="text-[#888888] text-sm">¿Cómo quieres recibir tu pedido?</span>
             </div>
             <div data-testid="delivery-options-container">
               <div className="pb-8">
@@ -136,15 +136,15 @@ const Shipping: React.FC<ShippingProps> = ({ cart, availableShippingMethods }) =
                       data-testid="delivery-option-radio"
                       className={clx(
                         "flex items-center justify-between text-sm cursor-pointer py-3 border rounded-xl px-4 mb-2 transition-colors",
-                        { "border-yellow-400 bg-yellow-400/10": showPickupOptions === PICKUP_OPTION_ON,
-                          "border-gray-600 hover:border-gray-500": showPickupOptions !== PICKUP_OPTION_ON }
+                        { "border-[#facc15] bg-[#facc15]/10": showPickupOptions === PICKUP_OPTION_ON,
+                          "border-[#2a2a2a] hover:border-[#888888]": showPickupOptions !== PICKUP_OPTION_ON }
                       )}
                     >
                       <div className="flex items-center gap-x-4">
                         <MedusaRadio checked={showPickupOptions === PICKUP_OPTION_ON} />
                         <span className="text-white">Recoger en tienda</span>
                       </div>
-                      <span className="text-gray-400">-</span>
+                      <span className="text-[#888888]">-</span>
                     </Radio>
                   </RadioGroup>
                 )}
@@ -159,8 +159,8 @@ const Shipping: React.FC<ShippingProps> = ({ cart, availableShippingMethods }) =
                         disabled={isDisabled}
                         className={clx(
                           "flex items-center justify-between text-sm cursor-pointer py-3 border rounded-xl px-4 mb-2 transition-colors",
-                          { "border-yellow-400 bg-yellow-400/10": option.id === shippingMethodId,
-                            "border-gray-600 hover:border-gray-500": option.id !== shippingMethodId,
+                          { "border-[#facc15] bg-[#facc15]/10": option.id === shippingMethodId,
+                            "border-[#2a2a2a] hover:border-[#888888]": option.id !== shippingMethodId,
                             "cursor-not-allowed opacity-50": isDisabled }
                         )}
                       >
@@ -168,7 +168,7 @@ const Shipping: React.FC<ShippingProps> = ({ cart, availableShippingMethods }) =
                           <MedusaRadio checked={option.id === shippingMethodId} />
                           <span className="text-white">{option.name}</span>
                         </div>
-                        <span className="text-yellow-400 font-bold">
+                        <span className="text-[#facc15] font-bold">
                           {option.price_type === "flat" ? (
                             convertToLocale({ amount: option.amount!, currency_code: cart?.currency_code })
                           ) : calculatedPricesMap[option.id] ? (
@@ -187,7 +187,7 @@ const Shipping: React.FC<ShippingProps> = ({ cart, availableShippingMethods }) =
             <div className="grid">
               <div className="flex flex-col mb-4">
                 <span className="font-bold text-white">Tienda</span>
-                <span className="text-gray-400 text-sm">Elige una tienda cercana</span>
+                <span className="text-[#888888] text-sm">Elige una tienda cercana</span>
               </div>
               <div data-testid="delivery-options-container">
                 <div className="pb-8">
@@ -200,8 +200,8 @@ const Shipping: React.FC<ShippingProps> = ({ cart, availableShippingMethods }) =
                         data-testid="delivery-option-radio"
                         className={clx(
                           "flex items-center justify-between text-sm cursor-pointer py-3 border rounded-xl px-4 mb-2 transition-colors",
-                          { "border-yellow-400 bg-yellow-400/10": option.id === shippingMethodId,
-                            "border-gray-600 hover:border-gray-500": option.id !== shippingMethodId,
+                          { "border-[#facc15] bg-[#facc15]/10": option.id === shippingMethodId,
+                            "border-[#2a2a2a] hover:border-[#888888]": option.id !== shippingMethodId,
                             "cursor-not-allowed opacity-50": option.insufficient_inventory }
                         )}
                       >
@@ -209,14 +209,14 @@ const Shipping: React.FC<ShippingProps> = ({ cart, availableShippingMethods }) =
                           <MedusaRadio checked={option.id === shippingMethodId} />
                           <div className="flex flex-col">
                             <span className="text-white">{option.name}</span>
-                            <span className="text-gray-400 text-xs">
+                            <span className="text-[#888888] text-xs">
                               {option.data?.["pickup_address"]
                                 ? String(option.data["pickup_address"])
                                 : "Dirección disponible al confirmar recogida"}
                             </span>
                           </div>
                         </div>
-                        <span className="text-yellow-400 font-bold">
+                        <span className="text-[#facc15] font-bold">
                           {convertToLocale({ amount: option.amount!, currency_code: cart?.currency_code })}
                         </span>
                       </Radio>
@@ -233,7 +233,7 @@ const Shipping: React.FC<ShippingProps> = ({ cart, availableShippingMethods }) =
               onClick={handleSubmit}
               disabled={isLoading || !cart.shipping_methods?.[0]}
               data-testid="submit-delivery-option-button"
-              className="mt-4 w-full py-4 bg-yellow-400 text-gray-900 font-black text-base rounded-xl hover:bg-yellow-300 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2"
+              className="mt-4 w-full py-4 bg-[#facc15] text-[#0a0a0a] font-black text-base rounded-xl hover:bg-[#e6b800] hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <span className="inline-block w-5 h-5 border-2 border-gray-900 border-t-transparent rounded-full animate-spin" />
@@ -248,7 +248,7 @@ const Shipping: React.FC<ShippingProps> = ({ cart, availableShippingMethods }) =
           {cart && (cart.shipping_methods?.length ?? 0) > 0 && (
             <div className="flex flex-col w-1/3">
               <p className="font-bold text-white mb-1">Método</p>
-              <p className="text-gray-400">
+              <p className="text-[#888888]">
                 {cart.shipping_methods!.at(-1)!.name}{" "}
                 {convertToLocale({ amount: cart.shipping_methods!.at(-1)!.amount!, currency_code: cart?.currency_code })}
               </p>

@@ -3,6 +3,7 @@ import Summary from "./summary"
 import EmptyCartMessage from "../components/empty-cart-message"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import SignInPrompt from "../components/sign-in-prompt"
+import Breadcrumbs from "@modules/common/components/breadcrumbs"
 import { HttpTypes } from "@medusajs/types"
 
 const CartTemplate = ({
@@ -13,13 +14,18 @@ const CartTemplate = ({
   customer: HttpTypes.StoreCustomer | null
 }) => {
   return (
-    <div className="min-h-screen bg-gray-950">
+    <div className="min-h-screen bg-[#0a0a0a]">
+
+      {/* Breadcrumbs */}
+      <div className="content-container pt-4">
+        <Breadcrumbs crumbs={[{ label: "Carrito" }]} />
+      </div>
 
       {/* Header */}
-      <div className="border-b border-yellow-400/20 bg-gray-900">
+      <div className="border-b border-[#2a2a2a] bg-[#111111]">
         <div className="content-container py-8 flex flex-col gap-2">
-          <span className="text-xs text-yellow-400 font-bold uppercase tracking-widest">🛒 King Keys</span>
-          <h1 className="text-3xl font-black text-white">Tu <span className="text-yellow-400">Carrito</span></h1>
+          <span className="text-xs text-[#facc15] font-bold uppercase tracking-widest">🛒 King Keys</span>
+          <h1 className="text-3xl font-black text-white">Tu <span className="text-[#facc15]">Carrito</span></h1>
         </div>
       </div>
 
@@ -30,23 +36,23 @@ const CartTemplate = ({
             {/* Items */}
             <div className="flex flex-col gap-y-4">
               {!customer && (
-                <div className="bg-yellow-400/10 border border-yellow-400/30 rounded-xl p-4 flex items-center justify-between gap-4">
+                <div className="bg-[#facc15]/10 border border-[#facc15]/30 rounded-xl p-4 flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
                     <span className="text-xl">👤</span>
                     <div>
                       <p className="text-white text-sm font-bold">¿Ya tienes cuenta?</p>
-                      <p className="text-gray-400 text-xs">Inicia sesión para ver tus pedidos anteriores</p>
+                      <p className="text-[#888888] text-xs">Inicia sesión para ver tus pedidos anteriores</p>
                     </div>
                   </div>
                   <SignInPrompt />
                 </div>
               )}
-              <div className="bg-gray-900 border border-gray-700 rounded-xl overflow-hidden">
+              <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl overflow-hidden">
                 <ItemsTemplate cart={cart} />
               </div>
               <LocalizedClientLink
                 href="/store"
-                className="flex items-center justify-center gap-2 py-3 px-6 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl text-gray-300 hover:text-white text-sm font-semibold transition-all duration-200 w-full small:w-fit"
+                className="flex items-center justify-center gap-2 py-3 px-6 bg-[#1a1a1a] hover:bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-[#888888] hover:text-white text-sm font-semibold transition-all duration-200 w-full small:w-fit"
               >
                 ← Seguir Comprando
               </LocalizedClientLink>
@@ -55,11 +61,11 @@ const CartTemplate = ({
             {/* Resumen */}
             <div className="relative">
               <div className="sticky top-20 flex flex-col gap-4">
-                <div className="bg-gray-900 border border-yellow-400/20 rounded-xl p-6">
+                <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl p-6">
                   <Summary cart={cart as any} />
                 </div>
                 {/* Garantias */}
-                <div className="bg-gray-900 border border-gray-700 rounded-xl p-4 flex flex-col gap-3">
+                <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl p-4 flex flex-col gap-3">
                   {[
                     { icon: "✅", text: "Licencias 100% Originales" },
                     { icon: "⚡", text: "Entrega Inmediata por Email" },
@@ -68,7 +74,7 @@ const CartTemplate = ({
                   ].map((g) => (
                     <div key={g.text} className="flex items-center gap-3">
                       <span>{g.icon}</span>
-                      <span className="text-gray-400 text-xs">{g.text}</span>
+                      <span className="text-[#888888] text-xs">{g.text}</span>
                     </div>
                   ))}
                 </div>

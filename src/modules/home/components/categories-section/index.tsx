@@ -23,22 +23,22 @@ export default async function CategoriesSection() {
   }
 
   return (
-    <section className="bg-gray-900/50 border-y border-yellow-400/10 py-14">
+    <section className="bg-[#111111]/50 border-y border-[#facc15]/10 py-14">
       <div className="content-container flex flex-col gap-8">
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex flex-col gap-1">
-            <span className="text-xs text-yellow-400 font-bold uppercase tracking-widest">
+            <span className="text-xs text-[#facc15] font-bold uppercase tracking-widest">
               📦 Explora
             </span>
             <h2 className="text-3xl font-black text-white">
-              Categorías <span className="text-yellow-400">Populares</span>
+              Categorías <span className="text-[#facc15]">Populares</span>
             </h2>
           </div>
           <LocalizedClientLink
             href="/store"
-            className="text-sm text-yellow-400 hover:text-yellow-300 font-bold border border-yellow-400/30 px-4 py-2 rounded-lg hover:bg-yellow-400/10 transition-all duration-200"
+            className="text-sm text-[#facc15] hover:text-[#e6b800] font-bold border border-[#facc15]/30 px-4 py-2 rounded-lg hover:bg-[#facc15]/10 transition-all duration-200"
           >
             Ver toda la tienda →
           </LocalizedClientLink>
@@ -50,16 +50,16 @@ export default async function CategoriesSection() {
             <FadeInView key={category.id} delay={i * 80}>
               <LocalizedClientLink
                 href={`/categories/${category.handle}`}
-                className="group flex flex-col items-center gap-3 bg-gray-900 border border-gray-700 hover:border-yellow-400/60 rounded-xl p-5 transition-all duration-200 hover:shadow-lg hover:shadow-yellow-400/10 hover:-translate-y-1 text-center"
+                className="group flex flex-col items-center gap-3 bg-[#111111] border border-[#2a2a2a] hover:border-[#facc15]/60 rounded-xl p-5 transition-all duration-200 hover:shadow-lg hover:shadow-yellow-400/10 hover:-translate-y-1 text-center"
               >
                 <span className="text-4xl group-hover:scale-110 transition-transform duration-200">
                   {getIcon(category.name)}
                 </span>
-                <span className="text-white text-sm font-bold group-hover:text-yellow-400 transition-colors duration-200">
+                <span className="text-white text-sm font-bold group-hover:text-[#facc15] transition-colors duration-200">
                   {category.name}
                 </span>
                 {category.products && category.products.length > 0 && (
-                  <span className="text-xs text-gray-500 bg-gray-800 px-2 py-0.5 rounded-full">
+                  <span className="text-xs text-[#888888] bg-[#1a1a1a] px-2 py-0.5 rounded-full">
                     {category.products.length} productos
                   </span>
                 )}
@@ -71,11 +71,11 @@ export default async function CategoriesSection() {
           <FadeInView delay={10 * 80}>
             <LocalizedClientLink
               href="/store"
-              className="group flex flex-col items-center gap-3 bg-yellow-400/5 border border-yellow-400/20 hover:border-yellow-400/60 rounded-xl p-5 transition-all duration-200 hover:-translate-y-1 text-center"
+              className="group flex flex-col items-center gap-3 bg-[#facc15]/5 border border-[#facc15]/20 hover:border-[#facc15]/60 rounded-xl p-5 transition-all duration-200 hover:-translate-y-1 text-center"
             >
               <span className="text-4xl group-hover:scale-110 transition-transform duration-200">✨</span>
-              <span className="text-yellow-400 text-sm font-bold">Ver Todas</span>
-              <span className="text-xs text-gray-500 bg-gray-800 px-2 py-0.5 rounded-full">Tienda completa</span>
+              <span className="text-[#facc15] text-sm font-bold">Ver Todas</span>
+              <span className="text-xs text-[#888888] bg-[#1a1a1a] px-2 py-0.5 rounded-full">Tienda completa</span>
             </LocalizedClientLink>
           </FadeInView>
         </div>

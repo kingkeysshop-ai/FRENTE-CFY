@@ -15,13 +15,13 @@ const LoginTemplate = () => {
   return (
     <div className="w-full">
       {/* Tabs */}
-      <div className="flex border-b border-gray-700">
+      <div className="flex border-b border-[#2a2a2a]">
         <button
           onClick={() => setCurrentView("sign-in")}
           className={`flex-1 py-4 text-sm font-bold uppercase tracking-wider transition-all duration-200 ${
             currentView === "sign-in"
-              ? "bg-yellow-400 text-gray-900"
-              : "text-gray-400 hover:text-white bg-transparent"
+              ? "bg-[#facc15] text-[#0a0a0a]"
+              : "text-[#888888] hover:text-white bg-transparent"
           }`}
         >
           Iniciar Sesión
@@ -30,8 +30,8 @@ const LoginTemplate = () => {
           onClick={() => setCurrentView("register")}
           className={`flex-1 py-4 text-sm font-bold uppercase tracking-wider transition-all duration-200 ${
             currentView === "register"
-              ? "bg-yellow-400 text-gray-900"
-              : "text-gray-400 hover:text-white bg-transparent"
+              ? "bg-[#facc15] text-[#0a0a0a]"
+              : "text-[#888888] hover:text-white bg-transparent"
           }`}
         >
           Registrarse

@@ -24,11 +24,11 @@ const CheckboxWithLabel: React.FC<CheckboxProps> = ({
         onChange={onChange}
         name={name}
         data-testid={dataTestId}
-        className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-yellow-400 focus:ring-yellow-400/50 focus:ring-2 accent-yellow-400 cursor-pointer"
+        className="w-4 h-4 rounded border-[#2a2a2a] bg-[#1a1a1a] text-[#facc15] focus:ring-yellow-400/50 focus:ring-2 accent-yellow-400 cursor-pointer"
       />
       <label
         htmlFor="checkbox"
-        className="text-yellow-400 text-sm font-semibold cursor-pointer select-none"
+        className="text-[#facc15] text-sm font-semibold cursor-pointer select-none"
       >
         {label}
       </label>

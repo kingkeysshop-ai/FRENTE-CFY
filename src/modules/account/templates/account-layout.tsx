@@ -23,11 +23,11 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
 
   if (!customer) {
     return (
-      <div className="relative min-h-screen bg-gray-950 flex items-center justify-center px-4 py-16 overflow-hidden">
+      <div className="relative min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4 py-16 overflow-hidden">
 
         {/* Brillo dorado */}
-        <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-yellow-400 opacity-[0.05] blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 right-[-10%] w-[350px] h-[350px] rounded-full bg-yellow-500 opacity-[0.04] blur-[100px] pointer-events-none" />
+        <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-[#facc15] opacity-[0.05] blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-0 right-[-10%] w-[350px] h-[350px] rounded-full bg-[#facc15] opacity-[0.04] blur-[100px] pointer-events-none" />
 
         {/* Grid de puntos */}
         <div
@@ -42,7 +42,7 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
         {PARTICLES.map((p) => (
           <span
             key={p.id}
-            className="absolute rounded-full bg-yellow-400 pointer-events-none"
+            className="absolute rounded-full bg-[#facc15] pointer-events-none"
             style={{
               width: p.size,
               height: p.size,
@@ -58,9 +58,9 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
         <div className="relative z-10 w-full max-w-2xl flex flex-col items-center gap-8">
           <a href="/" className="text-3xl font-black tracking-widest uppercase">
             <span className="text-white">KING</span>
-            <span className="text-yellow-400"> KEYS</span>
+            <span className="text-[#facc15]"> KEYS</span>
           </a>
-          <div className="w-full bg-gray-900/80 backdrop-blur-sm border border-yellow-400/20 rounded-2xl overflow-hidden shadow-2xl shadow-black">
+          <div className="w-full bg-[#111111]/80 backdrop-blur-sm border border-[#facc15]/20 rounded-2xl overflow-hidden shadow-2xl shadow-black">
             {children}
           </div>
           <div className="flex gap-10">
@@ -71,7 +71,7 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
             ].map((g) => (
               <div key={g.text} className="flex flex-col items-center gap-1">
                 <span className="text-2xl">{g.icon}</span>
-                <span className="text-xs text-gray-600">{g.text}</span>
+                <span className="text-xs text-[#888888]">{g.text}</span>
               </div>
             ))}
           </div>
@@ -89,11 +89,11 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
   }
 
   return (
-    <div className="relative min-h-screen bg-gray-950 overflow-hidden" data-testid="account-page">
+    <div className="relative min-h-screen bg-[#0a0a0a] overflow-hidden" data-testid="account-page">
 
       {/* Brillo dorado */}
-      <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full bg-yellow-400 opacity-[0.04] blur-[130px] pointer-events-none" />
-      <div className="absolute bottom-0 right-[-5%] w-[400px] h-[400px] rounded-full bg-yellow-500 opacity-[0.03] blur-[100px] pointer-events-none" />
+      <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full bg-[#facc15] opacity-[0.04] blur-[130px] pointer-events-none" />
+      <div className="absolute bottom-0 right-[-5%] w-[400px] h-[400px] rounded-full bg-[#facc15] opacity-[0.03] blur-[100px] pointer-events-none" />
 
       {/* Grid de puntos */}
       <div
@@ -108,7 +108,7 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
       {PARTICLES.map((p) => (
         <span
           key={p.id}
-          className="absolute rounded-full bg-yellow-400 pointer-events-none"
+          className="absolute rounded-full bg-[#facc15] pointer-events-none"
           style={{
             width: p.size,
             height: p.size,
@@ -121,10 +121,10 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
       ))}
 
       {/* Header */}
-      <div className="relative z-10 border-b border-yellow-400/20 bg-gray-900/80 backdrop-blur-sm">
+      <div className="relative z-10 border-b border-[#facc15]/20 bg-[#111111]/80 backdrop-blur-sm">
         <div className="content-container py-8 flex flex-col gap-1">
-          <span className="text-xs text-yellow-400 font-bold uppercase tracking-widest">👤 King Keys</span>
-          <h1 className="text-3xl font-black text-white">Mi <span className="text-yellow-400">Cuenta</span></h1>
+          <span className="text-xs text-[#facc15] font-bold uppercase tracking-widest">👤 King Keys</span>
+          <h1 className="text-3xl font-black text-white">Mi <span className="text-[#facc15]">Cuenta</span></h1>
         </div>
       </div>
 
@@ -132,14 +132,14 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
         <div className="grid grid-cols-1 small:grid-cols-[260px_1fr] gap-8">
 
           {/* Sidebar */}
-          <div className="bg-gray-900/80 backdrop-blur-sm border border-gray-700 rounded-xl p-4 h-fit small:sticky small:top-20">
-            <div className="flex items-center gap-3 pb-4 mb-4 border-b border-gray-700">
-              <div className="w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center text-gray-900 font-black text-lg">
+          <div className="bg-[#111111]/80 backdrop-blur-sm border border-[#2a2a2a] rounded-xl p-4 h-fit small:sticky small:top-20">
+            <div className="flex items-center gap-3 pb-4 mb-4 border-b border-[#2a2a2a]">
+              <div className="w-10 h-10 rounded-full bg-[#facc15] flex items-center justify-center text-[#0a0a0a] font-black text-lg">
                 {customer.first_name?.[0]?.toUpperCase() ?? "👤"}
               </div>
               <div>
                 <p className="text-white font-bold text-sm">{customer.first_name ?? ""} {customer.last_name ?? ""}</p>
-                <p className="text-gray-500 text-xs truncate max-w-[160px]">{customer.email}</p>
+                <p className="text-[#888888] text-xs truncate max-w-[160px]">{customer.email}</p>
               </div>
             </div>
             <AccountNav customer={customer} />
@@ -150,14 +150,14 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
         </div>
 
         {/* Footer soporte */}
-        <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col small:flex-row items-start small:items-center justify-between gap-4">
+        <div className="mt-12 pt-8 border-t border-[#2a2a2a] flex flex-col small:flex-row items-start small:items-center justify-between gap-4">
           <div>
             <h3 className="text-white font-bold text-lg mb-1">¿Necesitas ayuda?</h3>
-            <p className="text-gray-400 text-sm">Nuestro equipo está disponible 24/7 para ayudarte.</p>
+            <p className="text-[#888888] text-sm">Nuestro equipo está disponible 24/7 para ayudarte.</p>
           </div>
           <a
             href="/store"
-            className="px-6 py-3 bg-yellow-400 text-gray-900 font-bold rounded-lg text-sm hover:bg-yellow-300 transition-all duration-200 whitespace-nowrap"
+            className="px-6 py-3 bg-[#facc15] text-[#0a0a0a] font-bold rounded-lg text-sm hover:bg-[#e6b800] transition-all duration-200 whitespace-nowrap"
           >
             🎧 Contactar Soporte
           </a>

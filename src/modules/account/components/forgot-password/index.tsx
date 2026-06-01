@@ -16,15 +16,15 @@ const ForgotPassword = () => {
       <h1 className="text-2xl font-black text-white uppercase mb-2 tracking-tight">
         Recuperar Contraseña 🔐
       </h1>
-      <p className="text-center text-sm text-gray-400 mb-8">
+      <p className="text-center text-sm text-[#888888] mb-8">
         Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.
       </p>
 
       {isSuccess ? (
-        <div className="w-full bg-gray-800/60 border border-green-500/30 rounded-xl p-6 text-center">
+        <div className="w-full bg-[#1a1a1a]/60 border border-green-500/30 rounded-xl p-6 text-center">
           <span className="text-4xl block mb-3">📧</span>
           <p className="text-white font-bold text-sm mb-2">Correo enviado</p>
-          <p className="text-gray-400 text-sm">
+          <p className="text-[#888888] text-sm">
             Si existe una cuenta con ese correo, recibirás un enlace para restablecer tu contraseña.
           </p>
         </div>
@@ -49,7 +49,7 @@ const ForgotPassword = () => {
 
       <LocalizedClientLink
         href="/account"
-        className="text-gray-500 text-sm mt-6 hover:text-yellow-400 transition-colors"
+        className="text-[#888888] text-sm mt-6 hover:text-[#facc15] transition-colors"
       >
         ← Volver a iniciar sesión
       </LocalizedClientLink>

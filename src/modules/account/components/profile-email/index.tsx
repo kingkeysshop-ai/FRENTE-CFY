@@ -50,7 +50,7 @@ const ProfileEmail: React.FC<MyInformationProps> = ({ customer }) => {
             defaultValue={customer.email}
             data-testid="email-input"
           />
-          <p className="text-xs text-gray-500 italic">
+          <p className="text-xs text-[#888888] italic">
             ⚠️ La actualización de email no está disponible actualmente.
           </p>
         </div>

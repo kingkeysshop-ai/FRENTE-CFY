@@ -55,8 +55,8 @@ const EditAddress: React.FC<EditAddressProps> = ({ region, address, isActive = f
         className={clx(
           "border rounded-xl p-5 min-h-[200px] h-full w-full flex flex-col justify-between transition-all duration-200",
           isActive
-            ? "border-yellow-400/60 bg-yellow-400/5"
-            : "border-gray-700 bg-gray-900 hover:border-gray-600"
+            ? "border-[#facc15]/60 bg-[#facc15]/5"
+            : "border-[#2a2a2a] bg-[#111111] hover:border-[#2a2a2a]"
         )}
         data-testid="address-container"
       >
@@ -66,17 +66,17 @@ const EditAddress: React.FC<EditAddressProps> = ({ region, address, isActive = f
               {address.first_name} {address.last_name}
             </Heading>
             {isActive && (
-              <span className="text-xs bg-yellow-400/20 text-yellow-400 border border-yellow-400/30 rounded-full px-2 py-0.5 font-bold shrink-0">
+              <span className="text-xs bg-[#facc15]/20 text-[#facc15] border border-[#facc15]/30 rounded-full px-2 py-0.5 font-bold shrink-0">
                 Principal
               </span>
             )}
           </div>
           {address.company && (
-            <Text className="text-gray-500 text-xs" data-testid="address-company">
+            <Text className="text-[#888888] text-xs" data-testid="address-company">
               {address.company}
             </Text>
           )}
-          <Text className="flex flex-col text-gray-400 text-xs mt-2 gap-0.5">
+          <Text className="flex flex-col text-[#888888] text-xs mt-2 gap-0.5">
             <span data-testid="address-address">
               {address.address_1}
               {address.address_2 && <>, {address.address_2}</>}
@@ -90,9 +90,9 @@ const EditAddress: React.FC<EditAddressProps> = ({ region, address, isActive = f
             </span>
           </Text>
         </div>
-        <div className="flex items-center gap-4 mt-4 pt-4 border-t border-gray-700">
+        <div className="flex items-center gap-4 mt-4 pt-4 border-t border-[#2a2a2a]">
           <button
-            className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-yellow-400 transition-colors font-semibold"
+            className="flex items-center gap-1.5 text-xs text-[#888888] hover:text-[#facc15] transition-colors font-semibold"
             onClick={open}
             data-testid="address-edit-button"
           >
@@ -100,7 +100,7 @@ const EditAddress: React.FC<EditAddressProps> = ({ region, address, isActive = f
             Editar
           </button>
           <button
-            className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-red-400 transition-colors font-semibold"
+            className="flex items-center gap-1.5 text-xs text-[#888888] hover:text-red-400 transition-colors font-semibold"
             onClick={removeAddress}
             data-testid="address-delete-button"
           >
@@ -144,7 +144,7 @@ const EditAddress: React.FC<EditAddressProps> = ({ region, address, isActive = f
               <button
                 type="reset"
                 onClick={close}
-                className="flex-1 h-10 rounded-lg border border-gray-600 text-gray-400 text-sm font-bold hover:border-gray-500 hover:text-white transition-all duration-200"
+                className="flex-1 h-10 rounded-lg border border-[#2a2a2a] text-[#888888] text-sm font-bold hover:border-[#888888] hover:text-white transition-all duration-200"
                 data-testid="cancel-button"
               >
                 Cancelar

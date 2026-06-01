@@ -40,7 +40,7 @@ export default function WishlistClient({
     return (
       <div className="grid grid-cols-2 small:grid-cols-3 medium:grid-cols-4 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="bg-gray-900 rounded-xl animate-pulse h-80" />
+          <div key={i} className="bg-[#111111] rounded-xl animate-pulse h-80" />
         ))}
       </div>
     )
@@ -48,11 +48,11 @@ export default function WishlistClient({
 
   if (!items.length || !products.length) {
     return (
-      <div className="bg-gray-900 border border-gray-700 rounded-xl p-12 text-center">
-        <p className="text-gray-400 text-lg mb-4">No tienes favoritos aún.</p>
+      <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl p-12 text-center">
+        <p className="text-[#888888] text-lg mb-4">No tienes favoritos aún.</p>
         <LocalizedClientLink
           href="/store"
-          className="inline-flex items-center gap-2 py-3 px-6 bg-yellow-400 text-gray-900 font-bold rounded-xl hover:bg-yellow-300 transition-colors"
+          className="inline-flex items-center gap-2 py-3 px-6 bg-[#facc15] text-[#0a0a0a] font-bold rounded-xl hover:bg-[#e6b800] transition-colors"
         >
           Explorar Productos →
         </LocalizedClientLink>
