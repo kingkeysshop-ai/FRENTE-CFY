@@ -207,14 +207,14 @@ export const updateCustomerPassword = async (
     return { success: false, error: "Las contraseñas nuevas no coinciden" }
   }
 
-  const headers = {
+  const authHeaders = {
     ...(await getAuthHeaders()),
   }
 
   try {
     await sdk.customers.update(
       { password: newPassword, old_password: oldPassword } as any,
-      headers
+      authHeaders
     )
     const cacheTag = await getCacheTag("customers")
     revalidateTag(cacheTag)
