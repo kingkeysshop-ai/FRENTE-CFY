@@ -1,9 +1,9 @@
+import crypto from "crypto"
 import { NextRequest, NextResponse } from "next/server"
 import { checkRateLimit } from "@lib/rate-limit"
 
 const AURPAY_API_BASE = process.env.AURPAY_API_BASE || "https://dashboard.aurpay.net"
 const AURPAY_API_KEY = process.env.AURPAY_API_KEY
-const AURPAY_API_SECRET = process.env.AURPAY_API_SECRET
 const AURPAY_WEBHOOK_SECRET = process.env.AURPAY_WEBHOOK_SECRET
 const MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
 const MEDUSA_API_KEY = process.env.MEDUSA_API_KEY
@@ -55,15 +55,17 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const webhookSecretParam = AURPAY_WEBHOOK_SECRET ? `&secret=${AURPAY_WEBHOOK_SECRET}` : ""
+    const webhookToken = AURPAY_WEBHOOK_SECRET
+      ? crypto.createHmac("sha256", AURPAY_WEBHOOK_SECRET).update(cartId).digest("hex")
+      : ""
 
     const payload = {
       price: Number(amount),
       currency: currency.toUpperCase(),
       succeed_url: `${NEXT_PUBLIC_BASE_URL}/payment/success?cart_id=${cartId}`,
       timeout_url: `${NEXT_PUBLIC_BASE_URL}/checkout?step=review&aurpay=timeout`,
-      callback_url: `${NEXT_PUBLIC_BASE_URL}/api/aurpay/webhook?cart_id=${cartId}${webhookSecretParam}`,
-      timeout_callback: `${NEXT_PUBLIC_BASE_URL}/api/aurpay/webhook?cart_id=${cartId}&timeout=1${webhookSecretParam}`,
+      callback_url: `${NEXT_PUBLIC_BASE_URL}/api/aurpay/webhook?cart_id=${cartId}&token=${webhookToken}`,
+      timeout_callback: `${NEXT_PUBLIC_BASE_URL}/api/aurpay/webhook?cart_id=${cartId}&timeout=1&token=${webhookToken}`,
       fixed_encrypt_price: false,
       enable_post_callback: true,
     }
@@ -71,9 +73,6 @@ export async function POST(req: NextRequest) {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
       "API-Key": AURPAY_API_KEY,
-    }
-    if (AURPAY_API_SECRET) {
-      headers["API-Secret"] = AURPAY_API_SECRET
     }
 
     const response = await fetch(`${AURPAY_API_BASE}/api/order/pay-url`, {

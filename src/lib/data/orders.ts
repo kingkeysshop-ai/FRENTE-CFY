@@ -74,9 +74,10 @@ export const createTransferRequest = async (
 
     return { success: true, error: null, order }
   } catch (error: any) {
+    console.error("Error en transferencia de orden:", error.response?.data || error.message)
     return {
       success: false,
-      error: error.response?.data?.message || error.message || "Transfer request failed",
+      error: "No se pudo transferir la orden. Intenta de nuevo.",
       order: null,
     }
   }

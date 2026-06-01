@@ -62,6 +62,8 @@ export const updateCustomer = async (body: any) => {
 }
 
 // ─── Registro de nuevo cliente ────────────────────────────────────────────────
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export async function signup(_currentState: unknown, formData: FormData) {
   const h = await headers()
   const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"
@@ -69,13 +71,26 @@ export async function signup(_currentState: unknown, formData: FormData) {
     return "Demasiados registros desde esta IP. Intenta de nuevo en 1 minuto."
   }
 
-  const password = formData.get("password") as string
-  const customerForm = {
-    email: formData.get("email") as string,
-    first_name: formData.get("first_name") as string,
-    last_name: formData.get("last_name") as string,
-    phone: formData.get("phone") as string,
+  const email = (formData.get("email") as string || "").trim()
+  const password = formData.get("password") as string || ""
+  const first_name = (formData.get("first_name") as string || "").trim()
+  const last_name = (formData.get("last_name") as string || "").trim()
+  const phone = (formData.get("phone") as string || "").trim()
+
+  if (!email || !password || !first_name) {
+    return "Completa todos los campos requeridos."
   }
+  if (!EMAIL_RE.test(email)) {
+    return "Ingresa un email válido."
+  }
+  if (password.length < 8) {
+    return "La contraseña debe tener al menos 8 caracteres."
+  }
+  if (first_name.length > 50 || last_name.length > 50) {
+    return "El nombre no puede exceder 50 caracteres."
+  }
+
+  const customerForm = { email, first_name, last_name, phone }
 
   try {
     await sdk.customers.create({
@@ -93,8 +108,8 @@ export async function signup(_currentState: unknown, formData: FormData) {
 
     return null
   } catch (error: any) {
-    console.error("Error en registro de cliente (SDK V1):", error.response?.data || error.message)
-    return error.response?.data?.message || error.message || "Error al crear la cuenta"
+    console.error("Error en registro de cliente:", error.response?.data || error.message)
+    return "Error al crear la cuenta. Verifica los datos e intenta de nuevo."
   }
 }
 
@@ -102,12 +117,16 @@ export async function signup(_currentState: unknown, formData: FormData) {
 export async function login(_currentState: unknown, formData: FormData) {
   const h = await headers()
   const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"
-  const email = formData.get("email") as string
+  const email = (formData.get("email") as string || "").trim()
   if (!checkRateLimit(`login:${email}:${ip}`, 5, 60000)) {
     return "Demasiados intentos. Intenta de nuevo en 1 minuto."
   }
 
-  const password = formData.get("password") as string
+  const password = formData.get("password") as string || ""
+
+  if (!email || !password) {
+    return "Ingresa email y contraseña."
+  }
 
   try {
     // ✅ FIX SDK v2: login(provider, actor_type, body)
@@ -120,13 +139,14 @@ export async function login(_currentState: unknown, formData: FormData) {
         revalidateTag(customerCacheTag)
       })
   } catch (error: any) {
-    return error.toString()
+    console.error("Error en login:", error.message)
+    return "Email o contraseña incorrectos."
   }
 
   try {
     await transferCart()
   } catch (error: any) {
-    return error.toString()
+    console.error("Error al transferir carrito:", error.message)
   }
 }
 
@@ -194,9 +214,10 @@ export const updateCustomerPassword = async (
     revalidateTag(cacheTag)
     return { success: true, error: null }
   } catch (error: any) {
+    console.error("Error al actualizar contraseña:", error.message)
     return {
       success: false,
-      error: error.response?.data?.message || error.message || "Error al actualizar la contraseña",
+      error: "Error al actualizar la contraseña. Verifica tu contraseña actual.",
     }
   }
 }
@@ -217,10 +238,8 @@ export async function generatePasswordToken(
     await (sdk as any).store.customer.generatePasswordToken(email, {}, headers)
     return { error: null, submitted: true }
   } catch (error: any) {
-    return {
-      error: error.response?.data?.message || error.message || "Error al enviar el correo de recuperación",
-      submitted: true,
-    }
+    console.error("Error al generar token de recuperación:", error.message)
+    return { error: null, submitted: true }
   }
 }
 
@@ -241,10 +260,8 @@ export async function resetPassword(
     await (sdk as any).store.customer.resetPassword({ email, token, password }, {}, {})
     return { error: null, submitted: true }
   } catch (error: any) {
-    return {
-      error: error.response?.data?.message || error.message || "Error al restablecer la contraseña",
-      submitted: true,
-    }
+    console.error("Error al restablecer contraseña:", error.message)
+    return { error: "Error al restablecer la contraseña. El token puede haber expirado.", submitted: true }
   }
 }
 
@@ -287,7 +304,8 @@ export const addCustomerAddress = async (
       return { success: true, error: null }
     })
     .catch((err: any) => {
-      return { success: false, error: err.toString() }
+      console.error("Error al agregar dirección:", err.message)
+      return { success: false, error: "Error al guardar la dirección. Intenta de nuevo." }
     })
 }
 
@@ -308,7 +326,8 @@ export const deleteCustomerAddress = async (
     revalidateTag(customerCacheTag)
     return { success: true, error: null }
   } catch (err: any) {
-    return { success: false, error: err.toString() }
+    console.error("Error al eliminar dirección:", err.message)
+    return { success: false, error: "Error al eliminar la dirección." }
   }
 }
 
@@ -358,6 +377,7 @@ export const updateCustomerAddress = async (
       return { success: true, error: null }
     })
     .catch((err: any) => {
-      return { success: false, error: err.toString() }
+      console.error("Error al actualizar dirección:", err.message)
+      return { success: false, error: "Error al actualizar la dirección." }
     })
 }

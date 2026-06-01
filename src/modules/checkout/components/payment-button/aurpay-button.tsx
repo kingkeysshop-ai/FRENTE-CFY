@@ -22,7 +22,7 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
       const freshCart = await retrieveCart(cart.id)
 
       const session = getActivePaymentSession(freshCart)
-      const providerId = session?.provider_id || "aurapay"
+      const providerId = session?.provider_id || "aurpay"
 
       const redirectUrl = session?.data?.redirect_url
         || session?.data?.url

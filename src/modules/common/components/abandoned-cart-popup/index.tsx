@@ -27,7 +27,7 @@ type AbandonedCartPopupProps = {
 
 const AbandonedCartPopup = ({ itemCount }: AbandonedCartPopupProps) => {
   const [visible, setVisible] = useState(false)
-  const mounted = useRef(false)
+  const listenerTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const dismiss = useCallback(() => {
     setVisible(false)
@@ -35,19 +35,22 @@ const AbandonedCartPopup = ({ itemCount }: AbandonedCartPopupProps) => {
   }, [])
 
   useEffect(() => {
-    if (mounted.current) return
-    mounted.current = true
-
     if (itemCount === 0 || !canShow()) return
 
-    const delay = setTimeout(() => {
-      document.addEventListener("mouseleave", (e: MouseEvent) => {
+    listenerTimer.current = setTimeout(() => {
+      const handler = (e: MouseEvent) => {
         if (e.clientY > 0) return
         setVisible(true)
-      }, { once: true })
+      }
+      document.addEventListener("mouseleave", handler, { once: true })
     }, 15000)
 
-    return () => clearTimeout(delay)
+    return () => {
+      if (listenerTimer.current) {
+        clearTimeout(listenerTimer.current)
+        listenerTimer.current = null
+      }
+    }
   }, [itemCount])
 
   if (!visible) return null

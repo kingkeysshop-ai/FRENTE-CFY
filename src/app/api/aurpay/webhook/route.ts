@@ -23,16 +23,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: auth.reason }, { status: 403 })
     }
 
-    const body = await req.json()
     const cartId = req.nextUrl.searchParams.get("cart_id")
+    if (!cartId) {
+      console.error("[Aurpay Webhook] No cart_id in query params")
+      return NextResponse.json({ error: "Missing cart_id" }, { status: 400 })
+    }
 
-    const { status } = body
+    let body: any
+    try {
+      body = await req.json()
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
+    }
+
+    const { status } = body || {}
 
     if (status === "SUCCEED" || status === "succeed") {
-      if (!cartId) {
-        console.error("[Aurpay Webhook] No cart_id in query params")
-        return NextResponse.json({ error: "Missing cart_id" }, { status: 400 })
-      }
 
       const medusaRes = await fetch(
         `${MEDUSA_BACKEND_URL}/store/carts/${cartId}/complete`,

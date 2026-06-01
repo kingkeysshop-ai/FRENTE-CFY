@@ -43,7 +43,7 @@ export const paymentInfoMap: Record<
     title: "Aurpay (Crypto)",
     icon: <CreditCard />,
   },
-  aurapay: {
+  aurpay: {
     title: "Aurpay (Crypto)",
     icon: <CreditCard />,
   },
@@ -80,7 +80,7 @@ export const isCryptomus = (providerId?: string) => {
 }
 
 export const isAurapay = (providerId?: string) => {
-  return providerId?.startsWith("pp_aurpay") || providerId === "aurapay"
+  return providerId?.startsWith("pp_aurpay") || providerId === "aurpay"
 }
 
 export const isBold = (providerId?: string) => {

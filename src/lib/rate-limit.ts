@@ -1,13 +1,14 @@
-// In-memory rate limiter — funciona para single-instance Docker.
-// Para multi-instancia/serverless, reemplazar con Upstash Redis/Vercel KV.
 const store = new Map<string, { count: number; resetAt: number }>()
 
-setInterval(() => {
+const cleanupId = setInterval(() => {
   const now = Date.now()
   store.forEach((entry, key) => {
     if (now > entry.resetAt) store.delete(key)
   })
-}, 60000)
+  if (store.size === 0 && cleanupId.unref) cleanupId.unref()
+}, 30000)
+
+if (cleanupId.unref) cleanupId.unref()
 
 export function checkRateLimit(
   key: string,
@@ -28,4 +29,8 @@ export function checkRateLimit(
 
   entry.count++
   return true
+}
+
+export function getRateLimitStoreSize(): number {
+  return store.size
 }
