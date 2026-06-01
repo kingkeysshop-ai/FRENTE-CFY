@@ -112,13 +112,13 @@ export async function updateCart(data: any) {
     throw new Error("No existing cart found, please create one before updating")
   }
 
-  const headers = {
+  const authHeaders = {
     ...(await getAuthHeaders()),
   }
 
   try {
     const { cart } = await (sdk as any).store.cart
-      .update(cartId, data, {}, headers) as { cart: HttpTypes.StoreCart }
+      .update(cartId, data, {}, authHeaders) as { cart: HttpTypes.StoreCart }
 
     const cartCacheTag = await getCacheTag("carts")
     revalidateTag(cartCacheTag)
