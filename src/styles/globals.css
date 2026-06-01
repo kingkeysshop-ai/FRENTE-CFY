@@ -151,7 +151,7 @@
 
   /* Terminal window */
   .terminal-win {
-    @apply rounded-xl overflow-hidden border border-[rgba(250,204,21,0.1)] bg-[rgba(0,0,0,0.4)] backdrop-blur-[10px];
+    @apply rounded-xl overflow-hidden border border-[rgba(250,204,21,0.1)] bg-[rgba(0,0,0,0.4)] backdrop-blur-[10px] w-full;
     box-shadow: 0 0 60px rgba(250,204,21,0.03);
   }
   .terminal-bar {
@@ -164,7 +164,7 @@
   .terminal-dot-yellow { background: #ffbd2e; }
   .terminal-dot-green { background: #27c93f; }
   .terminal-title { @apply text-[0.65rem] text-[#555] font-mono; }
-  .terminal-body { @apply p-5 font-mono text-[0.8rem] leading-relaxed; }
+  .terminal-body { @apply p-3 sm:p-4 lg:p-5 font-mono text-[0.75rem] sm:text-[0.8rem] leading-relaxed; }
   .terminal-line { @apply flex items-start gap-2 text-[#888] mb-1; }
   .terminal-prompt { @apply text-[#facc15] shrink-0 font-medium; }
   .terminal-cmd { @apply text-[#ccc]; }

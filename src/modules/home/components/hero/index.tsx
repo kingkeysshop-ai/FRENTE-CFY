@@ -108,11 +108,11 @@ const Hero = ({ productCount }: HeroProps) => {
       <div className="absolute inset-0 hero-grid-bg" />
 
       {/* Contenido - split layout con terminal */}
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center py-24 lg:py-0 min-h-[90vh]">
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16 items-center py-16 sm:py-24 lg:py-0 min-h-[90vh]">
 
         {/* LEFT: Brand copy */}
         <div
-          className="flex flex-col gap-5"
+          className="flex flex-col gap-4 sm:gap-5"
           style={{
             transition: "opacity 700ms ease-out, transform 700ms ease-out",
             opacity: mounted ? 1 : 0,
@@ -127,7 +127,7 @@ const Hero = ({ productCount }: HeroProps) => {
           </div>
 
           {/* Platform badges */}
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5">
             {PLATFORMS.map((p, i) => (
               <span
                 key={p.name}
@@ -141,7 +141,7 @@ const Hero = ({ productCount }: HeroProps) => {
 
           {/* Titulo */}
           <div>
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none">
               Terminal <span className="text-gold">de Licencias</span>
             </h1>
           </div>
@@ -162,7 +162,7 @@ const Hero = ({ productCount }: HeroProps) => {
           )}
 
           {/* Botones con prefijo $ */}
-          <div className="flex flex-col sm:flex-row gap-3 mt-1">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-1">
             <LocalizedClientLink
               href="/store"
               onMouseEnter={() => setHoverBtn(true)}
@@ -205,7 +205,7 @@ const Hero = ({ productCount }: HeroProps) => {
 
         {/* RIGHT: Terminal window */}
         <div
-          className="hidden lg:flex items-center justify-center"
+          className="flex items-center justify-center"
           style={{
             transition: "opacity 800ms ease-out 200ms, transform 800ms ease-out 200ms",
             opacity: mounted ? 1 : 0,
@@ -231,7 +231,7 @@ const Hero = ({ productCount }: HeroProps) => {
             </div>
 
             {/* Body with typewriter */}
-            <div className="terminal-body min-h-[280px]">
+            <div className="terminal-body min-h-[200px] lg:min-h-[280px]">
               {TERMINAL_LINES.slice(0, visibleLines).map((line, i) => {
                 if (line.isOutput) {
                   return (
