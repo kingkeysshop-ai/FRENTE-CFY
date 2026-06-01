@@ -11,6 +11,7 @@ import CountrySelect from "../country-select"
 import LanguageSelect from "../language-select"
 import { HttpTypes } from "@medusajs/types"
 import { Locale } from "@lib/data/locales"
+import { Home, ShoppingBag, ShoppingCart, User } from "lucide-react"
 
 // ─── Constantes ────────────────────────────────────────────────────────────────
 
@@ -21,11 +22,11 @@ const SideMenuItems: Record<string, string> = {
   Carrito: "/cart",
 }
 
-const MENU_ICONS: Record<string, string> = {
-  Inicio: "🏠",
-  Tienda: "🛒",
-  "Mi Cuenta": "👤",
-  Carrito: "🛍️",
+const MENU_ICONS: Record<string, React.ReactNode> = {
+  Inicio: <Home className="w-5 h-5" />,
+  Tienda: <ShoppingBag className="w-5 h-5" />,
+  "Mi Cuenta": <User className="w-5 h-5" />,
+  Carrito: <ShoppingCart className="w-5 h-5" />,
 }
 
 const ANIMATION_DELAYS = [0, 60, 120, 180]
