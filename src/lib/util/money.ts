@@ -19,7 +19,7 @@ export const convertToLocale = ({
   currency_code,
   minimumFractionDigits,
   maximumFractionDigits,
-  locale = "es-CO",
+  locale = "en-US",
 }: ConvertToLocaleParams) => {
   if (!currency_code || isEmpty(currency_code)) {
     return amount.toString()

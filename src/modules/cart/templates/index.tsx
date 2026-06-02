@@ -56,6 +56,14 @@ const CartTemplate = ({
               <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl overflow-hidden">
                 <ItemsTemplate cart={cart} />
               </div>
+
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+                <p className="text-gray-400 text-sm">¿Buscas más productos?</p>
+                <LocalizedClientLink href="/store" className="text-[#F5C518] font-semibold text-sm hover:underline">
+                  Ver toda la tienda →
+                </LocalizedClientLink>
+              </div>
+
               <LocalizedClientLink
                 href="/store"
                 className="flex items-center justify-center gap-2 py-3 px-6 bg-[#1a1a1a] hover:bg-[#2a2a2a] border border-[#2a2a2a] rounded-xl text-[#888888] hover:text-white text-sm font-semibold transition-all duration-200 w-full small:w-fit"
