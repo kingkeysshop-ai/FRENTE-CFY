@@ -6,6 +6,7 @@ import { SortOptions } from "@modules/store/components/refinement-list/sort-prod
 import PaginatedProducts from "@modules/store/templates/paginated-products"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
+import Box from "@modules/common/icons/box"
 
 export default function CategoryTemplate({
   category,
@@ -66,8 +67,8 @@ export default function CategoryTemplate({
 
           {/* Titulo */}
           <div className="flex flex-col gap-2">
-            <span className="text-xs text-[#facc15] font-bold uppercase tracking-widest">
-              📦 Categoría
+            <span className="text-xs text-[#facc15] font-bold uppercase tracking-widest inline-flex items-center gap-1">
+              <Box size="14" color="#facc15" /> Categoría
             </span>
             <h1 className="text-4xl font-black text-white" data-testid="category-page-title">
               {category.name}

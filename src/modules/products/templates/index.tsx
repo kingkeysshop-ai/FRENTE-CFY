@@ -12,6 +12,12 @@ import { HttpTypes } from "@medusajs/types"
 import ProductActionsWrapper from "./product-actions-wrapper"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import ProductUrgency from "@modules/products/components/product-urgency"
+import Star from "@modules/common/icons/star"
+import CheckCircle from "@modules/common/icons/check-circle"
+import Lightning from "@modules/common/icons/lightning"
+import ShieldCheck from "@modules/common/icons/shield-check"
+import Headset from "@modules/common/icons/headset"
+import Key from "@modules/common/icons/key"
 
 type ProductTemplateProps = {
   product: HttpTypes.StoreProduct
@@ -85,7 +91,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
           {/* Box de compra */}
           <div className="bg-[#111111] border border-yellow-400/20 rounded-xl p-5 flex flex-col gap-4">
             <div className="flex items-center gap-2 pb-3 border-b border-[#2a2a2a]">
-              <span className="text-[#facc15] text-lg">👑</span>
+              <Star size="20" color="#facc15" />
               <span className="text-white font-bold text-sm">Compra Segura</span>
             </div>
             <ProductOnboardingCta />
@@ -104,13 +110,13 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
           {/* Garantias */}
           <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl p-4 flex flex-col gap-3">
             {[
-              { icon: "✅", text: "Licencia 100% Original" },
-              { icon: "⚡", text: "Activación Inmediata" },
-              { icon: "🔒", text: "Pago Seguro" },
-              { icon: "🎧", text: "Soporte 24/7" },
+              { icon: CheckCircle, text: "Licencia 100% Original" },
+              { icon: Lightning, text: "Activación Inmediata" },
+              { icon: ShieldCheck, text: "Pago Seguro" },
+              { icon: Headset, text: "Soporte 24/7" },
             ].map((item: any) => (
               <div key={item.text} className="flex items-center gap-3">
-                <span className="text-base">{item.icon}</span>
+                <item.icon size="18" color="#888888" />
                 <span className="text-[#888888] text-xs">{item.text}</span>
               </div>
             ))}
@@ -123,7 +129,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
       <div className="border-t border-[#1a1a1a] bg-[#111111]/50">
         <div className="content-container py-12">
           <div className="flex items-center gap-3 mb-8">
-            <span className="text-[#facc15] text-xl">🔑</span>
+            <Key size="28" color="#facc15" />
             <h2 className="text-2xl font-black text-white">Productos <span className="text-[#facc15]">Relacionados</span></h2>
           </div>
           <Suspense fallback={<SkeletonRelatedProducts />}>

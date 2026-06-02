@@ -11,6 +11,10 @@ import CountrySelect from "../country-select"
 import LanguageSelect from "../language-select"
 import { HttpTypes } from "@medusajs/types"
 import { Locale } from "@lib/data/locales"
+import Home from "@modules/common/icons/home"
+import Store from "@modules/common/icons/store"
+import User from "@modules/common/icons/user"
+import ShoppingCart from "@modules/common/icons/shopping-cart"
 
 // ─── Constantes ────────────────────────────────────────────────────────────────
 
@@ -21,11 +25,11 @@ const SideMenuItems: Record<string, string> = {
   Carrito: "/cart",
 }
 
-const MENU_ICONS: Record<string, string> = {
-  Inicio: "🏠",
-  Tienda: "🛒",
-  "Mi Cuenta": "👤",
-  Carrito: "🛍️",
+const MENU_ICONS: Record<string, React.FC<{ size?: string | number; color?: string }>> = {
+  Inicio: Home,
+  Tienda: Store,
+  "Mi Cuenta": User,
+  Carrito: ShoppingCart,
 }
 
 const ANIMATION_DELAYS = [0, 60, 120, 180]
@@ -157,7 +161,7 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                                     : "text-[#888888] hover:text-[#facc15] hover:bg-[#facc15]/10"
                                 )}
                               >
-                                <span aria-hidden="true">{MENU_ICONS[name]}</span>
+                                <span aria-hidden="true">{(() => { const Icon = MENU_ICONS[name]; return <Icon size="20" color="currentColor" /> })()}</span>
                                 {name}
                               </LocalizedClientLink>
                             </li>

@@ -9,6 +9,8 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import { HttpTypes } from "@medusajs/types"
 import { signout } from "@lib/data/customer"
 import ChevronDown from "@modules/common/icons/chevron-down"
+import Star from "@modules/common/icons/shopping-cart"
+import ShoppingCart from "@modules/common/icons/shopping-cart"
 
 const AccountNav = ({ customer }: { customer: HttpTypes.StoreCustomer | null }) => {
   const route = usePathname()
@@ -19,10 +21,10 @@ const AccountNav = ({ customer }: { customer: HttpTypes.StoreCustomer | null }) 
   }
 
   const navItems = [
-    { href: "/account",           label: "Resumen",      icon: "👑",  testid: "overview-link" },
-    { href: "/account/profile",   label: "Mi Perfil",    icon: "👤",  testid: "profile-link" },
-    { href: "/account/addresses", label: "Direcciones",  icon: "📍",  testid: "addresses-link" },
-    { href: "/account/orders",    label: "Mis Pedidos",  icon: "🛒",  testid: "orders-link" },
+    { href: "/account",           label: "Resumen",      icon: Star,  testid: "overview-link" },
+    { href: "/account/profile",   label: "Mi Perfil",    icon: User,  testid: "profile-link" },
+    { href: "/account/addresses", label: "Direcciones",  icon: MapPin,  testid: "addresses-link" },
+    { href: "/account/orders",    label: "Mis Pedidos",  icon: ShoppingCart,  testid: "orders-link" },
   ]
 
   return (
@@ -42,6 +44,7 @@ const AccountNav = ({ customer }: { customer: HttpTypes.StoreCustomer | null }) 
           <ul className="flex flex-col">
             {navItems.map((item: any) => {
               const active = route.split(countryCode)[1] === item.href
+              const Icon = item.icon
               return (
                 <li key={item.href}>
                   <LocalizedClientLink
@@ -52,7 +55,7 @@ const AccountNav = ({ customer }: { customer: HttpTypes.StoreCustomer | null }) 
                     data-testid={item.testid}
                   >
                     <div className="flex items-center gap-2">
-                      <span>{item.icon}</span>
+                      <Icon size="18" color="currentColor" />
                       <span className="text-sm">{item.label}</span>
                     </div>
                     <ChevronDown className="-rotate-90 text-xs" />
@@ -80,6 +83,7 @@ const AccountNav = ({ customer }: { customer: HttpTypes.StoreCustomer | null }) 
         <ul className="flex flex-col gap-1">
           {navItems.map((item: any) => {
             const active = route.split(countryCode)[1] === item.href
+            const Icon = item.icon
             return (
               <li key={item.href}>
                 <LocalizedClientLink
@@ -91,7 +95,7 @@ const AccountNav = ({ customer }: { customer: HttpTypes.StoreCustomer | null }) 
                   }`}
                   data-testid={item.testid}
                 >
-                  <span>{item.icon}</span>
+                  <Icon size="18" color="currentColor" />
                   <span>{item.label}</span>
                 </LocalizedClientLink>
               </li>

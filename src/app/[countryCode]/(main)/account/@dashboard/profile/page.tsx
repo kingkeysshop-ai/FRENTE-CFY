@@ -4,6 +4,7 @@ import { listRegions } from "@lib/data/regions"
 import { retrieveCustomer } from "@lib/data/customer"
 
 import ProfileName from "@modules/account//components/profile-name"
+import User from "@modules/common/icons/user"
 import ProfileEmail from "@modules/account/components/profile-email"
 import ProfilePhone from "@modules/account/components/profile-phone"
 import ProfilePassword from "@modules/account/components/profile-password"
@@ -26,7 +27,7 @@ export default async function Profile() {
       {/* Page header */}
       <div className="bg-[#111111] border border-yellow-400/20 rounded-xl p-6">
         <div className="flex items-center gap-3 mb-1">
-          <span className="text-[#facc15] text-lg">👤</span>
+          <span className="text-[#facc15] text-lg"><User size="20" color="#facc15" /></span>
           <h1 className="text-2xl font-black text-white">
             Mi <span className="text-[#facc15]">Perfil</span>
           </h1>

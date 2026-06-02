@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { getRegion } from "@lib/data/regions"
 import { retrieveCustomer } from "@lib/data/customer"
 import AddressBook from "@modules/account/components/address-book"
+import MapPin from "@modules/common/icons/map-pin"
 
 export const metadata: Metadata = {
   title: "Mis Direcciones | King Keys",
@@ -25,7 +26,7 @@ export default async function Addresses(props: {
       {/* Page header */}
       <div className="bg-[#111111] border border-yellow-400/20 rounded-xl p-6">
         <div className="flex items-center gap-3 mb-1">
-          <span className="text-[#facc15] text-lg">📍</span>
+          <MapPin size="24" color="#facc15" />
           <h1 className="text-2xl font-black text-white">
             Mis <span className="text-[#facc15]">Direcciones</span>
           </h1>

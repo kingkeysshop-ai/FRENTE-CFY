@@ -1,6 +1,10 @@
 import ItemsPreviewTemplate from "@modules/cart/templates/preview"
 import DiscountCode from "@modules/checkout/components/discount-code"
 import CartTotals from "@modules/common/components/cart-totals"
+import ShoppingCart from "@modules/common/icons/shopping-cart"
+import CheckCircle from "@modules/common/icons/check-circle"
+import Lightning from "@modules/common/icons/lightning"
+import ShieldCheck from "@modules/common/icons/shield-check"
 
 const CheckoutSummary = ({ cart }: { cart: any }) => {
   if (!cart) return null
@@ -21,7 +25,7 @@ const CheckoutSummary = ({ cart }: { cart: any }) => {
 
         {/* Titulo */}
         <div className="flex items-center gap-2 pb-4 border-b border-[#2a2a2a]">
-          <span className="text-[#facc15] text-lg">🛒</span>
+          <ShoppingCart size="20" color="#facc15" />
           <h2 className="text-white font-black text-lg">Tu Pedido</h2>
         </div>
 
@@ -42,12 +46,12 @@ const CheckoutSummary = ({ cart }: { cart: any }) => {
         {/* Garantias */}
         <div className="flex flex-col gap-2 pt-3 border-t border-[#2a2a2a]">
           {[
-            { icon: "✅", text: "Licencias 100% Originales" },
-            { icon: "⚡", text: "Entrega Inmediata por Email" },
-            { icon: "🔒", text: "Pago 100% Seguro" },
+            { icon: CheckCircle, text: "Licencias 100% Originales" },
+            { icon: Lightning, text: "Entrega Inmediata por Email" },
+            { icon: ShieldCheck, text: "Pago 100% Seguro" },
           ].map((g) => (
             <div key={g.text} className="flex items-center gap-2">
-              <span className="text-sm">{g.icon}</span>
+              <g.icon size="16" color="#888888" />
               <span className="text-xs text-[#888888] font-medium">{g.text}</span>
             </div>
           ))}

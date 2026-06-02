@@ -4,6 +4,9 @@ import { clx } from "@medusajs/ui"
 import { CheckCircleSolid } from "@medusajs/icons"
 import PaymentButton from "../payment-button"
 import { useSearchParams } from "next/navigation"
+import CheckCircle from "@modules/common/icons/check-circle"
+import Lightning from "@modules/common/icons/lightning"
+import ShieldCheck from "@modules/common/icons/shield-check"
 
 const Review = ({ cart }: { cart: any }) => {
   const searchParams = useSearchParams()
@@ -42,12 +45,12 @@ const Review = ({ cart }: { cart: any }) => {
           {/* Resumen de garantias */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {[
-              { icon: "✅", title: "Licencia Original", desc: "100% autentica y activable" },
-              { icon: "⚡", title: "Entrega Inmediata", desc: "Por correo electronico" },
-              { icon: "🔒", title: "Pago Seguro", desc: "Transaccion cifrada" },
+              { icon: CheckCircle, title: "Licencia Original", desc: "100% autentica y activable" },
+              { icon: Lightning, title: "Entrega Inmediata", desc: "Por correo electronico" },
+              { icon: ShieldCheck, title: "Pago Seguro", desc: "Transaccion cifrada" },
             ].map((g) => (
               <div key={g.title} className="bg-[#1a1a1a]/60 border border-[#2a2a2a] rounded-xl p-4 flex flex-col gap-1">
-                <span className="text-xl">{g.icon}</span>
+                <g.icon size="24" color="#facc15" />
                 <p className="text-white font-bold text-sm">{g.title}</p>
                 <p className="text-[#888888] text-xs">{g.desc}</p>
               </div>

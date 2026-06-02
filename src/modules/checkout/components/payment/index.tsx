@@ -10,6 +10,7 @@ import PaymentContainer, { StripeCardContainer } from "@modules/checkout/compone
 import Divider from "@modules/common/components/divider"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
+import ShieldCheck from "@modules/common/icons/shield-check"
 
 const Payment = ({
   cart,
@@ -87,7 +88,7 @@ const Payment = ({
         <h2 className={clx("flex flex-row text-xl font-black text-white gap-x-2 items-center", {
           "opacity-50 pointer-events-none select-none": !isOpen && !paymentReady,
         })}>
-          🔒 Método de Pago
+          <ShieldCheck size="16" color="#facc15" /> Método de Pago
           {!isOpen && paymentReady && <CheckCircleSolid className="text-[#facc15]" />}
         </h2>
         {!isOpen && paymentReady && (

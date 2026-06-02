@@ -1,4 +1,5 @@
 import Link from "next/link"
+import ShieldCheck from "@modules/common/icons/shield-check"
 
 export default function Page() {
   return (
@@ -8,7 +9,7 @@ export default function Page() {
         {/* Header */}
         <div className="flex flex-col gap-3">
           <Link href="/" className="text-xs text-[#facc15] font-bold uppercase tracking-widest hover:underline">← Volver al inicio</Link>
-          <h1 className="text-4xl font-black text-white">🔒 Política de Privacidad</h1>
+          <h1 className="text-4xl font-black text-white inline-flex items-center gap-2"><ShieldCheck size="32" color="white" /> Política de Privacidad</h1>
           <p className="text-[#888888] text-sm">King Keys — Licencias Digitales Originales</p>
           <div className="h-px bg-gradient-to-r from-[#facc15]/40 to-transparent mt-2" />
         </div>

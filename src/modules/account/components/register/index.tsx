@@ -7,6 +7,7 @@ import ErrorMessage from "@modules/checkout/components/error-message"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { signup } from "@lib/data/customer"
+import Star from "@modules/common/icons/star"
 
 type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void
@@ -18,7 +19,7 @@ const Register = ({ setCurrentView }: Props) => {
   return (
     <div className="w-full flex flex-col items-center" data-testid="register-page">
       <h1 className="text-2xl font-black text-white uppercase mb-2 tracking-tight">
-        ¡Bienvenido, Miembro King Keys! 👑
+        ¡Bienvenido, Miembro King Keys! <Star size="18" color="#facc15" />
       </h1>
       <p className="text-center text-sm text-[#888888] mb-8">
         Crea tu cuenta y accede a licencias digitales originales con activación inmediata.

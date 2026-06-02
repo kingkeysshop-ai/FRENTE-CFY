@@ -2,12 +2,16 @@
 
 import { usePathname } from "next/navigation"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import Home from "@modules/common/icons/home"
+import Store from "@modules/common/icons/store"
+import ShoppingCart from "@modules/common/icons/shopping-cart"
+import User from "@modules/common/icons/user"
 
 const NAV_ITEMS = [
-  { href: "/",        icon: "🏠", label: "Inicio"  },
-  { href: "/store",   icon: "🔑", label: "Tienda"  },
-  { href: "/cart",    icon: "🛒", label: "Carrito" },
-  { href: "/account", icon: "👤", label: "Cuenta"  },
+  { href: "/",        icon: Home,           label: "Inicio"  },
+  { href: "/store",   icon: Store,          label: "Tienda"  },
+  { href: "/cart",    icon: ShoppingCart,   label: "Carrito" },
+  { href: "/account", icon: User,           label: "Cuenta"  },
 ]
 
 const MobileBottomNav = () => {
@@ -21,7 +25,7 @@ const MobileBottomNav = () => {
   return (
     <nav className="fixed bottom-0 inset-x-0 z-50 small:hidden bg-[#111111]/95 backdrop-blur-md border-t border-[#facc15]/20">
       <div className="flex items-center justify-around h-16 px-2">
-        {NAV_ITEMS.map(({ href, icon, label }) => {
+        {NAV_ITEMS.map(({ href, icon: Icon, label }) => {
           const active = isActive(href)
           return (
             <LocalizedClientLink
@@ -37,10 +41,10 @@ const MobileBottomNav = () => {
 
               {/* Icono */}
               <span
-                className="text-xl transition-transform duration-200"
+                className="transition-transform duration-200"
                 style={{ transform: active ? "scale(1.15)" : "scale(1)" }}
               >
-                {icon}
+                <Icon size="22" color={active ? "#facc15" : "#6b7280"} />
               </span>
 
               {/* Label */}

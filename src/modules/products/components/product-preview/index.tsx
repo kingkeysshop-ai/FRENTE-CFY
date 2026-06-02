@@ -4,6 +4,10 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import WishlistButton from "@modules/wishlist/components/wishlist-button"
 import Thumbnail from "../thumbnail"
 import PreviewPrice from "./price"
+import Lightning from "@modules/common/icons/lightning"
+import Star from "@modules/common/icons/star"
+import CheckCircle from "@modules/common/icons/check-circle"
+import Key from "@modules/common/icons/key"
 
 const isBestSeller = (product: HttpTypes.StoreProduct) =>
   product.tags?.some((t: any) => t.value?.toLowerCase() === "best-seller" || t.value?.toLowerCase() === "mas-vendido")
@@ -46,18 +50,18 @@ export default async function ProductPreview({
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
             {cheapestPrice?.price_type === "sale" && (
-              <span className="px-2 py-1 bg-gradient-to-r from-[#facc15] to-[#f59e0b] text-[#0a0a0a] text-[11px] font-black rounded-lg uppercase tracking-wide shadow-glow-yellow-sm">
-                🔥 Oferta
+              <span className="px-2 py-1 bg-gradient-to-r from-[#facc15] to-[#f59e0b] text-[#0a0a0a] text-[11px] font-black rounded-lg uppercase tracking-wide shadow-glow-yellow-sm inline-flex items-center gap-1">
+                <Lightning size="12" color="#0a0a0a" /> Oferta
               </span>
             )}
             {isBestSeller(product) && (
-              <span className="px-2 py-1 bg-purple-500/90 text-white text-[11px] font-black rounded-lg uppercase tracking-wide backdrop-blur-sm">
-                ⭐ Más Vendido
+              <span className="px-2 py-1 bg-purple-500/90 text-white text-[11px] font-black rounded-lg uppercase tracking-wide backdrop-blur-sm inline-flex items-center gap-1">
+                <Star size="12" color="white" /> Más Vendido
               </span>
             )}
             {isLowStock && (
-              <span className="px-2 py-1 bg-red-500/80 text-white text-[11px] font-black rounded-lg uppercase tracking-wide backdrop-blur-sm">
-                ⚡ Últimas {inventory}
+              <span className="px-2 py-1 bg-red-500/80 text-white text-[11px] font-black rounded-lg uppercase tracking-wide backdrop-blur-sm inline-flex items-center gap-1">
+                <Lightning size="12" color="white" /> Últimas {inventory}
               </span>
             )}
           </div>
@@ -90,7 +94,7 @@ export default async function ProductPreview({
               {cheapestPrice && <PreviewPrice price={cheapestPrice} />}
             </div>
             <span className="text-[11px] text-[#888888] bg-white/[0.03] px-2.5 py-1 rounded-lg flex items-center gap-1 border border-white/[0.04] font-medium">
-              {inventory > 0 ? "✅ Stock" : "🔑 Digital"}
+              {inventory > 0 ? <><CheckCircle size="12" color="#22c55e" /> Stock</> : <><Key size="12" color="#888888" /> Digital</>}
             </span>
           </div>
         </div>

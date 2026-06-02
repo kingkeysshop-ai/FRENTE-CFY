@@ -5,6 +5,12 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import SignInPrompt from "../components/sign-in-prompt"
 import Breadcrumbs from "@modules/common/components/breadcrumbs"
 import { HttpTypes } from "@medusajs/types"
+import ShoppingCart from "@modules/common/icons/shopping-cart"
+import User from "@modules/common/icons/user"
+import CheckCircle from "@modules/common/icons/check-circle"
+import Lightning from "@modules/common/icons/lightning"
+import ShieldCheck from "@modules/common/icons/shield-check"
+import Headset from "@modules/common/icons/headset"
 
 const CartTemplate = ({
   cart,
@@ -24,7 +30,7 @@ const CartTemplate = ({
       {/* Header */}
       <div className="border-b border-[#2a2a2a] bg-[#111111]">
         <div className="content-container py-8 flex flex-col gap-2">
-          <span className="text-xs text-[#facc15] font-bold uppercase tracking-widest">🛒 King Keys</span>
+          <span className="text-xs text-[#facc15] font-bold uppercase tracking-widest inline-flex items-center gap-1"><ShoppingCart size="14" color="#facc15" /> King Keys</span>
           <h1 className="text-3xl font-black text-white">Tu <span className="text-[#facc15]">Carrito</span></h1>
         </div>
       </div>
@@ -38,7 +44,7 @@ const CartTemplate = ({
               {!customer && (
                 <div className="bg-[#facc15]/10 border border-[#facc15]/30 rounded-xl p-4 flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
-                    <span className="text-xl">👤</span>
+                    <User size="24" color="#facc15" />
                     <div>
                       <p className="text-white text-sm font-bold">¿Ya tienes cuenta?</p>
                       <p className="text-[#888888] text-xs">Inicia sesión para ver tus pedidos anteriores</p>
@@ -67,13 +73,13 @@ const CartTemplate = ({
                 {/* Garantias */}
                 <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl p-4 flex flex-col gap-3">
                   {[
-                    { icon: "✅", text: "Licencias 100% Originales" },
-                    { icon: "⚡", text: "Entrega Inmediata por Email" },
-                    { icon: "🔒", text: "Pago 100% Seguro" },
-                    { icon: "🎧", text: "Soporte 24/7" },
+                    { icon: CheckCircle, text: "Licencias 100% Originales" },
+                    { icon: Lightning, text: "Entrega Inmediata por Email" },
+                    { icon: ShieldCheck, text: "Pago 100% Seguro" },
+                    { icon: Headset, text: "Soporte 24/7" },
                   ].map((g) => (
                     <div key={g.text} className="flex items-center gap-3">
-                      <span>{g.icon}</span>
+                      <g.icon size="18" color="#888888" />
                       <span className="text-[#888888] text-xs">{g.text}</span>
                     </div>
                   ))}

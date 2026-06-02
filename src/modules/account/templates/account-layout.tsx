@@ -3,6 +3,10 @@
 import React from "react"
 import AccountNav from "../components/account-nav"
 import { HttpTypes } from "@medusajs/types"
+import ShieldCheck from "@modules/common/icons/shield-check"
+import Lightning from "@modules/common/icons/lightning"
+import Headset from "@modules/common/icons/headset"
+import User from "@modules/common/icons/user"
 
 const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
   id: i,
@@ -65,12 +69,12 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
           </div>
           <div className="flex gap-10">
             {[
-              { icon: "🔒", text: "Acceso Seguro" },
-              { icon: "⚡", text: "Entrega Inmediata" },
-              { icon: "🎧", text: "Soporte 24/7" },
+              { icon: ShieldCheck, text: "Acceso Seguro" },
+              { icon: Lightning, text: "Entrega Inmediata" },
+              { icon: Headset, text: "Soporte 24/7" },
             ].map((g) => (
               <div key={g.text} className="flex flex-col items-center gap-1">
-                <span className="text-2xl">{g.icon}</span>
+                <g.icon size="28" color="#888888" />
                 <span className="text-xs text-[#888888]">{g.text}</span>
               </div>
             ))}
@@ -123,7 +127,7 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
       {/* Header */}
       <div className="relative z-10 border-b border-[#facc15]/20 bg-[#111111]/80 backdrop-blur-sm">
         <div className="content-container py-8 flex flex-col gap-1">
-          <span className="text-xs text-[#facc15] font-bold uppercase tracking-widest">👤 King Keys</span>
+          <span className="text-xs text-[#facc15] font-bold uppercase tracking-widest inline-flex items-center gap-1"><User size="14" color="#facc15" /> King Keys</span>
           <h1 className="text-3xl font-black text-white">Mi <span className="text-[#facc15]">Cuenta</span></h1>
         </div>
       </div>
@@ -135,7 +139,7 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
           <div className="bg-[#111111]/80 backdrop-blur-sm border border-[#2a2a2a] rounded-xl p-4 h-fit small:sticky small:top-20">
             <div className="flex items-center gap-3 pb-4 mb-4 border-b border-[#2a2a2a]">
               <div className="w-10 h-10 rounded-full bg-[#facc15] flex items-center justify-center text-[#0a0a0a] font-black text-lg">
-                {customer.first_name?.[0]?.toUpperCase() ?? "👤"}
+                {customer.first_name?.[0]?.toUpperCase() ?? <User size="20" color="#0a0a0a" />}
               </div>
               <div>
                 <p className="text-white font-bold text-sm">{customer.first_name ?? ""} {customer.last_name ?? ""}</p>
@@ -159,7 +163,7 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
             href="/store"
             className="px-6 py-3 bg-[#facc15] text-[#0a0a0a] font-bold rounded-lg text-sm hover:bg-[#e6b800] transition-all duration-200 whitespace-nowrap"
           >
-            🎧 Contactar Soporte
+            <Headset size="18" color="#facc15" /> Contactar Soporte
           </a>
         </div>
       </div>

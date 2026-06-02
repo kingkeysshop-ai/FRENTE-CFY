@@ -1,8 +1,8 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { useToast, Toast as ToastType } from "@lib/context/toast-context"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import CheckCircle from "@modules/common/icons/check-circle"
+import AlertTriangle from "@modules/common/icons/alert-triangle"
 
 const ToastItem = ({ toast }: { toast: ToastType }) => {
   const { removeToast } = useToast()
@@ -31,7 +31,7 @@ const ToastItem = ({ toast }: { toast: ToastType }) => {
     >
       {/* Icono */}
       <span className="text-xl shrink-0 mt-0.5">
-        {isSuccess ? "✅" : "⚠️"}
+        {isSuccess ? <CheckCircle size="24" color="#22c55e" /> : <AlertTriangle size="24" color="#f87171" />}
       </span>
 
       {/* Texto */}

@@ -7,6 +7,8 @@ import DigitalInfo from "@modules/checkout/components/digital-info"
 import Payment from "@modules/checkout/components/payment"
 import Review from "@modules/checkout/components/review"
 import Shipping from "@modules/checkout/components/shipping"
+import ShieldCheck from "@modules/common/icons/shield-check"
+import Star from "@modules/common/icons/star"
 
 export default async function CheckoutForm({
   cart,
@@ -92,7 +94,7 @@ export default async function CheckoutForm({
           <span className={`w-7 h-7 rounded-full bg-[#facc15] text-[#0a0a0a] text-xs font-black flex items-center justify-center`}>
             {isDigital ? 2 : 3}
           </span>
-          <span className="text-white font-bold text-sm uppercase tracking-wider">🔒 Método de Pago</span>
+          <span className="text-white font-bold text-sm uppercase tracking-wider inline-flex items-center gap-1.5"><ShieldCheck size="16" color="white" /> Método de Pago</span>
         </div>
         <div className="p-6">
           <Payment cart={cart} availablePaymentMethods={paymentMethods} />
@@ -105,7 +107,7 @@ export default async function CheckoutForm({
           <span className={`w-7 h-7 rounded-full bg-[#facc15] text-[#0a0a0a] text-xs font-black flex items-center justify-center`}>
             {isDigital ? 3 : 4}
           </span>
-          <span className="text-white font-bold text-sm uppercase tracking-wider">👑 Revisar y Confirmar</span>
+          <span className="text-white font-bold text-sm uppercase tracking-wider inline-flex items-center gap-1.5"><Star size="16" color="white" /> Revisar y Confirmar</span>
         </div>
         <div className="p-6">
           <Review cart={cart} />

@@ -3,6 +3,7 @@ import { LOGIN_VIEW } from "@modules/account/templates/login-template"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
 import Input from "@modules/common/components/input"
+import Star from "@modules/common/icons/star"
 import { useActionState } from "react"
 
 type Props = {
@@ -15,7 +16,7 @@ const Login = ({ setCurrentView }: Props) => {
   return (
     <div className="w-full flex flex-col items-center" data-testid="login-page">
       <h1 className="text-2xl font-black text-white uppercase mb-2 tracking-tight">
-        Bienvenido de vuelta 👑
+        Bienvenido de vuelta <Star size="18" color="#facc15" />
       </h1>
       <p className="text-center text-sm text-[#888888] mb-8">
         Inicia sesión para acceder a tus licencias y pedidos.

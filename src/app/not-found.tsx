@@ -1,5 +1,8 @@
 import { Metadata } from "next"
 import Link from "next/link"
+import Star from "@modules/common/icons/star"
+import Home from "@modules/common/icons/home"
+import Key from "@modules/common/icons/key"
 
 export const metadata: Metadata = {
   title: "404 - Página no encontrada | King Keys",
@@ -22,8 +25,8 @@ export default function NotFound() {
         </div>
 
         {/* Crown icon */}
-        <div className="w-16 h-16 rounded-full bg-[#facc15]/10 border border-[#facc15]/30 flex items-center justify-center text-3xl -mt-6">
-          👑
+        <div className="w-16 h-16 rounded-full bg-[#facc15]/10 border border-[#facc15]/30 flex items-center justify-center">
+          <Star size="32" color="#facc15" />
         </div>
 
         <div className="flex flex-col gap-2">
@@ -40,15 +43,15 @@ export default function NotFound() {
         <div className="flex flex-col small:flex-row gap-3 w-full small:w-auto">
           <Link
             href="/"
-            className="px-6 py-3 bg-[#facc15] text-[#0a0a0a] font-black rounded-xl text-sm hover:bg-[#e6b800] transition-all duration-200 hover:shadow-lg hover:shadow-[#facc15]/20 active:scale-95"
+            className="px-6 py-3 bg-[#facc15] text-[#0a0a0a] font-black rounded-xl text-sm hover:bg-[#e6b800] transition-all duration-200 hover:shadow-lg hover:shadow-[#facc15]/20 active:scale-95 inline-flex items-center gap-2"
           >
-            🏠 Ir al Inicio
+            <Home size="18" color="#0a0a0a" /> Ir al Inicio
           </Link>
           <Link
             href="/store"
-            className="px-6 py-3 border border-[#2a2a2a] text-[#888888] font-bold rounded-xl text-sm hover:border-[#facc15]/40 hover:text-white transition-all duration-200"
+            className="px-6 py-3 border border-[#2a2a2a] text-[#888888] font-bold rounded-xl text-sm hover:border-[#facc15]/40 hover:text-white transition-all duration-200 inline-flex items-center gap-2"
           >
-            🔑 Ver Productos
+            <Key size="18" color="currentColor" /> Ver Productos
           </Link>
         </div>
 

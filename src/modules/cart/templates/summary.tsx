@@ -4,6 +4,9 @@ import CartTotals from "@modules/common/components/cart-totals"
 import DiscountCode from "@modules/checkout/components/discount-code"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
+import Star from "@modules/common/icons/star"
+import ShieldCheck from "@modules/common/icons/shield-check"
+import Tag from "@modules/common/icons/tag"
 
 type SummaryProps = {
   cart: HttpTypes.StoreCart & {
@@ -40,7 +43,7 @@ const Summary = ({ cart }: SummaryProps) => {
 
       {/* Titulo */}
       <div className="flex items-center gap-2 pb-4 border-b border-[#2a2a2a]">
-        <span className="text-[#facc15] text-lg">👑</span>
+        <Star size="20" color="#facc15" />
         <h2 className="text-white font-black text-xl">Resumen del Pedido</h2>
       </div>
 
@@ -58,14 +61,14 @@ const Summary = ({ cart }: SummaryProps) => {
         data-testid="checkout-button"
       >
         <button className="w-full py-4 bg-[#facc15] text-[#0a0a0a] font-black text-base rounded-xl hover:bg-[#e6b800] hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2">
-          🔒 Ir al Checkout
+          <ShieldCheck size="18" color="#0a0a0a" /> Ir al Checkout
         </button>
       </LocalizedClientLink>
 
       {/* Metodos de pago */}
       <div className="flex items-center justify-center gap-2 pt-1">
-        {["💳", "🏦", "💰"].map((icon, i) => (
-          <span key={i} className="text-lg">{icon}</span>
+        {[Tag, Tag, Tag].map((Icon, i) => (
+          <span key={i}><Icon size="20" color="#888888" /></span>
         ))}
         <span className="text-xs text-[#888888] ml-1">Pago 100% seguro</span>
       </div>

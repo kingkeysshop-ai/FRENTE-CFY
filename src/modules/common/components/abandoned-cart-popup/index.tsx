@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useCallback, useRef } from "react"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import ShoppingCart from "@modules/common/icons/shopping-cart"
+import Gift from "@modules/common/icons/gift"
 
 const POPUP_COOLDOWN_KEY = "kingkeys_abandoned_popup_last"
 const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000 // 7 days
@@ -67,7 +69,7 @@ const AbandonedCartPopup = ({ itemCount }: AbandonedCartPopupProps) => {
         </button>
 
         <div className="text-center">
-          <span className="text-5xl block mb-4">🛒</span>
+          <ShoppingCart size="48" color="#facc15" />
           <h2 className="text-xl font-black text-white uppercase tracking-wider mb-2">
             ¡No Te Vayas!
           </h2>
@@ -75,8 +77,8 @@ const AbandonedCartPopup = ({ itemCount }: AbandonedCartPopupProps) => {
             Tienes <span className="text-[#facc15] font-bold">{itemCount} producto{itemCount !== 1 ? "s" : ""}</span> en tu carrito esperándote.
           </p>
           <div className="bg-[#facc15]/10 border border-[#facc15]/20 rounded-xl p-4 mb-6">
-            <p className="text-[#facc15] text-xs uppercase tracking-widest font-bold mb-1">
-              🎁 Oferta Exclusiva
+            <p className="text-[#facc15] text-xs uppercase tracking-widest font-bold mb-1 inline-flex items-center gap-1">
+              <Gift size="14" color="#facc15" /> Oferta Exclusiva
             </p>
             <p className="text-white text-sm font-semibold">
               Completa tu compra ahora y obtén <span className="text-[#facc15]">5% de descuento</span> con tu primera orden.

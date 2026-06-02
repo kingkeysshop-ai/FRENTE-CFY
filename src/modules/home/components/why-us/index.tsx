@@ -1,45 +1,55 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import Key from "@modules/common/icons/key"
+import Lightning from "@modules/common/icons/lightning"
+import Headset from "@modules/common/icons/headset"
+import ShieldCheck from "@modules/common/icons/shield-check"
+import Tag from "@modules/common/icons/tag"
+import Refresh from "@modules/common/icons/refresh"
+import CheckCircle from "@modules/common/icons/check-circle"
+import Star from "@modules/common/icons/star"
+import Box from "@modules/common/icons/box"
+import Globe from "@modules/common/icons/globe"
 
 const REASONS = [
   {
-    icon: "🔑",
+    icon: Key,
     title: "100% Originales",
     desc: "Todas nuestras licencias provienen directamente de distribuidores oficiales Microsoft. Sin activadores, sin riesgos.",
     stat: "100%",
     statLabel: "Garantizado",
   },
   {
-    icon: "⚡",
+    icon: Lightning,
     title: "Entrega Inmediata",
     desc: "Recibes tu clave de activación por correo en segundos tras confirmar el pago. Sin esperas.",
     stat: "< 1min",
     statLabel: "Tiempo de entrega",
   },
   {
-    icon: "🎧",
+    icon: Headset,
     title: "Soporte 24/7",
     desc: "Nuestro equipo está disponible todos los días del año para resolver cualquier problema con tu licencia.",
     stat: "24/7",
     statLabel: "Disponibilidad",
   },
   {
-    icon: "🛡️",
+    icon: ShieldCheck,
     title: "Pago Seguro",
     desc: "Procesamos tus pagos con cifrado SSL. Tus datos bancarios nunca se almacenan en nuestros servidores.",
     stat: "SSL",
     statLabel: "Cifrado",
   },
   {
-    icon: "💰",
+    icon: Tag,
     title: "Mejor Precio",
     desc: "Ofrecemos los precios más competitivos del mercado sin sacrificar la autenticidad del producto.",
     stat: "-70%",
     statLabel: "vs precio retail",
   },
   {
-    icon: "🔄",
+    icon: Refresh,
     title: "Garantía de Reemplazo",
     desc: "Si tu licencia falla por causas ajenas a ti, la reemplazamos sin costo adicional ni preguntas.",
     stat: "∞",
@@ -86,7 +96,7 @@ const WhyUs = () => {
           }}
         >
           <span className="px-4 py-1.5 rounded-full bg-[#facc15]/10 border border-[#facc15]/30 text-[#facc15] text-xs font-bold tracking-widest uppercase">
-            👑 ¿Por qué elegirnos?
+            <Star size="14" color="#facc15" /> ¿Por qué elegirnos?
           </span>
           <h2 className="text-3xl md:text-4xl font-black font-display text-white">
             Diseñado para quienes exigen<br/>
@@ -115,7 +125,7 @@ const WhyUs = () => {
 
               {/* Icono + stat */}
               <div className="flex items-start justify-between relative z-[1]">
-                <span className="text-3xl">{r.icon}</span>
+                <span className="text-3xl text-[#facc15]">{(() => { const Icon = r.icon; return <Icon size="28" color="#facc15" /> })()}</span>
                 <div className="flex flex-col items-end">
                   <span className="text-xl font-black text-gold leading-none">{r.stat}</span>
                   <span className="text-[10px] text-[#888888] uppercase tracking-wider">{r.statLabel}</span>
@@ -141,16 +151,19 @@ const WhyUs = () => {
           }}
         >
           {[
-            { icon: "✅", text: "+5,000 clientes satisfechos" },
-            { icon: "🌟", text: "4.9/5 valoración media" },
-            { icon: "📦", text: "+10,000 licencias entregadas" },
-            { icon: "🇨🇴", text: "Operamos desde Colombia" },
-          ].map((b: any) => (
+            { icon: CheckCircle, text: "+5,000 clientes satisfechos" },
+            { icon: Star, text: "4.9/5 valoración media" },
+            { icon: Box, text: "+10,000 licencias entregadas" },
+            { icon: Globe, text: "Operamos desde Colombia" },
+          ].map((b: any) => {
+            const BIcon = b.icon
+            return (
             <div key={b.text} className="flex items-center gap-2 text-sm text-[#888888]">
-              <span>{b.icon}</span>
+              <BIcon size="18" color="#888888" />
               <span>{b.text}</span>
             </div>
-          ))}
+            )
+          })}
         </div>
 
       </div>

@@ -2,6 +2,15 @@ import { listCategories } from "@lib/data/categories"
 import { listCollections } from "@lib/data/collections"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import NewsletterSignup from "@components/NewsletterSignup"
+import CheckCircle from "@modules/common/icons/check-circle"
+import Lightning from "@modules/common/icons/lightning"
+import ShieldCheck from "@modules/common/icons/shield-check"
+import Store from "@modules/common/icons/store"
+import Box from "@modules/common/icons/box"
+import User from "@modules/common/icons/user"
+import Tag from "@modules/common/icons/tag"
+import Refresh from "@modules/common/icons/refresh"
+import Headset from "@modules/common/icons/headset"
 
 export default async function Footer() {
   const { collections } = await listCollections().catch(() => ({ collections: [], count: 0 }))
@@ -24,14 +33,14 @@ export default async function Footer() {
               Licencias digitales originales al mejor precio. Activación inmediata y soporte 24/7.
             </p>
             <div className="flex gap-2 flex-wrap mt-2">
-              <span className="px-3 py-1 bg-[#facc15]/10 border border-[#facc15]/30 text-[#facc15] text-xs rounded-full font-medium">
-                ✅ 100% Original
+              <span className="px-3 py-1 bg-[#facc15]/10 border border-[#facc15]/30 text-[#facc15] text-xs rounded-full font-medium inline-flex items-center gap-1">
+                <CheckCircle size="12" color="#facc15" /> 100% Original
               </span>
-              <span className="px-3 py-1 bg-[#facc15]/10 border border-[#facc15]/30 text-[#facc15] text-xs rounded-full font-medium">
-                ⚡ Entrega Inmediata
+              <span className="px-3 py-1 bg-[#facc15]/10 border border-[#facc15]/30 text-[#facc15] text-xs rounded-full font-medium inline-flex items-center gap-1">
+                <Lightning size="12" color="#facc15" /> Entrega Inmediata
               </span>
-              <span className="px-3 py-1 bg-[#facc15]/10 border border-[#facc15]/30 text-[#facc15] text-xs rounded-full font-medium">
-                🔒 Pago Seguro
+              <span className="px-3 py-1 bg-[#facc15]/10 border border-[#facc15]/30 text-[#facc15] text-xs rounded-full font-medium inline-flex items-center gap-1">
+                <ShieldCheck size="12" color="#facc15" /> Pago Seguro
               </span>
             </div>
             {/* Newsletter */}
@@ -45,8 +54,8 @@ export default async function Footer() {
 
             {/* Tienda */}
             <div className="flex flex-col gap-3">
-              <span className="text-white font-bold uppercase tracking-wider text-xs">
-                🛒 Tienda
+              <span className="text-white font-bold uppercase tracking-wider text-xs inline-flex items-center gap-1.5">
+                <Store size="14" color="white" /> Tienda
               </span>
               <ul className="flex flex-col gap-2">
                 <li>
@@ -70,8 +79,8 @@ export default async function Footer() {
             {/* Colecciones */}
             {collections && collections.length > 0 && (
               <div className="flex flex-col gap-3">
-                <span className="text-white font-bold uppercase tracking-wider text-xs">
-                  📦 Colecciones
+                <span className="text-white font-bold uppercase tracking-wider text-xs inline-flex items-center gap-1.5">
+                  <Box size="14" color="white" /> Colecciones
                 </span>
                 <ul className="flex flex-col gap-2">
                   {collections.slice(0, 5).map((c: any) => (
@@ -90,8 +99,8 @@ export default async function Footer() {
 
             {/* Mi Cuenta */}
             <div className="flex flex-col gap-3">
-              <span className="text-white font-bold uppercase tracking-wider text-xs">
-                👤 Mi Cuenta
+              <span className="text-white font-bold uppercase tracking-wider text-xs inline-flex items-center gap-1.5">
+                <User size="14" color="white" /> Mi Cuenta
               </span>
               <ul className="flex flex-col gap-2">
                 {[
@@ -117,29 +126,29 @@ export default async function Footer() {
 
         {/* Métodos de Pago */}
         <div className="flex flex-col gap-4 py-8 border-b border-[#2a2a2a]">
-          <span className="text-white font-bold uppercase tracking-wider text-xs text-center">
-            💳 Métodos de Pago
+          <span className="text-white font-bold uppercase tracking-wider text-xs text-center inline-flex items-center justify-center gap-1.5">
+            <Tag size="14" color="white" /> Métodos de Pago
           </span>
           <div className="flex items-center justify-center gap-6 flex-wrap">
-            <span className="text-[#888888] text-sm flex items-center gap-1.5">💳 Tarjeta</span>
+            <span className="text-[#888888] text-sm flex items-center gap-1.5"><Tag size="14" color="#888888" /> Tarjeta</span>
             <span className="text-[#2a2a2a]">|</span>
             <span className="text-[#888888] text-sm flex items-center gap-1.5">₿ Crypto (Aurpay)</span>
             <span className="text-[#2a2a2a]">|</span>
-            <span className="text-[#888888] text-sm flex items-center gap-1.5">🟢 Bold (Colombia)</span>
+            <span className="text-[#888888] text-sm flex items-center gap-1.5">Bold (Colombia)</span>
             <span className="text-[#2a2a2a]">|</span>
-            <span className="text-[#888888] text-sm flex items-center gap-1.5">🔷 Cryptomus</span>
+            <span className="text-[#888888] text-sm flex items-center gap-1.5">Cryptomus</span>
           </div>
         </div>
 
         {/* Garantías */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 py-6 text-xs text-[#888888] border-b border-[#2a2a2a]">
-          <span className="flex items-center gap-1.5">✅ 100% Original</span>
+          <span className="flex items-center gap-1.5"><CheckCircle size="14" color="#888888" /> 100% Original</span>
           <span className="hidden sm:inline text-[#2a2a2a]">•</span>
-          <span className="flex items-center gap-1.5">🔄 Reembolso Garantizado</span>
+          <span className="flex items-center gap-1.5"><Refresh size="14" color="#888888" /> Reembolso Garantizado</span>
           <span className="hidden sm:inline text-[#2a2a2a]">•</span>
-          <span className="flex items-center gap-1.5">🎧 Soporte 24/7</span>
+          <span className="flex items-center gap-1.5"><Headset size="14" color="#888888" /> Soporte 24/7</span>
           <span className="hidden sm:inline text-[#2a2a2a]">•</span>
-          <span className="flex items-center gap-1.5">⚡ Entrega Inmediata</span>
+          <span className="flex items-center gap-1.5"><Lightning size="14" color="#888888" /> Entrega Inmediata</span>
         </div>
 
         {/* Redes Sociales */}

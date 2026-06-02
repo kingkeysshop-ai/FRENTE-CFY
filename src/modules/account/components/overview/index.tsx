@@ -2,6 +2,9 @@ import ChevronDown from "@modules/common/icons/chevron-down"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
+import Star from "@modules/common/icons/star"
+import ShoppingCart from "@modules/common/icons/shopping-cart"
+import Key from "@modules/common/icons/key"
 
 type OverviewProps = {
   customer: HttpTypes.StoreCustomer | null
@@ -28,7 +31,7 @@ const Overview = ({ customer, orders }: OverviewProps) => {
       <div className="bg-[#111111] border border-[#facc15]/20 rounded-xl p-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
-            <p className="text-xs text-[#facc15] font-bold uppercase tracking-widest mb-1">👑 Panel de Control</p>
+            <p className="text-xs text-[#facc15] font-bold uppercase tracking-widest mb-1"><Star size="12" color="#facc15" /> Panel de Control</p>
             <h2 className="text-2xl font-black text-white" data-testid="welcome-message">
               Hola, <span className="text-[#facc15]">{customer?.first_name}</span> 👋
             </h2>
@@ -98,7 +101,7 @@ const Overview = ({ customer, orders }: OverviewProps) => {
       <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#2a2a2a]">
           <div className="flex items-center gap-2">
-            <span className="text-[#facc15]">🛒</span>
+            <ShoppingCart size="18" color="#facc15" />
             <h3 className="text-white font-black text-base">Pedidos Recientes</h3>
           </div>
           <LocalizedClientLink
@@ -135,15 +138,15 @@ const Overview = ({ customer, orders }: OverviewProps) => {
             ))
           ) : (
             <li className="px-6 py-12 flex flex-col items-center gap-3 text-center">
-              <span className="text-4xl">🛒</span>
+              <ShoppingCart size="48" color="#888888" />
               <p className="text-[#888888] text-sm" data-testid="no-orders-message">
                 Aún no tienes pedidos. ¡Explora nuestra tienda!
               </p>
               <LocalizedClientLink
                 href="/store"
-                className="px-4 py-2 bg-[#facc15] text-[#0a0a0a] text-xs font-bold rounded-lg hover:bg-[#e6b800] transition-colors"
+                className="px-4 py-2 bg-[#facc15] text-[#0a0a0a] text-xs font-bold rounded-lg hover:bg-[#e6b800] transition-colors inline-flex items-center gap-1"
               >
-                🔑 Ver Productos
+                <Key size="12" color="#0a0a0a" /> Ver Productos
               </LocalizedClientLink>
             </li>
           )}

@@ -10,6 +10,8 @@ import NavLinks from "@modules/layout/components/nav-links"
 import SideMenu from "@modules/layout/components/side-menu"
 import ScrollAwareHeader from "@modules/layout/components/scroll-aware-header"
 import SearchBar from "@modules/layout/components/search-bar"
+import Heart from "@modules/common/icons/heart"
+import ShoppingCart from "@modules/common/icons/shopping-cart"
 
 export default async function Nav() {
   const [regions, locales, currentLocale] = await Promise.all([
@@ -49,7 +51,7 @@ export default async function Nav() {
                 className="flex items-center gap-1 text-sm text-[#888888] hover:text-[#facc15] transition-colors"
                 aria-label="Favoritos"
               >
-                <span>❤️</span>
+                <Heart size="18" color="currentColor" />
                 <span className="hidden small:inline">Favoritos</span>
               </LocalizedClientLink>
               <NavLinks />
@@ -60,7 +62,7 @@ export default async function Nav() {
                     href="/cart"
                     data-testid="nav-cart-link"
                   >
-                    <span>🛒</span>
+                    <ShoppingCart size="18" color="currentColor" />
                     <span className="hidden small:inline">Carrito</span>
                   </LocalizedClientLink>
                 }

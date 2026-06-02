@@ -1,6 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Lightning from "@modules/common/icons/lightning"
+import CheckCircle from "@modules/common/icons/check-circle"
+import ShieldCheck from "@modules/common/icons/shield-check"
 
 const ANNOUNCEMENT_KEY = "kingkeys_announcement_closed"
 
@@ -23,9 +26,9 @@ const AnnouncementBar = () => {
     <div className="relative bg-[#facc15] border-b border-[#e6b800]">
       <div className="content-container flex items-center justify-between py-1.5 px-4">
         <div className="flex items-center gap-2 text-xs md:text-sm text-black font-semibold mx-auto">
-          <span>⚡</span>
+          <Lightning size="14" color="black" />
           <span>
-            ENTREGA INSTANTÁNEA · ✅ 100% ORIGINALES · 🔒 PAGO SEGURO
+            ENTREGA INSTANTÁNEA · <CheckCircle size="14" color="black" /> 100% ORIGINALES · <ShieldCheck size="14" color="black" /> PAGO SEGURO
           </span>
         </div>
         <button

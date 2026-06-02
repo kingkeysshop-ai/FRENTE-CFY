@@ -7,6 +7,10 @@ import PaymentDetails from "@modules/order/components/payment-details"
 import LicenseKeysDisplay from "@modules/order/components/license-keys"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
+import Star from "@modules/common/icons/star"
+import Lightning from "@modules/common/icons/lightning"
+import ShieldCheck from "@modules/common/icons/shield-check"
+import CheckCircle from "@modules/common/icons/check-circle"
 
 type OrderCompletedTemplateProps = {
   order: HttpTypes.StoreOrder
@@ -30,8 +34,8 @@ export default async function OrderCompletedTemplate({ order }: OrderCompletedTe
 
         {/* Banner exito */}
         <div className="bg-[#111111] border border-[#facc15]/40 rounded-2xl p-8 flex flex-col items-center text-center gap-4">
-          <div className="w-20 h-20 rounded-full bg-[#facc15]/10 border-2 border-[#facc15] flex items-center justify-center text-4xl">
-            👑
+          <div className="w-20 h-20 rounded-full bg-[#facc15]/10 border-2 border-[#facc15] flex items-center justify-center">
+            <Star size="40" color="#facc15" />
           </div>
           <div>
             <h1 className="text-3xl font-black text-white mb-2">Gracias por tu compra!</h1>
@@ -41,12 +45,12 @@ export default async function OrderCompletedTemplate({ order }: OrderCompletedTe
           </div>
           <div className="flex gap-3 flex-wrap justify-center">
             {[
-              { icon: "⚡", text: "Entrega Inmediata" },
-              { icon: "🔒", text: "100% Seguro" },
-              { icon: "✅", text: "Original Garantizado" },
+              { icon: Lightning, text: "Entrega Inmediata" },
+              { icon: ShieldCheck, text: "100% Seguro" },
+              { icon: CheckCircle, text: "Original Garantizado" },
             ].map((b: any) => (
-              <span key={b.text} className="px-3 py-1 bg-[#facc15]/10 border border-[#facc15]/40 text-[#facc15] text-xs rounded-full font-bold">
-                {b.icon} {b.text}
+              <span key={b.text} className="px-3 py-1 bg-[#facc15]/10 border border-[#facc15]/40 text-[#facc15] text-xs rounded-full font-bold inline-flex items-center gap-1">
+                <b.icon size="14" color="#facc15" /> {b.text}
               </span>
             ))}
           </div>
@@ -55,7 +59,7 @@ export default async function OrderCompletedTemplate({ order }: OrderCompletedTe
         {/* Detalles del pedido */}
         <div className="bg-[#111111] border border-[#2a2a2a] rounded-2xl overflow-hidden">
           <div className="flex items-center gap-2 px-6 py-4 border-b border-[#2a2a2a] bg-[#1a1a1a]/60">
-            <span className="text-[#facc15] text-base">👑</span>
+            <Star size="18" color="#facc15" />
             <h2 className="text-white font-black text-base uppercase tracking-wide">Detalles del Pedido</h2>
           </div>
           <div className="p-6 flex flex-col gap-8">

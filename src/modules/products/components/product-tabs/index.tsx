@@ -2,6 +2,10 @@
 
 import Accordion from "./accordion"
 import { HttpTypes } from "@medusajs/types"
+import Key from "@modules/common/icons/key"
+import Lightning from "@modules/common/icons/lightning"
+import ShieldCheck from "@modules/common/icons/shield-check"
+import Globe from "@modules/common/icons/globe"
 
 type ProductTabsProps = {
   product: HttpTypes.StoreProduct
@@ -42,28 +46,28 @@ const ProductInfoTab = ({ product }: ProductTabsProps) => {
     <div className="text-sm px-6 py-6">
       <div className="flex flex-col gap-y-4">
         <div className="flex items-center gap-3">
-          <span className="text-[#facc15] text-lg">🔑</span>
+          <Key size="24" color="#facc15" />
           <div>
             <p className="text-white font-semibold text-sm">Licencia Digital</p>
             <p className="text-[#888888] text-xs">Activación inmediata vía email</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-[#facc15] text-lg">⚡</span>
+          <Lightning size="24" color="#facc15" />
           <div>
             <p className="text-white font-semibold text-sm">Entrega Instantánea</p>
             <p className="text-[#888888] text-xs">Recibe tu clave en minutos después del pago</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-[#facc15] text-lg">🔒</span>
+          <ShieldCheck size="24" color="#facc15" />
           <div>
             <p className="text-white font-semibold text-sm">Pago Seguro</p>
             <p className="text-[#888888] text-xs">Transacciones protegidas con cifrado SSL</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-[#facc15] text-lg">🌍</span>
+          <Globe size="24" color="#facc15" />
           <div>
             <p className="text-white font-semibold text-sm">Válido Mundialmente</p>
             <p className="text-[#888888] text-xs">Funciona en cualquier idioma y región</p>

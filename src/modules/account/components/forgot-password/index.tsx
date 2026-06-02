@@ -6,6 +6,7 @@ import { SubmitButton } from "@modules/checkout/components/submit-button"
 import Input from "@modules/common/components/input"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { useActionState } from "react"
+import Lock from "@modules/common/icons/lock"
 
 const ForgotPassword = () => {
   const [state, formAction] = useActionState(generatePasswordToken, { error: null, submitted: false })
@@ -14,7 +15,7 @@ const ForgotPassword = () => {
   return (
     <div className="w-full max-w-md mx-auto flex flex-col items-center" data-testid="forgot-password-page">
       <h1 className="text-2xl font-black text-white uppercase mb-2 tracking-tight">
-        Recuperar Contraseña 🔐
+        Recuperar Contraseña <Lock size="18" color="#facc15" />
       </h1>
       <p className="text-center text-sm text-[#888888] mb-8">
         Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.

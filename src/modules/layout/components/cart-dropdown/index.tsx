@@ -10,6 +10,8 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import Thumbnail from "@modules/products/components/thumbnail"
 import { usePathname } from "next/navigation"
 import { Fragment, useEffect, useRef, useState } from "react"
+import ShoppingCart from "@modules/common/icons/shopping-cart"
+import ShieldCheck from "@modules/common/icons/shield-check"
 
 const CartDropdown = ({ cart: cartState }: { cart?: HttpTypes.StoreCart | null }) => {
   const [activeTimer, setActiveTimer] = useState<ReturnType<typeof setTimeout> | undefined>(undefined)
@@ -55,7 +57,7 @@ const CartDropdown = ({ cart: cartState }: { cart?: HttpTypes.StoreCart | null }
             data-testid="nav-cart-link"
             className="flex items-center gap-2 text-sm text-[#888888] hover:text-[#facc15] transition-colors duration-200"
           >
-            <span className="text-lg">🛒</span>
+            <ShoppingCart size="20" color="currentColor" />
             <span className="hidden small:inline">Carrito</span>
             {totalItems > 0 && (
               <span className="w-5 h-5 rounded-full bg-[#facc15] text-gray-900 text-xs font-black flex items-center justify-center">
@@ -82,7 +84,7 @@ const CartDropdown = ({ cart: cartState }: { cart?: HttpTypes.StoreCart | null }
           >
             <div className="flex items-center justify-between px-5 py-4 border-b border-[#2a2a2a]">
               <div className="flex items-center gap-2">
-                <span>🛒</span>
+                <ShoppingCart size="16" color="#facc15" />
                 <h3 className="text-white font-black text-sm">Tu Carrito</h3>
               </div>
               {totalItems > 0 && (
@@ -131,20 +133,20 @@ const CartDropdown = ({ cart: cartState }: { cart?: HttpTypes.StoreCart | null }
                     </span>
                   </div>
                   <LocalizedClientLink href="/cart" onClick={close}>
-                    <button className="w-full py-2.5 bg-[#facc15] text-gray-900 font-black text-sm rounded-lg hover:bg-[#e6b800] transition-colors" data-testid="go-to-cart-button">
-                      🛒 Ver Carrito
+                    <button className="w-full py-2.5 bg-[#facc15] text-gray-900 font-black text-sm rounded-lg hover:bg-[#e6b800] transition-colors inline-flex items-center justify-center gap-1.5" data-testid="go-to-cart-button">
+                      <ShoppingCart size="16" color="#111111" /> Ver Carrito
                     </button>
                   </LocalizedClientLink>
                   <LocalizedClientLink href="/checkout" onClick={close}>
-                    <button className="w-full py-2.5 border border-[#facc15]/40 text-[#facc15] text-xs font-bold rounded-lg hover:bg-[#facc15]/10 transition-colors">
-                      🔒 Ir al Checkout
+                    <button className="w-full py-2.5 border border-[#facc15]/40 text-[#facc15] text-xs font-bold rounded-lg hover:bg-[#facc15]/10 transition-colors inline-flex items-center justify-center gap-1.5">
+                      <ShieldCheck size="14" color="#facc15" /> Ir al Checkout
                     </button>
                   </LocalizedClientLink>
                 </div>
               </>
             ) : (
               <div className="flex flex-col items-center justify-center py-12 gap-4">
-                <span className="text-5xl">🛒</span>
+                <span className="text-5xl"><ShoppingCart size="48" color="#888888" /></span>
                 <p className="text-[#888888] text-sm">Tu carrito está vacío</p>
                 <LocalizedClientLink href="/store" onClick={close}>
                   <button className="px-5 py-2 bg-[#facc15] text-gray-900 text-xs font-bold rounded-lg hover:bg-[#e6b800] transition-colors">

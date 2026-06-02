@@ -5,6 +5,7 @@ import { Button } from "@medusajs/ui"
 import OrderCard from "../order-card"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
+import Box from "@modules/common/icons/box"
 
 const OrderOverview = ({ orders }: { orders: HttpTypes.StoreOrder[] }) => {
   if (orders?.length) {
@@ -28,7 +29,7 @@ const OrderOverview = ({ orders }: { orders: HttpTypes.StoreOrder[] }) => {
       data-testid="no-orders-container"
     >
       <div className="w-20 h-20 rounded-full bg-[#1a1a1a] border-2 border-[#2a2a2a] flex items-center justify-center">
-        <span className="text-3xl">📦</span>
+        <span className="text-3xl"><Box size="32" color="#888888" /></span>
       </div>
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-black text-white">

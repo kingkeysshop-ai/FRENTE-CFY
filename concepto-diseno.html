@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KING KEYS — Concepto de Diseño</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,700&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #060608;
+    color: #fff;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #060608; }
+  ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #facc15; }
+
+  /* ─── UTILITIES ─── */
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 100px 0; }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #facc15;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .section-title .gold {
+    background: linear-gradient(135deg, #facc15 0%, #fbbf24 30%, #f59e0b 60%, #facc15 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .section-sub {
+    color: #666;
+    font-size: 1.1rem;
+    max-width: 560px;
+    line-height: 1.8;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  #noise {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 9999;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+  }
+
+  /* ─── AMBIENT GLOW ─── */
+  #ambient-glow {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(250,204,21,0.06) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 50% at 80% 90%, rgba(250,204,21,0.03) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 20% 80%, rgba(250,204,21,0.02) 0%, transparent 50%);
+  }
+
+  /* ============================================
+     1. NAV
+     ============================================ */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 16px 0;
+    background: rgba(6,6,8,0.6);
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: all 0.4s;
+  }
+  .nav.scrolled {
+    background: rgba(6,6,8,0.85);
+    border-bottom-color: rgba(250,204,21,0.08);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 1280px; margin: 0 auto; padding: 0 24px;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 900; letter-spacing: -0.02em;
+    text-decoration: none; display: flex; align-items: center; gap: 2px;
+  }
+  .nav-logo span:first-child { color: #fff; }
+  .nav-logo span:last-child {
+    background: linear-gradient(135deg, #facc15, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .nav-logo .crown {
+    font-size: 1.2rem; margin-right: 4px;
+    -webkit-text-fill-color: initial; color: #facc15;
+  }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-link {
+    color: #888; text-decoration: none; font-size: 0.875rem; font-weight: 500;
+    transition: color 0.3s; position: relative;
+  }
+  .nav-link::after {
+    content: ''; position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1.5px;
+    background: linear-gradient(90deg, #facc15, transparent);
+    transition: width 0.3s;
+  }
+  .nav-link:hover { color: #fff; }
+  .nav-link:hover::after { width: 100%; }
+  .nav-actions { display: flex; align-items: center; gap: 16px; }
+  .nav-icon-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: transparent; color: #888; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s; font-size: 1.1rem;
+  }
+  .nav-icon-btn:hover { border-color: #facc15; color: #facc15; background: rgba(250,204,21,0.08); }
+  .nav-cta {
+    padding: 10px 24px; border-radius: 100px;
+    background: linear-gradient(135deg, #facc15, #f59e0b);
+    color: #060608; font-weight: 700; font-size: 0.875rem;
+    text-decoration: none; transition: all 0.3s;
+    box-shadow: 0 0 0 0 rgba(250,204,21,0);
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 32px rgba(250,204,21,0.25);
+  }
+
+  /* ============================================
+     2. HERO
+     ============================================ */
+  .hero {
+    position: relative; z-index: 1;
+    min-height: 100vh; display: flex; align-items: center;
+    padding-top: 80px; overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(250,204,21,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(250,204,21,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, black 30%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, black 30%, transparent 70%);
+  }
+  .hero-glow-1 {
+    position: absolute; top: -20%; left: 50%; transform: translateX(-50%);
+    width: 900px; height: 900px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(250,204,21,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-glow-2 {
+    position: absolute; bottom: -10%; right: -10%;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(250,204,21,0.04) 0%, transparent 55%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+    align-items: center;
+  }
+  .hero-left { padding: 40px 0; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 16px 6px 8px;
+    border-radius: 100px;
+    border: 1px solid rgba(250,204,21,0.2);
+    background: rgba(250,204,21,0.05);
+    font-size: 0.75rem; font-weight: 600; color: #facc15;
+    letter-spacing: 0.05em; margin-bottom: 28px;
+    backdrop-filter: blur(8px);
+  }
+  .hero-badge .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #22c55e; animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .hero-badge .key-icon { font-size: 1rem; }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+  .hero-title .outline {
+    -webkit-text-stroke: 1.5px rgba(255,255,255,0.15);
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .hero-title .gold {
+    background: linear-gradient(135deg, #facc15 0%, #fbbf24 25%, #f59e0b 50%, #fbbf24 75%, #facc15 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% 100%;
+    animation: shimmer-gold 4s ease-in-out infinite;
+  }
+  @keyframes shimmer-gold {
+    0%,100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .hero-desc {
+    color: #666; font-size: 1.1rem; line-height: 1.9;
+    max-width: 480px; margin-bottom: 36px;
+  }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    padding: 14px 36px; border-radius: 100px; border: none;
+    background: linear-gradient(135deg, #facc15, #f59e0b);
+    color: #060608; font-weight: 700; font-size: 0.95rem;
+    cursor: pointer; transition: all 0.3s;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    box-shadow: 0 4px 24px rgba(250,204,21,0.15);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(250,204,21,0.3);
+  }
+  .btn-secondary {
+    padding: 14px 36px; border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+    color: #ccc; font-weight: 600; font-size: 0.95rem;
+    cursor: pointer; transition: all 0.3s;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    backdrop-filter: blur(8px);
+  }
+  .btn-secondary:hover {
+    border-color: rgba(250,204,21,0.3); color: #facc15;
+    background: rgba(250,204,21,0.05);
+  }
+
+  /* Hero Right - Visual */
+  .hero-visual {
+    position: relative; display: flex; align-items: center; justify-content: center;
+  }
+  .hero-card {
+    position: relative;
+    width: 100%; max-width: 480px;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 24px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 80px rgba(250,204,21,0.03);
+  }
+  .hero-card-glow {
+    position: absolute; inset: -1px; border-radius: 24px;
+    background: linear-gradient(135deg, rgba(250,204,21,0.1), transparent 50%, rgba(250,204,21,0.05));
+    z-index: -1; mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    padding: 1px;
+  }
+  .hero-card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 32px; padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .hero-card-header h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700; color: #facc15;
+  }
+  .hero-card-header .count {
+    font-size: 0.75rem; color: #555;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 12px; border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .hero-product {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px; margin-bottom: 8px;
+    border-radius: 16px;
+    transition: all 0.3s; cursor: default;
+    border: 1px solid transparent;
+  }
+  .hero-product:hover {
+    background: rgba(255,255,255,0.02);
+    border-color: rgba(250,204,21,0.08);
+  }
+  .hero-product-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; flex-shrink: 0;
+    background: rgba(250,204,21,0.05);
+    border: 1px solid rgba(250,204,21,0.1);
+  }
+  .hero-product-info { flex: 1; }
+  .hero-product-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 2px; }
+  .hero-product-desc { font-size: 0.75rem; color: #555; }
+  .hero-product-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700; font-size: 1.1rem;
+    background: linear-gradient(135deg, #facc15, #fbbf24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-product-badge {
+    font-size: 0.6rem; padding: 2px 8px; border-radius: 100px;
+    background: rgba(250,204,21,0.1); color: #facc15;
+    font-weight: 600; letter-spacing: 0.05em;
+    text-transform: uppercase; border: 1px solid rgba(250,204,21,0.15);
+  }
+  .hero-card-footer {
+    margin-top: 24px; padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .hero-card-footer .trust {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 0.7rem; color: #555; font-weight: 500;
+  }
+  .hero-card-footer .trust span {
+    display: flex; align-items: center; gap: 4px;
+  }
+
+  /* ============================================
+     3. TRUST BAR
+     ============================================ */
+  .trust-bar {
+    position: relative; z-index: 1;
+    padding: 48px 0; border-top: 1px solid rgba(255,255,255,0.03);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    background: rgba(255,255,255,0.01);
+  }
+  .trust-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+  .trust-item {
+    display: flex; align-items: center; gap: 12px;
+    color: #666; font-size: 0.8rem; font-weight: 500;
+    transition: color 0.3s; cursor: default;
+  }
+  .trust-item:hover { color: #aaa; }
+  .trust-item .icon {
+    width: 40px; height: 40px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    background: rgba(250,204,21,0.04);
+    border: 1px solid rgba(250,204,21,0.06);
+  }
+
+  /* ============================================
+     4. WHY US
+     ============================================ */
+  .why-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    margin-top: 48px;
+  }
+  .why-card {
+    padding: 36px; border-radius: 20px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%);
+    border: 1px solid rgba(255,255,255,0.04);
+    transition: all 0.4s; cursor: default;
+    position: relative; overflow: hidden;
+  }
+  .why-card::before {
+    content: ''; position: absolute; inset: 0;
+    border-radius: 20px;
+    background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(250,204,21,0.03) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.5s;
+    pointer-events: none;
+  }
+  .why-card:hover::before { opacity: 1; }
+  .why-card:hover {
+    border-color: rgba(250,204,21,0.12);
+    transform: translateY(-2px);
+  }
+  .why-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; margin-bottom: 20px;
+    background: rgba(250,204,21,0.06);
+    border: 1px solid rgba(250,204,21,0.08);
+  }
+  .why-card h3 { font-weight: 700; font-size: 1.05rem; margin-bottom: 8px; }
+  .why-card p { color: #555; font-size: 0.85rem; line-height: 1.7; }
+
+  /* ============================================
+     5. PRODUCTS SHOWCASE
+     ============================================ */
+  .showcase-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 48px; gap: 24px;
+  }
+  .showcase-nav {
+    display: flex; gap: 8px;
+  }
+  .showcase-nav button {
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+    color: #888; cursor: pointer; font-size: 1.1rem;
+    transition: all 0.3s; display: flex; align-items: center; justify-content: center;
+  }
+  .showcase-nav button:hover { border-color: #facc15; color: #facc15; background: rgba(250,204,21,0.06); }
+  .showcase-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+  }
+  .product-card {
+    position: relative; border-radius: 20px; overflow: hidden;
+    background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%);
+    border: 1px solid rgba(255,255,255,0.04);
+    transition: all 0.4s;
+    cursor: pointer;
+  }
+  .product-card:hover {
+    border-color: rgba(250,204,21,0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(250,204,21,0.04);
+  }
+  .product-img {
+    width: 100%; aspect-ratio: 1; object-fit: cover;
+    display: block;
+    background: linear-gradient(135deg, #0a0a0a, #111);
+    padding: 32px; display: flex; align-items: center; justify-content: center;
+    font-size: 4rem;
+  }
+  .product-body { padding: 20px; }
+  .product-cat {
+    font-size: 0.65rem; font-weight: 600; color: #facc15;
+    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .product-title { font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
+  .product-desc { font-size: 0.8rem; color: #555; margin-bottom: 12px; line-height: 1.6; }
+  .product-footer {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .product-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700; font-size: 1.3rem;
+    background: linear-gradient(135deg, #facc15, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .product-old-price {
+    font-size: 0.8rem; color: #444;
+    text-decoration: line-through; margin-left: 8px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .product-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: transparent; color: #888; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s; font-size: 1rem;
+  }
+  .product-card:hover .product-btn { border-color: #facc15; color: #facc15; }
+
+  /* ============================================
+     6. CTA BANNER
+     ============================================ */
+  .cta-banner {
+    position: relative; z-index: 1;
+    border-radius: 24px; overflow: hidden;
+    background: linear-gradient(135deg, rgba(250,204,21,0.04) 0%, transparent 100%);
+    border: 1px solid rgba(250,204,21,0.06);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+    padding: 64px;
+  }
+  .cta-banner::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 50% 100% at 0% 50%, rgba(250,204,21,0.03) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-banner h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3vw, 3rem);
+    font-weight: 900; line-height: 1.1; margin-bottom: 16px;
+  }
+  .cta-banner p { color: #666; line-height: 1.8; margin-bottom: 28px; }
+  .cta-features { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cta-feature {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.85rem; color: #888; font-weight: 500;
+  }
+  .cta-feature .check {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(250,204,21,0.1);
+    color: #facc15; font-size: 0.6rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .cta-right {
+    display: flex; flex-direction: column; justify-content: center;
+    align-items: flex-end; text-align: right;
+  }
+  .cta-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem; font-weight: 900;
+    background: linear-gradient(135deg, #facc15, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .cta-price-sub {
+    color: #555; font-size: 0.9rem; margin-bottom: 28px;
+  }
+
+  /* ============================================
+     7. FOOTER
+     ============================================ */
+  .footer {
+    position: relative; z-index: 1;
+    padding: 64px 0 32px;
+    border-top: 1px solid rgba(255,255,255,0.03);
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+    margin-bottom: 48px;
+  }
+  .footer-brand .nav-logo { font-size: 1.3rem; margin-bottom: 16px; }
+  .footer-brand p { color: #555; font-size: 0.85rem; line-height: 1.7; max-width: 320px; }
+  .footer-col h4 {
+    font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: #888; margin-bottom: 20px;
+  }
+  .footer-col a {
+    display: block; color: #555; text-decoration: none;
+    font-size: 0.85rem; margin-bottom: 12px; transition: color 0.3s;
+  }
+  .footer-col a:hover { color: #facc15; }
+  .footer-bottom {
+    padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.03);
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.8rem; color: #444;
+  }
+  .footer-socials { display: flex; gap: 12px; }
+  .footer-socials a {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; justify-content: center;
+    color: #555; text-decoration: none; transition: all 0.3s;
+    font-size: 0.9rem;
+  }
+  .footer-socials a:hover { border-color: #facc15; color: #facc15; }
+
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+  @media (max-width: 1024px) {
+    .hero-content { grid-template-columns: 1fr; gap: 40px; }
+    .hero-visual { order: -1; }
+    .hero-card { max-width: 100%; }
+    .showcase-grid { grid-template-columns: repeat(2, 1fr); }
+    .cta-banner { grid-template-columns: 1fr; padding: 40px; }
+    .cta-right { align-items: flex-start; text-align: left; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    .section { padding: 60px 0; }
+    .why-grid { grid-template-columns: 1fr; }
+    .showcase-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .cta-banner { padding: 28px; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .hero-card { padding: 24px; }
+    .trust-inner { justify-content: center; }
+  }
+
+  /* ─── FLOATING ANIMATION ─── */
+  @keyframes float {
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-10px)}
+  }
+  .float { animation: float 6s ease-in-out infinite; }
+  .float-delayed { animation: float 6s ease-in-out 2s infinite; }
+</style>
+</head>
+<body>
+
+<div id="noise"></div>
+<div id="ambient-glow"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <span class="crown">👑</span>
+      <span>KING</span>
+      <span>KEYS</span>
+    </a>
+    <div class="nav-links">
+      <a href="#" class="nav-link">Tienda</a>
+      <a href="#" class="nav-link">Categorías</a>
+      <a href="#" class="nav-link">Ofertas</a>
+      <a href="#" class="nav-link">Soporte</a>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-icon-btn">🔍</button>
+      <button class="nav-icon-btn">❤️</button>
+      <a href="#" class="nav-cta">🛒 Carrito</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow-1"></div>
+  <div class="hero-glow-2"></div>
+
+  <div class="container hero-content">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        <span class="key-icon">🔑</span>
+        Licencias Digitales Originales
+      </div>
+
+      <h1 class="hero-title">
+        El<br>
+        <span class="gold">Reino Digital</span><br>
+        <span class="outline">Comienza Aquí</span>
+      </h1>
+
+      <p class="hero-desc">
+        Accede al catálogo más exclusivo de licencias originales para 
+        Windows, Office, antivirus y gaming. Activación inmediata, 
+        precio sin competencia.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">
+          Explorar Tienda
+          <span>→</span>
+        </a>
+        <a href="#" class="btn-secondary">
+          🔥 Ofertas del Día
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-card float">
+        <div class="hero-card-glow"></div>
+        <div class="hero-card-header">
+          <h3>⚡ Más Vendidos</h3>
+          <span class="count">6 productos</span>
+        </div>
+
+        <div class="hero-product">
+          <div class="hero-product-icon">🪟</div>
+          <div class="hero-product-info">
+            <div class="hero-product-name">Windows 11 Pro</div>
+            <div class="hero-product-desc">Licencia digital original · Vitalicia</div>
+          </div>
+          <div>
+            <div class="hero-product-price">$12.90</div>
+            <div class="hero-product-badge">-85%</div>
+          </div>
+        </div>
+
+        <div class="hero-product">
+          <div class="hero-product-icon">📊</div>
+          <div class="hero-product-info">
+            <div class="hero-product-name">Office 2024 Pro</div>
+            <div class="hero-product-desc">Word, Excel, PPT · 1 PC</div>
+          </div>
+          <div>
+            <div class="hero-product-price">$18.50</div>
+            <div class="hero-product-badge">🔥 Oferta</div>
+          </div>
+        </div>
+
+        <div class="hero-product">
+          <div class="hero-product-icon">🛡️</div>
+          <div class="hero-product-info">
+            <div class="hero-product-name">ESET Internet Security</div>
+            <div class="hero-product-desc">3 dispositivos · 1 año</div>
+          </div>
+          <div>
+            <div class="hero-product-price">$9.90</div>
+            <div class="hero-product-badge">⭐ Top</div>
+          </div>
+        </div>
+
+        <div class="hero-card-footer">
+          <div class="trust">
+            <span>✅ Entrega Instantánea</span>
+            <span>🔒 Pago Seguro</span>
+          </div>
+          <span style="color:#facc15;font-size:0.7rem;font-weight:600;">
+            +2,500 vendidos
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRUST BAR ═══ -->
+<div class="trust-bar">
+  <div class="container trust-inner">
+    <div class="trust-item"><div class="icon">💳</div> Pago Seguro</div>
+    <div class="trust-item"><div class="icon">⚡</div> Entrega Inmediata</div>
+    <div class="trust-item"><div class="icon">🎯</div> 100% Originales</div>
+    <div class="trust-item"><div class="icon">💬</div> Soporte 24/7</div>
+    <div class="trust-item"><div class="icon">🔄</div> Garantía Total</div>
+    <div class="trust-item"><div class="icon">🏆</div> +5,000 Clientes</div>
+  </div>
+</div>
+
+<!-- ═══ WHY US ═══ -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Por Qué Elegirnos</div>
+    <h2 class="section-title">
+      Diseñado para quienes exigen<br>
+      <span class="gold">calidad y confianza</span>
+    </h2>
+    <div class="why-grid">
+      <div class="why-card" onmousemove="this.style.setProperty('--mx', (event.offsetX/this.offsetWidth*100)+'%');this.style.setProperty('--my', (event.offsetY/this.offsetHeight*100)+'%')">
+        <div class="why-icon">👑</div>
+        <h3>Licencias Reales</h3>
+        <p>100% originales con garantía de activación. Trabajamos directo con distribuidores autorizados.</p>
+      </div>
+      <div class="why-card" onmousemove="this.style.setProperty('--mx', (event.offsetX/this.offsetWidth*100)+'%');this.style.setProperty('--my', (event.offsetY/this.offsetHeight*100)+'%')">
+        <div class="why-icon">⚡</div>
+        <h3>Entrega Flash</h3>
+        <p>Recibe tu licencia en segundos después del pago. Autoatención 24/7 sin esperas.</p>
+      </div>
+      <div class="why-card" onmousemove="this.style.setProperty('--mx', (event.offsetX/this.offsetWidth*100)+'%');this.style.setProperty('--my', (event.offsetY/this.offsetHeight*100)+'%')">
+        <div class="why-icon">💰</div>
+        <h3>Precio Justo</h3>
+        <p>Los mejores precios del mercado colombiano. Sin markup, sin abusos, sin sorpresas.</p>
+      </div>
+      <div class="why-card" onmousemove="this.style.setProperty('--mx', (event.offsetX/this.offsetWidth*100)+'%');this.style.setProperty('--my', (event.offsetY/this.offsetHeight*100)+'%')">
+        <div class="why-icon">🔒</div>
+        <h3>Pago Blindado</h3>
+        <p>Múltiples métodos: tarjeta, crypto, Bold, PayPal, Stripe. Tus datos siempre seguros.</p>
+      </div>
+      <div class="why-card" onmousemove="this.style.setProperty('--mx', (event.offsetX/this.offsetWidth*100)+'%');this.style.setProperty('--my', (event.offsetY/this.offsetHeight*100)+'%')">
+        <div class="why-icon">🎧</div>
+        <h3>Soporte King</h3>
+        <p>Atención personalizada vía WhatsApp y chat. Resolvemos cualquier incidencia al instante.</p>
+      </div>
+      <div class="why-card" onmousemove="this.style.setProperty('--mx', (event.offsetX/this.offsetWidth*100)+'%');this.style.setProperty('--my', (event.offsetY/this.offsetHeight*100)+'%')">
+        <div class="why-icon">🛡️</div>
+        <h3>Garantía Extendida</h3>
+        <p>Si algo sale mal, te reemplazamos la licencia sin preguntas. Así de simple.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRODUCT SHOWCASE ═══ -->
+<section class="section">
+  <div class="container">
+    <div class="showcase-header">
+      <div>
+        <div class="section-label">Catálogo</div>
+        <h2 class="section-title">
+          Productos <span class="gold">Destacados</span>
+        </h2>
+      </div>
+      <div class="showcase-nav">
+        <button>←</button>
+        <button>→</button>
+      </div>
+    </div>
+    <div class="showcase-grid">
+      <div class="product-card">
+        <div class="product-img">🪟</div>
+        <div class="product-body">
+          <div class="product-cat">Microsoft</div>
+          <div class="product-title">Windows 11 Pro</div>
+          <div class="product-desc">Licencia digital oficial · Activación vitalicia · 1 PC</div>
+          <div class="product-footer">
+            <div>
+              <span class="product-price">$12.90</span>
+              <span class="product-old-price">$89.99</span>
+            </div>
+            <button class="product-btn">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">📊</div>
+        <div class="product-body">
+          <div class="product-cat">Microsoft</div>
+          <div class="product-title">Office 2024 Pro</div>
+          <div class="product-desc">Word, Excel, PowerPoint · 1 PC · Vitalicia</div>
+          <div class="product-footer">
+            <div>
+              <span class="product-price">$18.50</span>
+              <span class="product-old-price">$119.99</span>
+            </div>
+            <button class="product-btn">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">🎮</div>
+        <div class="product-body">
+          <div class="product-cat">Gaming</div>
+          <div class="product-title">Xbox Game Pass Ultimate</div>
+          <div class="product-desc">3 meses · Game Pass + EA Play + Online</div>
+          <div class="product-footer">
+            <div>
+              <span class="product-price">$22.00</span>
+              <span class="product-old-price">$45.99</span>
+            </div>
+            <button class="product-btn">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">🛡️</div>
+        <div class="product-body">
+          <div class="product-cat">Seguridad</div>
+          <div class="product-title">ESET Internet Security</div>
+          <div class="product-desc">3 dispositivos · 1 año · Antivirus + Firewall</div>
+          <div class="product-footer">
+            <div>
+              <span class="product-price">$9.90</span>
+              <span class="product-old-price">$39.99</span>
+            </div>
+            <button class="product-btn">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="section">
+  <div class="container">
+    <div class="cta-banner">
+      <div>
+        <h2>¿Listo para activar<br>tu <span class="gold">licencia</span>?</h2>
+        <p>Miles de usuarios ya confían en nosotros. Únete al reino digital y obtén tus licencias al mejor precio del mercado colombiano.</p>
+        <div class="cta-features">
+          <div class="cta-feature"><span class="check">✓</span> Activación inmediata</div>
+          <div class="cta-feature"><span class="check">✓</span> Soporte 24/7</div>
+          <div class="cta-feature"><span class="check">✓</span> Precio más bajo</div>
+          <div class="cta-feature"><span class="check">✓</span> Garantía total</div>
+        </div>
+      </div>
+      <div class="cta-right">
+        <div class="cta-price">$9.90</div>
+        <div class="cta-price-sub">desde — licencias desde $9.90 USD</div>
+        <a href="#" class="btn-primary" style="font-size:1.05rem;padding:16px 44px;">
+          👑 Ir a la Tienda
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo">
+          <span class="crown">👑</span>
+          <span>KING</span>
+          <span>KEYS</span>
+        </a>
+        <p>Tu tienda de confianza para licencias digitales originales en Colombia. Windows, Office, antivirus y gaming al mejor precio con entrega inmediata.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Productos</h4>
+        <a href="#">Windows</a>
+        <a href="#">Office</a>
+        <a href="#">Antivirus</a>
+        <a href="#">Gaming</a>
+        <a href="#">Ver Todo</a>
+      </div>
+      <div class="footer-col">
+        <h4>Ayuda</h4>
+        <a href="#">FAQ</a>
+        <a href="#">Soporte</a>
+        <a href="#">Garantía</a>
+        <a href="#">Métodos de Pago</a>
+        <a href="#">Contacto</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Términos</a>
+        <a href="#">Privacidad</a>
+        <a href="#">Política de Reembolso</a>
+        <a href="#">Aviso Legal</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 KING KEYS — Todos los derechos reservados.</span>
+      <div class="footer-socials">
+        <a href="#">𝕏</a>
+        <a href="#">📷</a>
+        <a href="#">💬</a>
+        <a href="#">📧</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll effect
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Parallax glow on hero
+  document.addEventListener('mousemove', (e) => {
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
+    const glow = document.querySelector('.hero-glow-1');
+    if (glow) {
+      glow.style.transform = `translate(${(x - 0.5) * 30}px, ${(y - 0.5) * 20}px) translateX(-50%)`;
+    }
+  });
+</script>
+</body>
+</html>

@@ -2,20 +2,27 @@
 
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { useEffect, useState, useRef, useCallback } from "react"
+import Windows from "@modules/common/icons/windows"
+import Office from "@modules/common/icons/office"
+import Xbox from "@modules/common/icons/xbox"
+import Playstation from "@modules/common/icons/playstation"
+import Steam from "@modules/common/icons/steam"
+import Antivirus from "@modules/common/icons/antivirus"
+import Key from "@modules/common/icons/key"
 
 const PLATFORMS = [
-  { name: "Windows", icon: "💠" },
-  { name: "Office", icon: "📊" },
-  { name: "Xbox", icon: "🎮" },
-  { name: "PlayStation", icon: "🎮" },
-  { name: "Steam", icon: "💎" },
-  { name: "Antivirus", icon: "🛡️" },
+  { name: "Windows", icon: Windows },
+  { name: "Office", icon: Office },
+  { name: "Xbox", icon: Xbox },
+  { name: "PlayStation", icon: Playstation },
+  { name: "Steam", icon: Steam },
+  { name: "Antivirus", icon: Antivirus },
 ]
 
 const HERO_PRODUCTS = [
-  { icon: "🪟", name: "Windows 11 Pro", tags: "#licencia #vitalicia #1pc", price: "$12.90", old: "$89.99" },
-  { icon: "📊", name: "Office 2024 Pro", tags: "#word #excel #ppt #1pc", price: "$18.50", old: "$119.99" },
-  { icon: "🛡️", name: "ESET Internet Security", tags: "#antivirus #3devices #1year", price: "$9.90", old: "$39.99" },
+  { icon: Windows, name: "Windows 11 Pro", tags: "#licencia #vitalicia #1pc", price: "$12.90", old: "$89.99" },
+  { icon: Office, name: "Office 2024 Pro", tags: "#word #excel #ppt #1pc", price: "$18.50", old: "$119.99" },
+  { icon: Antivirus, name: "ESET Internet Security", tags: "#antivirus #3devices #1year", price: "$9.90", old: "$39.99" },
 ]
 
 const TERMINAL_LINES = [
@@ -128,15 +135,18 @@ const Hero = ({ productCount }: HeroProps) => {
 
           {/* Platform badges */}
           <div className="flex flex-wrap items-center gap-1.5">
-            {PLATFORMS.map((p, i) => (
-              <span
-                key={p.name}
-                className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[#888888] text-[11px] font-semibold hover:bg-[#facc15]/10 hover:border-[#facc15]/30 hover:text-[#facc15] transition-all duration-300 cursor-default"
-                style={{ animation: mounted ? `heroFloat 4s ease-in-out ${i * 0.3}s infinite` : "none" }}
-              >
-                {p.icon} {p.name}
-              </span>
-            ))}
+            {PLATFORMS.map((p, i) => {
+              const Icon = p.icon
+              return (
+                <span
+                  key={p.name}
+                  className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[#888888] text-[11px] font-semibold hover:bg-[#facc15]/10 hover:border-[#facc15]/30 hover:text-[#facc15] transition-all duration-300 cursor-default"
+                  style={{ animation: mounted ? `heroFloat 4s ease-in-out ${i * 0.3}s infinite` : "none" }}
+                >
+                  <Icon size="14" color="currentColor" /> {p.name}
+                </span>
+              )
+            })}
           </div>
 
           {/* Titulo */}
@@ -260,13 +270,15 @@ const Hero = ({ productCount }: HeroProps) => {
               {/* Product rows after typewriter */}
               {typewriterDone && (
                 <div className="flex flex-col gap-2 mt-3 mb-3">
-                  {HERO_PRODUCTS.map((p, i) => (
+                  {HERO_PRODUCTS.map((p, i) => {
+                    const Icon = p.icon
+                    return (
                     <div
                       key={p.name}
                       className="flex items-center gap-2.5 p-2.5 rounded-lg border border-[rgba(250,204,21,0.08)] bg-[rgba(250,204,21,0.02)] hover:bg-[rgba(250,204,21,0.04)] hover:border-[rgba(250,204,21,0.15)] hover:translate-x-1 transition-all duration-300 cursor-default"
                       style={{ animation: `fadeSlideUp 0.5s ${i * 0.12}s both` }}
                     >
-                      <span className="text-xl flex-shrink-0">{p.icon}</span>
+                      <span className="flex-shrink-0"><Icon size="24" color="#facc15" /></span>
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-semibold">{p.name}</div>
                         <div className="text-xs text-[#555] font-mono">{p.tags}</div>
@@ -276,7 +288,8 @@ const Hero = ({ productCount }: HeroProps) => {
                         <div className="text-[11px] text-[#444] font-mono line-through">{p.old}</div>
                       </div>
                     </div>
-                  ))}
+                  )
+                })}
                 </div>
               )}
             </div>

@@ -1,5 +1,6 @@
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import ChevronDown from "@modules/common/icons/chevron-down"
+import ShieldCheck from "@modules/common/icons/shield-check"
 
 export default function CheckoutLayout({
   children,
@@ -37,7 +38,7 @@ export default function CheckoutLayout({
           {/* Seguridad */}
           <div className="flex-1 basis-0 flex justify-end">
             <span className="text-xs text-[#888888] flex items-center gap-1">
-              🔒 Pago Seguro
+              <ShieldCheck size="14" color="#888888" /> Pago Seguro
             </span>
           </div>
 
