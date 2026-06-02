@@ -71,6 +71,12 @@ module.exports = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "minio.cfynet.xyz",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
   async headers() {
