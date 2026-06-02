@@ -116,19 +116,22 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                   <ChevronDown />
                 </div>
               </Button>}
-              <Button
+              <button
                 onClick={handleAddToCart}
-                disabled={!inStock || !variant}
-                className="w-full"
-                isLoading={isAdding}
+                disabled={!inStock || !variant || isAdding}
                 data-testid="mobile-cart-button"
+                className="w-full py-3 rounded-xl font-bold text-sm bg-[#F5C518] text-black hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
               >
-                {!variant
-                  ? "Select variant"
-                  : !inStock
-                  ? "Out of stock"
-                  : "Add to cart"}
-              </Button>
+                {isAdding ? (
+                  <span className="inline-block w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                ) : !variant ? (
+                  "Seleccionar"
+                ) : !inStock ? (
+                  "Sin stock"
+                ) : (
+                  "Añadir al carrito"
+                )}
+              </button>
             </div>
           </div>
         </Transition>

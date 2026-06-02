@@ -178,7 +178,7 @@ export default function ProductActions({
 
         <ProductPrice product={product} variant={selectedVariant} />
 
-        <Button
+        <button
           onClick={handleAddToCart}
           disabled={
             !inStock ||
@@ -187,17 +187,19 @@ export default function ProductActions({
             isAdding ||
             !isValidVariant
           }
-          variant="primary"
-          className="w-full h-10"
-          isLoading={isAdding}
           data-testid="add-product-button"
+          className="w-full py-4 rounded-xl font-bold text-base bg-[#F5C518] text-black hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-[0_0_20px_rgba(245,197,24,0.2)] hover:shadow-[0_0_30px_rgba(245,197,24,0.4)] flex items-center justify-center gap-2"
         >
-          {!selectedVariant && !options
-            ? "Seleccionar"
-            : !inStock || !isValidVariant
-            ? "Sin stock"
-            : "Añadir al carrito"}
-        </Button>
+          {isAdding ? (
+            <span className="inline-block w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+          ) : !selectedVariant && !options ? (
+            "Seleccionar"
+          ) : !inStock || !isValidVariant ? (
+            "Sin stock"
+          ) : (
+            "Añadir al carrito"
+          )}
+        </button>
         <MobileActions
           product={product}
           variant={selectedVariant}
