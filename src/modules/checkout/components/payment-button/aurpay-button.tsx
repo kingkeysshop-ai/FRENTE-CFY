@@ -17,10 +17,10 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
   const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async () => {
+    setError(null)
     setIsLoading(true)
     try {
       const freshCart = await retrieveCart(cart.id)
-
       const session = getActivePaymentSession(freshCart)
       const providerId = session?.provider_id || "aurpay"
 
@@ -28,19 +28,10 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
         || session?.data?.url
         || session?.data?.pay_url
 
-      const isCorrupted = !redirectUrl
-        || session?.data?.data === 404
-        || (typeof session?.data === "object"
-          && !session?.data?.redirect_url
-          && !session?.data?.url
-          && !session?.data?.pay_url)
-
-      if (isCorrupted) {
+      if (!redirectUrl) {
         await initiatePaymentSession(freshCart, { provider_id: providerId })
-
         const updatedCart = await retrieveCart(cart.id)
         const updatedSession = getActivePaymentSession(updatedCart)
-
         const newUrl = updatedSession?.data?.redirect_url
           || updatedSession?.data?.url
           || updatedSession?.data?.pay_url
@@ -48,7 +39,8 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
         if (newUrl) {
           window.location.href = newUrl
         } else {
-          setError("No se pudo generar el link de pago")
+          console.error("[Aurpay] No redirect URL in session data:", updatedSession?.data)
+          setError("No se pudo generar el link de pago. Intenta de nuevo.")
         }
         setIsLoading(false)
         return
@@ -56,7 +48,8 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
 
       window.location.href = redirectUrl
     } catch (e) {
-      setError("Error al redirigir a Aurpay")
+      console.error("[Aurpay] Redirect error:", e)
+      setError("Error al redirigir a Aurpay. Intenta de nuevo.")
       setIsLoading(false)
     }
   }
@@ -65,7 +58,7 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
     <>
       <button
         onClick={handleSubmit}
-        disabled={isLoading || !!error || notReady}
+        disabled={isLoading || notReady}
         data-testid={dataTestId ?? "aurpay-payment-button"}
         className="flex items-center overflow-hidden w-full h-[54px] pl-5 border-none outline-none rounded-md bg-[#23275D] transition-opacity disabled:opacity-50"
       >
@@ -74,9 +67,7 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
           src="https://aurpay.net/wp-content/uploads/2022/06/favicon-logo.png"
           alt="logo"
         />
-        <span
-          className="flex flex-col items-center justify-center h-[54px] bg-[#191D48] px-5 flex-1 skew-x-[-15deg] translate-x-3.5"
-        >
+        <span className="flex flex-col items-center justify-center h-[54px] bg-[#191D48] px-5 flex-1 skew-x-[-15deg] translate-x-3.5">
           <span className="text-white text-sm font-bold skew-x-[8deg]">
             {isLoading ? "Redirigiendo..." : "Pay with Aurpay"}
           </span>
