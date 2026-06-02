@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from "react"
 import { useToast, Toast as ToastType } from "@lib/context/toast-context"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
