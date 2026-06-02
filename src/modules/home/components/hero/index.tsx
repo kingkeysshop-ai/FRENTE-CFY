@@ -22,7 +22,7 @@ const PLATFORMS = [
 const HERO_PRODUCTS = [
   { icon: Windows, name: "Windows 11 Pro", tags: "#licencia #vitalicia #1pc", price: "$12.90", old: "$89.99" },
   { icon: Office, name: "Office 2024 Pro", tags: "#word #excel #ppt #1pc", price: "$18.50", old: "$119.99" },
-  { icon: Antivirus, name: "ESET Internet Security", tags: "#antivirus #3devices #1year", price: "$9.90", old: "$39.99" },
+  { icon: Antivirus, name: "AVG Internet Security", tags: "#antivirus #3devices #1year", price: "$9.90", old: "$39.99" },
 ]
 
 const TERMINAL_LINES = [
