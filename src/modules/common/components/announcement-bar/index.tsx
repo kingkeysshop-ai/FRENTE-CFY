@@ -24,13 +24,28 @@ const AnnouncementBar = () => {
 
   return (
     <div className="relative bg-[#facc15] border-b border-[#e6b800]">
-      <div className="content-container flex items-center justify-between py-1.5 px-4">
-        <div className="flex items-center gap-2 text-xs md:text-sm text-black font-semibold mx-auto">
-          <Lightning size="14" color="black" />
-          <span>
-            ENTREGA INSTANTÁNEA · <CheckCircle size="14" color="black" /> 100% ORIGINALES · <ShieldCheck size="14" color="black" /> PAGO SEGURO
-          </span>
+      <div className="content-container flex items-center justify-between py-2 px-4">
+        <div className="flex flex-1 items-center justify-center gap-2 md:gap-6 text-xs md:text-sm text-black font-semibold">
+          <div className="flex items-center gap-1.5 shrink-0">
+            <Lightning size="16" color="black" />
+            <span className="whitespace-nowrap">ENTREGA INSTANTÁNEA</span>
+          </div>
+
+          <span className="hidden sm:block text-black/20 select-none">|</span>
+
+          <div className="flex items-center gap-1.5 shrink-0">
+            <CheckCircle size="16" color="black" />
+            <span className="whitespace-nowrap">100% ORIGINALES</span>
+          </div>
+
+          <span className="hidden sm:block text-black/20 select-none">|</span>
+
+          <div className="flex items-center gap-1.5 shrink-0">
+            <ShieldCheck size="16" color="black" />
+            <span className="whitespace-nowrap">PAGO SEGURO</span>
+          </div>
         </div>
+
         <button
           onClick={dismiss}
           className="shrink-0 text-black/50 hover:text-black transition-colors ml-4"
