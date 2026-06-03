@@ -44,6 +44,7 @@ const CartDropdown = ({ cart: cartState }: { cart?: HttpTypes.StoreCart | null }
   useEffect(() => {
     if (itemRef.current !== totalItems && !pathname.includes("/cart")) {
       timedOpen()
+      itemRef.current = totalItems
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalItems, itemRef.current])

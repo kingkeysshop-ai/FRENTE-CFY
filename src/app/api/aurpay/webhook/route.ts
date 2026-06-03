@@ -19,13 +19,11 @@ export async function POST(req: NextRequest) {
 
     const auth = validateWebhookSecret(req, AURPAY_ENV_SECRET)
     if (!auth.valid) {
-      console.warn("[Aurpay Webhook] Auth failed:", auth.reason)
       return NextResponse.json({ error: auth.reason }, { status: 403 })
     }
 
     const cartId = req.nextUrl.searchParams.get("cart_id")
     if (!cartId) {
-      console.error("[Aurpay Webhook] No cart_id in query params")
       return NextResponse.json({ error: "Missing cart_id" }, { status: 400 })
     }
 
@@ -39,7 +37,6 @@ export async function POST(req: NextRequest) {
     const { status } = body || {}
 
     if (status === "SUCCEED" || status === "succeed") {
-
       const medusaRes = await fetch(
         `${MEDUSA_BACKEND_URL}/store/carts/${cartId}/complete`,
         {
@@ -56,32 +53,19 @@ export async function POST(req: NextRequest) {
       if (!medusaRes.ok) {
         const isCompleted = medusaData?.type === "order"
         if (isCompleted) {
-          console.log(`[Aurpay Webhook] Cart already completed: ${medusaData?.order?.id}`)
-          return NextResponse.json({
-            received: true,
-            orderId: medusaData?.order?.id,
-          })
+          return NextResponse.json({ received: true, orderId: medusaData?.order?.id })
         }
-        console.error("[Aurpay Webhook] Failed to complete cart:", medusaData)
         return NextResponse.json(
           { error: "Failed to complete Medusa order" },
           { status: 500 }
         )
       }
 
-      console.log(
-        `[Aurpay Webhook] Order placed successfully: ${medusaData?.order?.id}`
-      )
-      return NextResponse.json({
-        received: true,
-        orderId: medusaData?.order?.id,
-      })
+      return NextResponse.json({ received: true, orderId: medusaData?.order?.id })
     }
 
-    console.log(`[Aurpay Webhook] Payment not succeeded (status: ${status})`)
     return NextResponse.json({ received: true, status })
   } catch (err: any) {
-    console.error("[Aurpay Webhook] Error:", err)
     return NextResponse.json({ error: "Internal error" }, { status: 500 })
   }
 }

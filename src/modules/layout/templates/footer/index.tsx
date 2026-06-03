@@ -154,10 +154,10 @@ export default async function Footer() {
         {/* Redes Sociales */}
         <div className="flex items-center justify-center gap-4 py-6 border-b border-[#2a2a2a]">
           <span className="text-[#888888] text-xs uppercase tracking-widest">Síguenos:</span>
-          <a href="#" className="text-[#888888] hover:text-[#facc15] transition-colors text-lg" aria-label="Twitter/X">𝕏</a>
-          <a href="#" className="text-[#888888] hover:text-[#facc15] transition-colors text-lg" aria-label="Instagram">📷</a>
-          <a href="#" className="text-[#888888] hover:text-[#facc15] transition-colors text-lg" aria-label="TikTok">♪</a>
-          <a href="#" className="text-[#888888] hover:text-[#facc15] transition-colors text-lg" aria-label="WhatsApp">💬</a>
+          <a href="https://x.com/kingkeys" target="_blank" rel="noopener noreferrer" className="text-[#888888] hover:text-[#facc15] transition-colors text-lg" aria-label="Twitter/X">𝕏</a>
+          <a href="https://instagram.com/kingkeys" target="_blank" rel="noopener noreferrer" className="text-[#888888] hover:text-[#facc15] transition-colors text-lg" aria-label="Instagram">📷</a>
+          <a href="https://tiktok.com/@kingkeys" target="_blank" rel="noopener noreferrer" className="text-[#888888] hover:text-[#facc15] transition-colors text-lg" aria-label="TikTok">♪</a>
+          <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="text-[#888888] hover:text-[#facc15] transition-colors text-lg" aria-label="WhatsApp">💬</a>
         </div>
 
         {/* Parte inferior */}

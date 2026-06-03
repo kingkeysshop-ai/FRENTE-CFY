@@ -73,7 +73,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left column — Image (45%) */}
           <div className="w-full lg:w-[45%] lg:sticky lg:top-20 lg:self-start">
-            <ImageGallery images={images} />
+            <ImageGallery images={images} title={product.title} />
           </div>
 
           {/* Right column — Info (55%) */}

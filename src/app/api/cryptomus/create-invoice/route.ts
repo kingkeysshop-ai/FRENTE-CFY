@@ -55,9 +55,7 @@ export async function POST(req: NextRequest) {
             )
           }
         }
-      } catch {
-        console.warn("[Cryptomus] Could not verify cart amount against backend")
-      }
+      } catch {} // cart verification is optional
     }
 
     const payload: Record<string, unknown> = {
@@ -88,7 +86,6 @@ export async function POST(req: NextRequest) {
     const data = await response.json()
 
     if (!response.ok || data.state !== 0) {
-      console.error("[Cryptomus] Error creating invoice:", data)
       return NextResponse.json(
         { error: data.message || "Failed to create Cryptomus invoice" },
         { status: 500 }
@@ -100,8 +97,7 @@ export async function POST(req: NextRequest) {
       uuid: data.result.uuid,
       orderId: data.result.order_id,
     })
-  } catch (err: any) {
-    console.error("[Cryptomus] Unexpected error:", err)
+  } catch {
     return NextResponse.json({ error: "Internal error" }, { status: 500 })
   }
 }

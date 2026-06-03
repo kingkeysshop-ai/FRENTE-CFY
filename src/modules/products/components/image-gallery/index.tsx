@@ -6,9 +6,10 @@ import { HttpTypes } from "@medusajs/types"
 
 type ImageGalleryProps = {
   images: any[]
+  title?: string
 }
 
-const ImageGallery = ({ images }: ImageGalleryProps) => {
+const ImageGallery = ({ images, title }: ImageGalleryProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
 
   if (!images?.length) {
@@ -27,7 +28,7 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
         {current && (
           <Image
             src={current}
-            alt="Product image"
+            alt={title ? `${title} - Imagen del producto` : "Imagen del producto"}
             className="object-contain object-center p-4"
             fill
             sizes="(max-width: 768px) 100vw, 45vw"
