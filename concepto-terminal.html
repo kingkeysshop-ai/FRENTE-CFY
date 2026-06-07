@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KING KEYS — Terminal Concept</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #060608;
+    color: #fff;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #060608; }
+  ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #facc15; }
+
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+  /* ─── NOISE ─── */
+  #noise {
+    position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+    opacity: 0.02;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat; background-size: 256px 256px;
+  }
+
+  #ambient-glow {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 0%, rgba(250,204,21,0.04) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 90%, rgba(250,204,21,0.02) 0%, transparent 60%);
+  }
+
+  /* ─── TERMINAL GRID BG ─── */
+  .terminal-grid {
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(250,204,21,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(250,204,21,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 70%);
+  }
+
+  /* ============================================
+     NAV
+     ============================================ */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(6,6,8,0.6);
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: all 0.4s;
+  }
+  .nav.scrolled { background: rgba(6,6,8,0.85); border-bottom-color: rgba(250,204,21,0.08); }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 900; letter-spacing: -0.02em;
+    text-decoration: none; display: flex; align-items: center; gap: 2px;
+  }
+  .nav-logo span:first-child { color: #fff; }
+  .nav-logo .gold {
+    background: linear-gradient(135deg, #facc15, #f59e0b);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .nav-logo .crown { font-size: 1.1rem; margin-right: 4px; -webkit-text-fill-color: initial; color: #facc15; }
+  .nav-links { display: flex; align-items: center; gap: 8px; }
+  .nav-link {
+    padding: 8px 16px; color: #666; text-decoration: none;
+    font-size: 0.8rem; font-weight: 500;
+    transition: all 0.3s; border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .nav-link:hover { color: #facc15; background: rgba(250,204,21,0.05); }
+  .nav-link.active { color: #facc15; background: rgba(250,204,21,0.08); }
+  .nav-actions { display: flex; align-items: center; gap: 12px; }
+  .nav-icon-btn {
+    width: 36px; height: 36px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: transparent; color: #666; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s; font-size: 0.9rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .nav-icon-btn:hover { border-color: #facc15; color: #facc15; background: rgba(250,204,21,0.06); }
+
+  /* Terminal-style button (realistic, like current) */
+  .btn-terminal {
+    padding: 10px 24px; border-radius: 10px; border: none;
+    background: linear-gradient(180deg, #facc15 0%, #e6b800 100%);
+    color: #060608; font-weight: 700; font-size: 0.85rem;
+    cursor: pointer; transition: all 0.2s;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.3) inset,
+      0 -1px 0 rgba(0,0,0,0.2) inset,
+      0 4px 12px rgba(250,204,21,0.25);
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    position: relative;
+  }
+  .btn-terminal:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.3) inset,
+      0 -1px 0 rgba(0,0,0,0.2) inset,
+      0 6px 20px rgba(250,204,21,0.35);
+  }
+  .btn-terminal:active {
+    transform: translateY(0px);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.1) inset,
+      0 -1px 0 rgba(0,0,0,0.3) inset,
+      0 2px 8px rgba(250,204,21,0.2);
+  }
+
+  .btn-outline-terminal {
+    padding: 10px 24px; border-radius: 10px;
+    border: 1px solid rgba(250,204,21,0.3);
+    background: transparent;
+    color: #facc15; font-weight: 600; font-size: 0.85rem;
+    cursor: pointer; transition: all 0.2s;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.05) inset;
+  }
+  .btn-outline-terminal:hover {
+    border-color: #facc15;
+    background: rgba(250,204,21,0.06);
+    transform: translateY(-1px);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.05) inset, 0 4px 16px rgba(250,204,21,0.1);
+  }
+
+  /* ============================================
+     HERO — TERMINAL STYLE
+     ============================================ */
+  .hero {
+    position: relative; z-index: 1;
+    min-height: 100vh; display: flex; align-items: center;
+    padding-top: 64px; overflow: hidden;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+    align-items: center; width: 100%;
+  }
+
+  /* Left: Terminal Window */
+  .terminal-window {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(250,204,21,0.1);
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 60px rgba(250,204,21,0.03);
+  }
+  .terminal-titlebar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .terminal-dots { display: flex; gap: 6px; }
+  .terminal-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+  .terminal-dot.red { background: #ff5f56; }
+  .terminal-dot.yellow { background: #ffbd2e; }
+  .terminal-dot.green { background: #27c93f; }
+  .terminal-title {
+    font-size: 0.7rem; color: #555;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+  .terminal-title .gold {
+    color: #facc15;
+  }
+  .terminal-body {
+    padding: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+  .terminal-line {
+    display: flex; align-items: flex-start; gap: 8px;
+    margin-bottom: 4px;
+    color: #888;
+  }
+  .terminal-prompt {
+    color: #facc15;
+    flex-shrink: 0;
+    font-weight: 500;
+  }
+  .terminal-command {
+    color: #ccc;
+  }
+  .terminal-output {
+    color: #666;
+    padding-left: 20px;
+    margin-bottom: 12px;
+  }
+  .terminal-output .highlight {
+    color: #facc15;
+  }
+  .terminal-output .green { color: #4ade80; }
+  .terminal-cursor {
+    display: inline-block;
+    width: 8px; height: 16px;
+    background: #facc15;
+    animation: cursor-blink 1s step-end infinite;
+    vertical-align: text-bottom;
+    margin-left: 4px;
+  }
+  @keyframes cursor-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .hero-left {
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px 6px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(250,204,21,0.15);
+    background: rgba(250,204,21,0.04);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; font-weight: 500; color: #facc15;
+    letter-spacing: 0.05em;
+    width: fit-content;
+  }
+  .hero-badge .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #4ade80;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+  }
+  .hero-title .gold {
+    background: linear-gradient(135deg, #facc15 0%, #fbbf24 25%, #f59e0b 50%, #fbbf24 75%, #facc15 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    background-size: 200% 100%;
+    animation: shimmer-gold 4s ease-in-out infinite;
+  }
+  @keyframes shimmer-gold { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+  .hero-title .outline {
+    -webkit-text-stroke: 1.5px rgba(255,255,255,0.1);
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-desc {
+    color: #666; font-size: 0.95rem; line-height: 1.8;
+    max-width: 440px; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+  }
+
+  /* Right: Product Terminal Cards */
+  .terminal-products {
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .terminal-product-card {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.01);
+    border: 1px solid rgba(255,255,255,0.04);
+    transition: all 0.3s;
+    cursor: default;
+  }
+  .terminal-product-card:hover {
+    background: rgba(250,204,21,0.03);
+    border-color: rgba(250,204,21,0.12);
+    transform: translateX(4px);
+  }
+  .tpc-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
+    background: rgba(250,204,21,0.04);
+    border: 1px solid rgba(250,204,21,0.06);
+  }
+  .tpc-info { flex: 1; min-width: 0; }
+  .tpc-name { font-weight: 600; font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; }
+  .tpc-name .tag {
+    font-size: 0.55rem; font-weight: 600; color: #060608;
+    background: #facc15; padding: 1px 6px; border-radius: 4px;
+    margin-left: 6px; vertical-align: middle;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .tpc-desc { font-size: 0.7rem; color: #555; font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+  .tpc-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700; font-size: 1rem;
+    background: linear-gradient(135deg, #facc15, #fbbf24);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    flex-shrink: 0;
+  }
+  .tpc-old {
+    font-size: 0.7rem; color: #444;
+    text-decoration: line-through; text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ============================================
+     TRUST BAR
+     ============================================ */
+  .trust-bar {
+    position: relative; z-index: 1;
+    padding: 40px 0;
+    border-top: 1px solid rgba(255,255,255,0.03);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .trust-inner {
+    display: flex; align-items: center; justify-content: center;
+    gap: 40px; flex-wrap: wrap;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem; color: #555;
+  }
+  .trust-item { display: flex; align-items: center; gap: 8px; cursor: default; transition: color 0.3s; }
+  .trust-item:hover { color: #888; }
+  .trust-item .icon { font-size: 1rem; }
+
+  /* ============================================
+     PRODUCT SHOWCASE — TERMINAL THEME
+     ============================================ */
+  .section-terminal {
+    position: relative; z-index: 1;
+    padding: 80px 0;
+  }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; color: #facc15;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::before {
+    content: '>';
+    color: #555;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 40px;
+  }
+  .section-title .gold {
+    background: linear-gradient(135deg, #facc15, #f59e0b);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+
+  .terminal-grid-cards {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  }
+  .terminal-card {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.04);
+    background: rgba(255,255,255,0.01);
+    transition: all 0.4s;
+    cursor: pointer;
+  }
+  .terminal-card:hover {
+    border-color: rgba(250,204,21,0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(250,204,21,0.03);
+  }
+  .tc-img {
+    width: 100%; aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3.5rem;
+    background: linear-gradient(135deg, #0a0a0a, #111);
+    position: relative;
+  }
+  .tc-img .os-label {
+    position: absolute; bottom: 8px; left: 8px;
+    font-size: 0.5rem; font-family: 'JetBrains Mono', monospace;
+    color: #444; background: rgba(0,0,0,0.6);
+    padding: 2px 8px; border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.03);
+  }
+  .tc-body { padding: 16px; }
+  .tc-cat {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem; color: #facc15;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 4px; display: flex; align-items: center; gap: 4px;
+  }
+  .tc-cat::before { content: '#'; color: #555; }
+  .tc-title {
+    font-weight: 700; font-size: 0.9rem; margin-bottom: 4px;
+  }
+  .tc-specs {
+    font-size: 0.7rem; color: #555;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 12px;
+  }
+  .tc-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.03);
+  }
+  .tc-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700; font-size: 1.1rem;
+    background: linear-gradient(135deg, #facc15, #f59e0b);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .tc-old-price {
+    font-size: 0.65rem; color: #444;
+    text-decoration: line-through;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .tc-btn {
+    width: 32px; height: 32px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: transparent; color: #666; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s; font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+  }
+  .terminal-card:hover .tc-btn { border-color: #facc15; color: #facc15; background: rgba(250,204,21,0.05); }
+
+  /* ============================================
+     WHY US — TERMINAL
+     ============================================ */
+  .grid-terminal-why {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  }
+  .terminal-why-card {
+    padding: 20px; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.03);
+    background: rgba(255,255,255,0.01);
+    transition: all 0.3s; cursor: default;
+    font-family: 'JetBrains Mono', monospace;
+    position: relative; overflow: hidden;
+  }
+  .terminal-why-card::before {
+    content: ''; position: absolute; inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(250,204,21,0.03) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.5s; pointer-events: none;
+  }
+  .terminal-why-card:hover::before { opacity: 1; }
+  .terminal-why-card:hover { border-color: rgba(250,204,21,0.08); transform: translateY(-1px); }
+  .twc-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+  }
+  .twc-icon { font-size: 1.2rem; }
+  .twc-status {
+    font-size: 0.55rem; color: #4ade80; font-weight: 500;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .twc-status .dot { width: 4px; height: 4px; border-radius: 50%; background: #4ade80; display: inline-block; }
+  .twc-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; color: #facc15; }
+  .twc-desc { font-size: 0.7rem; color: #555; line-height: 1.6; }
+
+  /* ============================================
+     CTA
+     ============================================ */
+  .terminal-cta {
+    border-radius: 12px;
+    border: 1px solid rgba(250,204,21,0.08);
+    background: linear-gradient(135deg, rgba(250,204,21,0.02) 0%, transparent 100%);
+    padding: 48px 56px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .terminal-cta::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 100% at 0% 50%, rgba(250,204,21,0.02) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .terminal-cta h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 2.5vw, 2.5rem);
+    font-weight: 900; line-height: 1.1; margin-bottom: 12px;
+  }
+  .terminal-cta p { color: #666; font-size: 0.85rem; line-height: 1.8; margin-bottom: 24px; font-family: 'JetBrains Mono', monospace; }
+  .cta-features { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cta-feature {
+    font-size: 0.7rem; color: #888;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 6px 12px; border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.04);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .cta-feature .check { color: #4ade80; }
+  .cta-right {
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-end; text-align: right;
+  }
+  .cta-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 3rem; font-weight: 700;
+    background: linear-gradient(135deg, #facc15, #f59e0b);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    line-height: 1; margin-bottom: 4px;
+  }
+  .cta-sub { color: #555; font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; margin-bottom: 20px; }
+
+  /* ============================================
+     FOOTER
+     ============================================ */
+  .footer {
+    position: relative; z-index: 1;
+    padding: 48px 0 24px;
+    border-top: 1px solid rgba(255,255,255,0.03);
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+    margin-bottom: 32px;
+  }
+  .footer-brand .nav-logo { font-size: 1.2rem; margin-bottom: 12px; }
+  .footer-brand p { color: #555; font-size: 0.75rem; line-height: 1.7; max-width: 300px; font-family: 'JetBrains Mono', monospace; }
+  .footer-col h4 {
+    font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: #888; margin-bottom: 16px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .footer-col a {
+    display: block; color: #555; text-decoration: none;
+    font-size: 0.75rem; margin-bottom: 10px; transition: color 0.3s;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .footer-col a:hover { color: #facc15; }
+  .footer-bottom {
+    padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.03);
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.7rem; color: #444;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  @media (max-width: 1024px) {
+    .hero-content { grid-template-columns: 1fr; gap: 32px; }
+    .terminal-grid-cards { grid-template-columns: repeat(2, 1fr); }
+    .grid-terminal-why { grid-template-columns: 1fr 1fr; }
+    .terminal-cta { grid-template-columns: 1fr; padding: 32px; }
+    .cta-right { align-items: flex-start; text-align: left; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    .terminal-grid-cards { grid-template-columns: 1fr; }
+    .grid-terminal-why { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .terminal-cta { padding: 24px; }
+    .terminal-body { padding: 16px; font-size: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="noise"></div>
+<div id="ambient-glow"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <span class="crown">👑</span>
+      <span>KING</span>
+      <span class="gold"> KEYS</span>
+    </a>
+    <div class="nav-links">
+      <a href="#" class="nav-link active">~/tienda</a>
+      <a href="#" class="nav-link">~/categorias</a>
+      <a href="#" class="nav-link">~/ofertas</a>
+      <a href="#" class="nav-link">~/soporte</a>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-icon-btn">🔍</button>
+      <button class="nav-icon-btn">❤️</button>
+      <a href="#" class="btn-terminal" style="padding:8px 18px;font-size:0.75rem">🛒 $0.00</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="terminal-grid"></div>
+  <div class="container hero-content" style="width:100%">
+
+    <!-- Left: Terminal -->
+    <div>
+      <div class="hero-left">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          KING KEYS v2.0 · ONLINE
+        </div>
+
+        <h1 class="hero-title">
+          <span class="outline">Terminal</span><br>
+          <span class="gold">de Licencias</span>
+        </h1>
+
+        <p class="hero-desc">
+          $ ~ sistema de activación inmediata — licencias originales 
+          para Windows, Office, antivirus y gaming.
+        </p>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="#" class="btn-terminal">
+            <span>$</span> ./explorar-tienda
+          </a>
+          <a href="#" class="btn-outline-terminal">
+            <span>🔥</span> ./ofertas --today
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Terminal Window -->
+    <div class="terminal-window">
+      <div class="terminal-titlebar">
+        <div class="terminal-dots">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+        </div>
+        <span class="terminal-title">king@keys:<span class="gold">~</span>$ bash — productos.sh</span>
+        <span style="width:52px"></span>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="terminal-prompt">$</span>
+          <span class="terminal-command">./productos --list --top-sellers</span>
+        </div>
+        <div class="terminal-output">
+          Cargando catálogo... <span class="green">OK</span><br>
+          <span class="highlight">▶</span> Mostrando 3 de 24 productos disponibles
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid rgba(250,204,21,0.08);background:rgba(250,204,21,0.02)">
+            <span style="font-size:1.2rem">🪟</span>
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:0.8rem">Windows 11 Pro</div>
+              <div style="font-size:0.65rem;color:#555">#licencia #vitalicia #1pc</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-weight:700;font-size:0.95rem;background:linear-gradient(135deg,#facc15,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">$12.90</div>
+              <div style="font-size:0.6rem;color:#444;text-decoration:line-through">$89.99</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid rgba(250,204,21,0.08);background:rgba(250,204,21,0.02)">
+            <span style="font-size:1.2rem">📊</span>
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:0.8rem">Office 2024 Pro</div>
+              <div style="font-size:0.65rem;color:#555">#word #excel #ppt #1pc</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-weight:700;font-size:0.95rem;background:linear-gradient(135deg,#facc15,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">$18.50</div>
+              <div style="font-size:0.6rem;color:#444;text-decoration:line-through">$119.99</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid rgba(250,204,21,0.08);background:rgba(250,204,21,0.02)">
+            <span style="font-size:1.2rem">🛡️</span>
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:0.8rem">ESET Internet Security</div>
+              <div style="font-size:0.65rem;color:#555">#antivirus #3devices #1year</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-weight:700;font-size:0.95rem;background:linear-gradient(135deg,#facc15,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">$9.90</div>
+              <div style="font-size:0.6rem;color:#444;text-decoration:line-through">$39.99</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="terminal-line">
+          <span class="terminal-prompt">$</span>
+          <span class="terminal-command">./comprar --id windows-11-pro</span>
+          <span class="terminal-cursor"></span>
+        </div>
+        <div class="terminal-output" style="margin-bottom:0">
+          <span class="green">✔</span> Procesando pago seguro... <span class="highlight">listo</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ TRUST BAR ═══ -->
+<div class="trust-bar">
+  <div class="container trust-inner">
+    <div class="trust-item"><span class="icon">💳</span> Pago Seguro</div>
+    <div class="trust-item"><span class="icon">⚡</span> Entrega Instantánea</div>
+    <div class="trust-item"><span class="icon">🎯</span> 100% Original</div>
+    <div class="trust-item"><span class="icon">💬</span> Soporte 24/7</div>
+    <div class="trust-item"><span class="icon">🔄</span> Garantía Total</div>
+    <div class="trust-item"><span class="icon">🏆</span> +5,000 Clientes</div>
+  </div>
+</div>
+
+<!-- ═══ PRODUCTS ═══ -->
+<section class="section-terminal">
+  <div class="container">
+    <div class="section-label">catálogo — productos</div>
+    <h2 class="section-title">Licencias <span class="gold">Disponibles</span></h2>
+    <div class="terminal-grid-cards">
+      <div class="terminal-card">
+        <div class="tc-img">
+          🪟
+          <span class="os-label">win32/x64</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-cat">microsoft</div>
+          <div class="tc-title">Windows 11 Pro</div>
+          <div class="tc-specs">Licencia digital · Vitalicia · 1 PC</div>
+          <div class="tc-footer">
+            <div>
+              <div class="tc-price">$12.90</div>
+              <div class="tc-old-price">$89.99</div>
+            </div>
+            <button class="tc-btn">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="terminal-card">
+        <div class="tc-img">
+          📊
+          <span class="os-label">win32/x64</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-cat">microsoft</div>
+          <div class="tc-title">Office 2024 Pro</div>
+          <div class="tc-specs">Word, Excel, PPT · 1 PC · Vitalicia</div>
+          <div class="tc-footer">
+            <div>
+              <div class="tc-price">$18.50</div>
+              <div class="tc-old-price">$119.99</div>
+            </div>
+            <button class="tc-btn">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="terminal-card">
+        <div class="tc-img">
+          🛡️
+          <span class="os-label">cross-platform</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-cat">seguridad</div>
+          <div class="tc-title">ESET Internet Security</div>
+          <div class="tc-specs">3 dispositivos · 1 año · Antivirus</div>
+          <div class="tc-footer">
+            <div>
+              <div class="tc-price">$9.90</div>
+              <div class="tc-old-price">$39.99</div>
+            </div>
+            <button class="tc-btn">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="terminal-card">
+        <div class="tc-img">
+          🎮
+          <span class="os-label">xbox-live</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-cat">gaming</div>
+          <div class="tc-title">Xbox Game Pass Ultimate</div>
+          <div class="tc-specs">3 meses · EA Play · Online Multiplayer</div>
+          <div class="tc-footer">
+            <div>
+              <div class="tc-price">$22.00</div>
+              <div class="tc-old-price">$45.99</div>
+            </div>
+            <button class="tc-btn">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WHY US ═══ -->
+<section class="section-terminal" style="padding-top:0">
+  <div class="container">
+    <div class="section-label">system — razones</div>
+    <h2 class="section-title">Por qué <span class="gold">King Keys</span></h2>
+    <div class="grid-terminal-why">
+      <div class="terminal-why-card" onmousemove="this.style.setProperty('--mx',(event.offsetX/this.offsetWidth*100)+'%');this.style.setProperty('--my',(event.offsetY/this.offsetHeight*100)+'%')">
+        <div class="twc-header">
+          <span class="twc-icon">👑</span>
+          <span class="twc-status"><span class="dot"></span> verified</span>
+        </div>
+        <div class="twc-title">100% Original</div>
+        <div class="twc-desc">Todas nuestras licencias son distribuidas directamente por partners oficiales Microsoft. Sin activadores, sin riesgos.</div>
+      </div>
+      <div class="terminal-why-card" onmousemove="this.style.setProperty('--mx',(event.offsetX/this.offsetWidth*100)+'%');this.style.setProperty('--my',(event.offsetY/this.offsetHeight*100)+'%')">
+        <div class="twc-header">
+          <span class="twc-icon">⚡</span>
+          <span class="twc-status"><span class="dot"></span> realtime</span>
+        </div>
+        <div class="twc-title">Entrega Flash</div>
+        <div class="twc-desc">Recibes tu clave en segundos después del pago. Sistema automatizado 24/7, sin esperas ni intervención manual.</div>
+      </div>
+      <div class="terminal-why-card" onmousemove="this.style.setProperty('--mx',(event.offsetX/this.offsetWidth*100)+'%');this.style.setProperty('--my',(event.offsetY/this.offsetHeight*100)+'%')">
+        <div class="twc-header">
+          <span class="twc-icon">💰</span>
+          <span class="twc-status"><span class="dot"></span> best-price</span>
+        </div>
+        <div class="twc-title">Precio Justo</div>
+        <div class="twc-desc">Los mejores precios del mercado colombiano. Comparamos contra retail para garantizarte el máximo ahorro.</div>
+      </div>
+      <div class="terminal-why-card" onmousemove="this.style.setProperty('--mx',(event.offsetX/this.offsetWidth*100)+'%');this.style.setProperty('--my',(event.offsetY/this.offsetHeight*100)+'%')">
+        <div class="twc-header">
+          <span class="twc-icon">🔒</span>
+          <span class="twc-status"><span class="dot"></span> encrypted</span>
+        </div>
+        <div class="twc-title">Pago Blindado</div>
+        <div class="twc-desc">Múltiples métodos: tarjeta, crypto, Bold, PayPal, Stripe. Cifrado SSL de grado bancario en todas las transacciones.</div>
+      </div>
+      <div class="terminal-why-card" onmousemove="this.style.setProperty('--mx',(event.offsetX/this.offsetWidth*100)+'%');this.style.setProperty('--my',(event.offsetY/this.offsetHeight*100)+'%')">
+        <div class="twc-header">
+          <span class="twc-icon">🎧</span>
+          <span class="twc-status"><span class="dot"></span> 24/7</span>
+        </div>
+        <div class="twc-title">Soporte King</div>
+        <div class="twc-desc">Atención personalizada vía WhatsApp y chat en vivo. Resolvemos cualquier incidencia en cuestión de minutos.</div>
+      </div>
+      <div class="terminal-why-card" onmousemove="this.style.setProperty('--mx',(event.offsetX/this.offsetWidth*100)+'%');this.style.setProperty('--my',(event.offsetY/this.offsetHeight*100)+'%')">
+        <div class="twc-header">
+          <span class="twc-icon">🛡️</span>
+          <span class="twc-status"><span class="dot"></span> guaranteed</span>
+        </div>
+        <div class="twc-title">Garantía Total</div>
+        <div class="twc-desc">Si algo sale mal, reemplazamos tu licencia sin costo. Sin preguntas, sin burocracia, sin demoras.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="section-terminal" style="padding-top:0">
+  <div class="container">
+    <div class="terminal-cta">
+      <div>
+        <h2>¿Listo para <span class="gold">ejecutar</span> tu compra?</h2>
+        <p>$ ./comprar --producto=licencia --confiar=king-keys</p>
+        <div class="cta-features">
+          <span class="cta-feature"><span class="check">✓</span> Activación inmediata</span>
+          <span class="cta-feature"><span class="check">✓</span> Soporte 24/7</span>
+          <span class="cta-feature"><span class="check">✓</span> Mejor precio</span>
+          <span class="cta-feature"><span class="check">✓</span> Garantía total</span>
+        </div>
+      </div>
+      <div class="cta-right">
+        <div class="cta-price">$9.90</div>
+        <div class="cta-sub">desde — licencias desde $9.90 USD</div>
+        <a href="#" class="btn-terminal" style="font-size:0.9rem;padding:14px 36px;">
+          <span>$</span> ./ir-a-tienda →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo">
+          <span class="crown">👑</span>
+          <span>KING</span>
+          <span class="gold"> KEYS</span>
+        </a>
+        <p>/* Tu tienda de confianza para licencias digitales originales en Colombia */</p>
+      </div>
+      <div class="footer-col">
+        <h4># productos</h4>
+        <a href="#">~/windows</a>
+        <a href="#">~/office</a>
+        <a href="#">~/antivirus</a>
+        <a href="#">~/gaming</a>
+        <a href="#">~/todos</a>
+      </div>
+      <div class="footer-col">
+        <h4># ayuda</h4>
+        <a href="#">~/faq</a>
+        <a href="#">~/soporte</a>
+        <a href="#">~/garantia</a>
+        <a href="#">~/pagos</a>
+        <a href="#">~/contacto</a>
+      </div>
+      <div class="footer-col">
+        <h4># legal</h4>
+        <a href="#">~/terminos</a>
+        <a href="#">~/privacidad</a>
+        <a href="#">~/reembolsos</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 KING KEYS — All rights reserved.</span>
+      <span>echo "hecho con 👑 en colombia"</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+  });
+</script>
+</body>
+</html>

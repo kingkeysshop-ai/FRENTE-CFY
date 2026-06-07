@@ -1,0 +1,160 @@
+import ChevronDown from "@modules/common/icons/chevron-down"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import { convertToLocale } from "@lib/util/money"
+import { HttpTypes } from "@medusajs/types"
+import Star from "@modules/common/icons/star"
+import ShoppingCart from "@modules/common/icons/shopping-cart"
+import Key from "@modules/common/icons/key"
+
+type OverviewProps = {
+  customer: HttpTypes.StoreCustomer | null
+  orders: HttpTypes.StoreOrder[] | null
+}
+
+const getProfileCompletion = (customer: HttpTypes.StoreCustomer | null) => {
+  let count = 0
+  if (!customer) return 0
+  if (customer.email) count++
+  if (customer.first_name && customer.last_name) count++
+  if (customer.phone) count++
+  if (customer.addresses?.find((addr: any) => addr.is_default_billing)) count++
+  return (count / 4) * 100
+}
+
+const Overview = ({ customer, orders }: OverviewProps) => {
+  const completion = getProfileCompletion(customer)
+
+  return (
+    <div data-testid="overview-page-wrapper" className="flex flex-col gap-6">
+
+      {/* Bienvenida */}
+      <div className="bg-[#111111] border border-[#facc15]/20 rounded-xl p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+          <div>
+            <p className="text-xs text-[#facc15] font-bold uppercase tracking-widest mb-1"><Star size="12" color="#facc15" /> Panel de Control</p>
+            <h2 className="text-2xl font-black text-white" data-testid="welcome-message">
+              Hola, <span className="text-[#facc15]">{customer?.first_name}</span> 👋
+            </h2>
+          </div>
+          <span className="text-xs text-[#888888] bg-[#1a1a1a] px-3 py-1 rounded-full">
+            {customer?.email}
+          </span>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        {/* Perfil completado */}
+        <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl p-5 flex flex-col gap-3">
+          <p className="text-xs text-[#888888] uppercase tracking-wider">Perfil Completado</p>
+          <div className="flex items-end gap-2">
+            <span className="text-4xl font-black text-white" data-testid="customer-profile-completion">
+              {completion}
+            </span>
+            <span className="text-[#facc15] font-bold text-lg mb-1">%</span>
+          </div>
+          {/* Barra de progreso */}
+          <div className="w-full h-1.5 bg-[#2a2a2a] rounded-full overflow-hidden">
+            <div
+              className="h-full bg-[#facc15] rounded-full transition-all duration-500"
+              style={{ width: `${completion}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Direcciones */}
+        <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl p-5 flex flex-col gap-3">
+          <p className="text-xs text-[#888888] uppercase tracking-wider">Direcciones</p>
+          <div className="flex items-end gap-2">
+            <span className="text-4xl font-black text-white" data-testid="addresses-count">
+              {customer?.addresses?.length || 0}
+            </span>
+            <span className="text-[#888888] text-sm mb-1">guardadas</span>
+          </div>
+          <LocalizedClientLink
+            href="/account/addresses"
+            className="text-xs text-[#facc15] hover:text-[#e6b800] transition-colors font-medium"
+          >
+            Gestionar →
+          </LocalizedClientLink>
+        </div>
+
+        {/* Pedidos */}
+        <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl p-5 flex flex-col gap-3">
+          <p className="text-xs text-[#888888] uppercase tracking-wider">Pedidos</p>
+          <div className="flex items-end gap-2">
+            <span className="text-4xl font-black text-white">
+              {orders?.length || 0}
+            </span>
+            <span className="text-[#888888] text-sm mb-1">realizados</span>
+          </div>
+          <LocalizedClientLink
+            href="/account/orders"
+            className="text-xs text-[#facc15] hover:text-[#e6b800] transition-colors font-medium"
+          >
+            Ver todos →
+          </LocalizedClientLink>
+        </div>
+      </div>
+
+      {/* Pedidos recientes */}
+      <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#2a2a2a]">
+          <div className="flex items-center gap-2">
+            <ShoppingCart size="18" color="#facc15" />
+            <h3 className="text-white font-black text-base">Pedidos Recientes</h3>
+          </div>
+          <LocalizedClientLink
+            href="/account/orders"
+            className="text-xs text-[#facc15] hover:text-[#e6b800] transition-colors font-medium"
+          >
+            Ver todos →
+          </LocalizedClientLink>
+        </div>
+
+        <ul className="flex flex-col divide-y divide-[#2a2a2a]" data-testid="orders-wrapper">
+          {orders && orders.length > 0 ? (
+            orders.slice(0, 5).map((order) => (
+              <li key={order.id} data-testid="order-wrapper">
+                <LocalizedClientLink href={`/account/orders/details/${order.id}`}>
+                  <div className="flex justify-between items-center px-6 py-4 hover:bg-[#1a1a1a]/50 transition-colors duration-200 group">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-6">
+                      <span className="text-[#facc15] font-black text-sm" data-testid="order-id">
+                        #{order.display_id}
+                      </span>
+                      <span className="text-[#888888] text-xs" data-testid="order-created-date">
+                        {new Date(order.created_at).toLocaleDateString("es-ES", {
+                          year: "numeric", month: "long", day: "numeric"
+                        })}
+                      </span>
+                      <span className="text-white font-bold text-sm" data-testid="order-amount">
+                        {convertToLocale({ amount: order.total, currency_code: order.currency_code })}
+                      </span>
+                    </div>
+                    <ChevronDown className="-rotate-90 text-[#888888] group-hover:text-[#facc15] transition-colors" />
+                  </div>
+                </LocalizedClientLink>
+              </li>
+            ))
+          ) : (
+            <li className="px-6 py-12 flex flex-col items-center gap-3 text-center">
+              <ShoppingCart size="48" color="#888888" />
+              <p className="text-[#888888] text-sm" data-testid="no-orders-message">
+                Aún no tienes pedidos. ¡Explora nuestra tienda!
+              </p>
+              <LocalizedClientLink
+                href="/store"
+                className="px-4 py-2 bg-[#facc15] text-[#0a0a0a] text-xs font-bold rounded-lg hover:bg-[#e6b800] transition-colors inline-flex items-center gap-1"
+              >
+                <Key size="12" color="#0a0a0a" /> Ver Productos
+              </LocalizedClientLink>
+            </li>
+          )}
+        </ul>
+      </div>
+
+    </div>
+  )
+}
+
+export default Overview

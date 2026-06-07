@@ -1,0 +1,29 @@
+
+> medusa-next@1.0.3 build
+> npm run check:env && next build
+
+
+> medusa-next@1.0.3 check:env
+> node check-env-variables.js
+
+   ▲ Next.js 15.5.18
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · serverActions
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 41s
+   Linting and checking validity of types ...
+Failed to compile.
+
+./src/lib/data/cart.ts:42:22
+Type error: 'HttpTypes' has no exported member named 'StoreCartResponse'. Did you mean 'OrderResponse'?
+
+[0m [90m 40 |[39m
+ [90m 41 |[39m   [36mreturn[39m [36mawait[39m sdk[33m.[39mclient
+[31m[1m>[22m[39m[90m 42 |[39m     [33m.[39mfetch[33m<[39m[33mHttpTypes[39m[33m.[39m[33mStoreCartResponse[39m[33m>[39m([32m`/store/carts/${id}`[39m[33m,[39m {
+ [90m    |[39m                      [31m[1m^[22m[39m
+ [90m 43 |[39m       method[33m:[39m [32m"GET"[39m[33m,[39m
+ [90m 44 |[39m       query[33m:[39m {
+ [90m 45 |[39m         expand[33m,[39m[0m
+Next.js build worker exited with code: 1 and signal: null
