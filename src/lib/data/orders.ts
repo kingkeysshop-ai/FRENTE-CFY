@@ -35,7 +35,7 @@ export const listOrders = async (
   filters?: Record<string, any>
 ) => {
   const authHeaders = await getAuthHeaders()
-  if (!authHeaders) {
+  if (!authHeaders?.authorization) {
     return []
   }
 
