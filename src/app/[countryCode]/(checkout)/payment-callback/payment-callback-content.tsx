@@ -1,11 +1,12 @@
 "use client"
 
-import { useSearchParams, useRouter } from "next/navigation"
+import { useSearchParams, useRouter, useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 
 export default function PaymentCallbackContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
+  const { countryCode } = useParams()
   const [status, setStatus] = useState<string>("processing")
 
   useEffect(() => {
@@ -16,25 +17,25 @@ export default function PaymentCallbackContent() {
       setStatus("success")
       if (orderId) {
         setTimeout(() => {
-          router.push(`/order/${orderId}/confirmed`)
+          router.push(`/${countryCode}/order/${orderId}/confirmed`)
         }, 2000)
       } else {
         setTimeout(() => {
-          router.push("/")
+          router.push(`/${countryCode}`)
         }, 2000)
       }
     } else if (paymentStatus === "cancelled" || paymentStatus === "failed") {
       setStatus("failed")
       setTimeout(() => {
-        router.push("/checkout?step=review")
+        router.push(`/${countryCode}/checkout?step=review`)
       }, 3000)
     } else {
       setStatus("processing")
       setTimeout(() => {
-        router.push("/")
+        router.push(`/${countryCode}`)
       }, 5000)
     }
-  }, [searchParams, router])
+  }, [searchParams, router, countryCode])
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">

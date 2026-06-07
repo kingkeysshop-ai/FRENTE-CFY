@@ -150,6 +150,18 @@ export async function middleware(request: NextRequest) {
 
     // ✅ CRÍTICO: Si el primer segmento YA es el country code, NO redirigir
     if (segments[0]?.toLowerCase() === countryCode) {
+      // Checkout protection: if no JWT but cart_id exists → redirect to login preserving cart
+      const pathAfterCountry = segments.slice(1).join("/")
+      if (pathAfterCountry.startsWith("checkout")) {
+        const jwtCookie = request.cookies.get("_medusa_jwt")
+        const cartIdCookie = request.cookies.get("_medusa_cart_id")
+        if (!jwtCookie && cartIdCookie) {
+          const loginUrl = new URL(`/${countryCode}/account`, request.url)
+          loginUrl.searchParams.set("redirectTo", `/${countryCode}/checkout`)
+          return NextResponse.redirect(loginUrl)
+        }
+      }
+
       if (!cacheIdCookie) {
         const response = NextResponse.next()
         response.cookies.set("_medusa_cache_id", cacheId, {

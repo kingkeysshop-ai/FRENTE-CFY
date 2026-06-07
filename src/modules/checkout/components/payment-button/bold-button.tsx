@@ -18,36 +18,23 @@ const BoldPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Props)
 
   const handleSubmit = async () => {
     setIsLoading(true)
+    setError(null)
     try {
-      const freshCart = await retrieveCart(cart.id)
+      await initiatePaymentSession(cart, { provider_id: "bold" })
 
-      const session = getActivePaymentSession(freshCart)
-      const providerId = session?.provider_id || "bold"
+      const updatedCart = await retrieveCart(cart.id)
+      const updatedSession = getActivePaymentSession(updatedCart)
+      const redirectUrl = updatedSession?.data?.redirect_url
 
-      const redirectUrl = session?.data?.redirect_url
-
-      const isCorrupted = !redirectUrl
-        || (typeof session?.data === "object" && !session?.data?.redirect_url)
-
-      if (isCorrupted) {
-        await initiatePaymentSession(freshCart, { provider_id: providerId })
-
-        const updatedCart = await retrieveCart(cart.id)
-        const updatedSession = getActivePaymentSession(updatedCart)
-
-        const newUrl = updatedSession?.data?.redirect_url
-
-        if (newUrl) {
-          window.location.href = newUrl
-        } else {
-          setError("No se pudo generar el link de pago")
-        }
+      if (!redirectUrl) {
+        setError("No se pudo generar el link de pago")
         setIsLoading(false)
         return
       }
 
       window.location.href = redirectUrl
-    } catch (e) {
+    } catch (e: any) {
+      console.error("Bold payment error:", e?.message || e)
       setError("Error al redirigir a Bold")
       setIsLoading(false)
     }

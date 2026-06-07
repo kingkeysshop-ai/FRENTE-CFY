@@ -20,28 +20,17 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
     setError(null)
     setIsLoading(true)
     try {
-      const freshCart = await retrieveCart(cart.id)
-      const session = getActivePaymentSession(freshCart)
-      const providerId = session?.provider_id || "aurpay"
+      await initiatePaymentSession(cart, { provider_id: "aurpay" })
 
-      const redirectUrl = session?.data?.redirect_url
-        || session?.data?.url
-        || session?.data?.pay_url
+      const updatedCart = await retrieveCart(cart.id)
+      const updatedSession = getActivePaymentSession(updatedCart)
+      const redirectUrl = updatedSession?.data?.redirect_url
+        || updatedSession?.data?.url
+        || updatedSession?.data?.pay_url
 
       if (!redirectUrl) {
-        await initiatePaymentSession(freshCart, { provider_id: providerId })
-        const updatedCart = await retrieveCart(cart.id)
-        const updatedSession = getActivePaymentSession(updatedCart)
-        const newUrl = updatedSession?.data?.redirect_url
-          || updatedSession?.data?.url
-          || updatedSession?.data?.pay_url
-
-        if (newUrl) {
-          window.location.href = newUrl
-        } else {
-          console.error("[Aurpay] No redirect URL in session data:", updatedSession?.data)
-          setError("No se pudo generar el link de pago. Intenta de nuevo.")
-        }
+        console.error("[Aurpay] No redirect URL in session data:", updatedSession?.data)
+        setError("No se pudo generar el link de pago. Intenta de nuevo.")
         setIsLoading(false)
         return
       }
