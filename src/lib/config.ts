@@ -149,8 +149,15 @@ const store = {
       const merged = await mergeHeaders(headers)
       try {
         await sdk.carts.createPaymentSessions(cart.id, merged)
-      } catch {
-        // Payment sessions already exist — continue
+      } catch (e: any) {
+        const status = e?.response?.status || e?.status
+        const data = e?.response?.data || e?.data
+        if (status === 409 || data?.type === "duplicate_error") {
+          // Payment sessions already exist — continue
+        } else {
+          console.error("[createPaymentSessions] Error:", JSON.stringify({ status, data, message: e?.message }))
+          throw e
+        }
       }
       return sdk.carts.setPaymentSession(cart.id, { provider_id: data.provider_id } as any, merged)
     },
