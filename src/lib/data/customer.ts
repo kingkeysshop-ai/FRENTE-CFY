@@ -43,8 +43,13 @@ export const retrieveCustomer =
 
 // ─── Actualizar datos del cliente ─────────────────────────────────────────────
 export const updateCustomer = async (body: any) => {
+  const authHeaders = await getAuthHeaders()
+  if (!authHeaders?.authorization) {
+    throw new Error("Debes iniciar sesión para actualizar tus datos.")
+  }
+
   const headers = {
-    ...(await getAuthHeaders()),
+    ...authHeaders,
   }
 
   let updateRes: any
@@ -245,7 +250,7 @@ export async function generatePasswordToken(
     return { error: null, submitted: true }
   } catch (error: any) {
     console.error("Error al generar token de recuperación:", error.message)
-    return { error: null, submitted: true }
+    return { error: "No se pudo enviar el correo de recuperación. Verifica el email e intenta de nuevo.", submitted: true }
   }
 }
 
@@ -260,6 +265,7 @@ export async function resetPassword(
   const passwordConfirm = formData.get("password_confirm") as string
 
   if (!email || !token || !password) return { error: "Todos los campos son obligatorios", submitted: true }
+  if (password.length < 8) return { error: "La contraseña debe tener al menos 8 caracteres.", submitted: true }
   if (password !== passwordConfirm) return { error: "Las contraseñas no coinciden", submitted: true }
 
   try {
@@ -298,12 +304,8 @@ export const addCustomerAddress = async (
     ...(await getAuthHeaders()),
   }
 
-  return sdk.client
-    .fetch(`/store/customers/me/addresses`, {
-      method: "POST",
-      headers,
-      body: address,
-    })
+  return (sdk as any).store.customer
+    .createAddress(address, {}, headers)
     .then(async () => {
       const customerCacheTag = await getCacheTag("customers")
       revalidateTag(customerCacheTag)
@@ -371,12 +373,8 @@ export const updateCustomerAddress = async (
     ...(await getAuthHeaders()),
   }
 
-  return sdk.client
-    .fetch(`/store/customers/me/addresses/${addressId}`, {
-      method: "POST",
-      headers,
-      body: address,
-    })
+  return (sdk as any).store.customer
+    .updateAddress(addressId, address, {}, headers)
     .then(async () => {
       const customerCacheTag = await getCacheTag("customers")
       revalidateTag(customerCacheTag)

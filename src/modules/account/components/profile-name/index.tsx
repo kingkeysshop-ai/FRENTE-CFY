@@ -17,14 +17,21 @@ const ProfileName: React.FC<MyInformationProps> = ({ customer }) => {
     _currentState: Record<string, unknown>,
     formData: FormData
   ) => {
+    const first_name = (formData.get("first_name") as string || "").trim()
+    const last_name = (formData.get("last_name") as string || "").trim()
+
+    if (!first_name) {
+      return { success: false, error: "El nombre es requerido." }
+    }
+    if (first_name.length > 50 || last_name.length > 50) {
+      return { success: false, error: "El nombre no puede exceder 50 caracteres." }
+    }
+
     try {
-      await updateCustomer({
-        first_name: formData.get("first_name") as string,
-        last_name: formData.get("last_name") as string,
-      })
+      await updateCustomer({ first_name, last_name })
       return { success: true, error: null }
     } catch (error: any) {
-      return { success: false, error: error.toString() }
+      return { success: false, error: error.message || "Error al actualizar el nombre." }
     }
   }
 

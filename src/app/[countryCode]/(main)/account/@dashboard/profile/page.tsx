@@ -3,7 +3,7 @@ import { notFound } from "next/navigation"
 import { listRegions } from "@lib/data/regions"
 import { retrieveCustomer } from "@lib/data/customer"
 
-import ProfileName from "@modules/account//components/profile-name"
+import ProfileName from "@modules/account/components/profile-name"
 import User from "@modules/common/icons/user"
 import ProfileEmail from "@modules/account/components/profile-email"
 import ProfilePhone from "@modules/account/components/profile-phone"

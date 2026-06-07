@@ -17,11 +17,17 @@ const ProfilePhone: React.FC<MyInformationProps> = ({ customer }) => {
     _currentState: Record<string, unknown>,
     formData: FormData
   ) => {
+    const phone = (formData.get("phone") as string || "").trim()
+
+    if (!phone) {
+      return { success: false, error: "El teléfono es requerido." }
+    }
+
     try {
-      await updateCustomer({ phone: formData.get("phone") as string })
+      await updateCustomer({ phone })
       return { success: true, error: null }
     } catch (error: any) {
-      return { success: false, error: error.toString() }
+      return { success: false, error: error.message || "Error al actualizar el teléfono." }
     }
   }
 

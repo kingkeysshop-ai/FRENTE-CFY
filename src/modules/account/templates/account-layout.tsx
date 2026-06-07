@@ -160,10 +160,10 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ customer, children }) => 
             <p className="text-[#888888] text-sm">Nuestro equipo está disponible 24/7 para ayudarte.</p>
           </div>
           <a
-            href="/store"
-            className="px-6 py-3 bg-[#facc15] text-[#0a0a0a] font-bold rounded-lg text-sm hover:bg-[#e6b800] transition-all duration-200 whitespace-nowrap"
+            href="/support"
+            className="px-6 py-3 bg-[#facc15] text-[#0a0a0a] font-bold rounded-lg text-sm hover:bg-[#e6b800] transition-all duration-200 whitespace-nowrap inline-flex items-center gap-2"
           >
-            <Headset size="18" color="#facc15" /> Contactar Soporte
+            <Headset size="18" color="#0a0a0a" /> Contactar Soporte
           </a>
         </div>
       </div>

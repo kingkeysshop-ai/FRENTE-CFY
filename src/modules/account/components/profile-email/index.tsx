@@ -4,19 +4,36 @@ import React, { useEffect, useActionState } from "react"
 import Input from "@modules/common/components/input"
 import AccountInfo from "../account-info"
 import { HttpTypes } from "@medusajs/types"
+import { updateCustomer } from "@lib/data/customer"
 
 type MyInformationProps = {
   customer: HttpTypes.StoreCustomer
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 const ProfileEmail: React.FC<MyInformationProps> = ({ customer }) => {
   const [successState, setSuccessState] = React.useState(false)
 
-  const updateCustomerEmail = (
-    _currentState: { success: boolean; error: null },
+  const updateCustomerEmail = async (
+    _currentState: Record<string, unknown>,
     formData: FormData
-  ): { success: boolean; error: null } => {
-    return { success: false, error: null }
+  ) => {
+    const email = (formData.get("email") as string || "").trim()
+
+    if (!email) {
+      return { success: false, error: "El email es requerido." }
+    }
+    if (!EMAIL_RE.test(email)) {
+      return { success: false, error: "Ingresa un email válido." }
+    }
+
+    try {
+      await updateCustomer({ email })
+      return { success: true, error: null }
+    } catch (error: any) {
+      return { success: false, error: error.message || "Error al actualizar el email." }
+    }
   }
 
   const [state, formAction] = useActionState(updateCustomerEmail, {
@@ -36,7 +53,8 @@ const ProfileEmail: React.FC<MyInformationProps> = ({ customer }) => {
         label="Correo Electrónico"
         currentInfo={customer.email}
         isSuccess={successState}
-        isError={false}
+        isError={!!state.error}
+        errorMessage={state.error as string}
         clearState={clearState}
         data-testid="account-email-editor"
       >
@@ -50,9 +68,6 @@ const ProfileEmail: React.FC<MyInformationProps> = ({ customer }) => {
             defaultValue={customer.email}
             data-testid="email-input"
           />
-          <p className="text-xs text-[#888888] italic">
-            ⚠️ La actualización de email no está disponible actualmente.
-          </p>
         </div>
       </AccountInfo>
     </form>
