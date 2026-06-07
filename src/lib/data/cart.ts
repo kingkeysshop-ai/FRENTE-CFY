@@ -51,6 +51,20 @@ export async function retrieveCart(cartId?: string, expand?: string) {
       })
     return cart
   } catch (e: any) {
+    // Cart requires auth (customer-owned) but JWT expired → retry without auth
+    if (e?.response?.status === 401) {
+      try {
+        const { cart } = await sdk.client
+          .fetch<{ cart: HttpTypes.StoreCart }>(`/store/carts/${id}`, {
+            method: "GET",
+            query: { expand },
+            next,
+          })
+        return cart
+      } catch {
+        // Still inaccessible → cart belongs to a customer, keep cookie for re-login
+      }
+    }
     if (e?.response?.status === 404) {
       await removeCartId()
     }
