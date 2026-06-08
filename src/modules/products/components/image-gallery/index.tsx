@@ -33,6 +33,7 @@ const ImageGallery = ({ images, title }: ImageGalleryProps) => {
             fill
             sizes="(max-width: 768px) 100vw, 45vw"
             priority
+            unoptimized
           />
         )}
       </div>
@@ -56,6 +57,7 @@ const ImageGallery = ({ images, title }: ImageGalleryProps) => {
                   className="object-cover"
                   fill
                   sizes="64px"
+                  unoptimized
                 />
               </div>
             </button>

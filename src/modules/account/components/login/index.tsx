@@ -8,9 +8,10 @@ import { useActionState } from "react"
 
 type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void
+  redirectTo: string
 }
 
-const Login = ({ setCurrentView }: Props) => {
+const Login = ({ setCurrentView, redirectTo }: Props) => {
   const [message, formAction] = useActionState(login, null)
 
   return (
@@ -22,6 +23,7 @@ const Login = ({ setCurrentView }: Props) => {
         Inicia sesión para acceder a tus licencias y pedidos.
       </p>
       <form className="w-full" action={formAction}>
+        <input type="hidden" name="redirectTo" value={redirectTo} />
         <div className="flex flex-col w-full gap-y-3">
           <Input
             label="Correo electrónico"

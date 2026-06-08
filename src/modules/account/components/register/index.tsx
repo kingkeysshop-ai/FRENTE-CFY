@@ -11,9 +11,10 @@ import Star from "@modules/common/icons/star"
 
 type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void
+  redirectTo: string
 }
 
-const Register = ({ setCurrentView }: Props) => {
+const Register = ({ setCurrentView, redirectTo }: Props) => {
   const [message, formAction] = useActionState(signup, null)
 
   return (
@@ -25,6 +26,7 @@ const Register = ({ setCurrentView }: Props) => {
         Crea tu cuenta y accede a licencias digitales originales con activación inmediata.
       </p>
       <form className="w-full flex flex-col" action={formAction}>
+        <input type="hidden" name="redirectTo" value={redirectTo} />
         <div className="flex flex-col w-full gap-y-3">
           <Input
             label="Nombre"

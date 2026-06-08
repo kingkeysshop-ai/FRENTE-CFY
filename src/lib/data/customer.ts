@@ -81,6 +81,7 @@ export async function signup(_currentState: unknown, formData: FormData) {
   const first_name = (formData.get("first_name") as string || "").trim()
   const last_name = (formData.get("last_name") as string || "").trim()
   const phone = (formData.get("phone") as string || "").trim()
+  const redirectTo = (formData.get("redirectTo") as string) || "/"
 
   if (!email || !password || !first_name) {
     return "Completa todos los campos requeridos."
@@ -111,9 +112,13 @@ export async function signup(_currentState: unknown, formData: FormData) {
     const customerCacheTag = await getCacheTag("customers")
     revalidateTag(customerCacheTag)
 
-    return null
+    redirect(redirectTo)
   } catch (error: any) {
-    console.error("Error en registro de cliente:", error.response?.data || error.message)
+    const errData = error.response?.data
+    if (errData?.type === "duplicate_error" && errData?.message?.includes("email")) {
+      return "Ya existe una cuenta con este email. Inicia sesión en su lugar."
+    }
+    console.error("Error en registro de cliente:", errData || error.message)
     return "Error al crear la cuenta. Verifica los datos e intenta de nuevo."
   }
 }
@@ -123,6 +128,7 @@ export async function login(_currentState: unknown, formData: FormData) {
   const h = await headers()
   const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"
   const email = (formData.get("email") as string || "").trim()
+  const redirectTo = (formData.get("redirectTo") as string) || "/"
   if (!checkRateLimit(`login:${email}:${ip}`, 5, 60000)) {
     return "Demasiados intentos. Intenta de nuevo en 1 minuto."
   }
@@ -153,6 +159,8 @@ export async function login(_currentState: unknown, formData: FormData) {
   } catch (error: any) {
     console.error("Error al transferir carrito:", error.message)
   }
+
+  redirect(redirectTo)
 }
 
 // ─── Cerrar sesión ────────────────────────────────────────────────────────────

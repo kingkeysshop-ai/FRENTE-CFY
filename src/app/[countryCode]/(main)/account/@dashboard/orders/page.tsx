@@ -2,7 +2,6 @@ import { Metadata } from "next"
 
 import OrderFilters from "@modules/account/components/order-filters"
 import OrderOverview from "@modules/account/components/order-overview"
-import { notFound } from "next/navigation"
 import { listOrders } from "@lib/data/orders"
 import Divider from "@modules/common/components/divider"
 import TransferRequestForm from "@modules/account/components/transfer-request-form"
@@ -25,11 +24,7 @@ export default async function Orders(props: {
     filters["created_at[gte]"] = from.toISOString()
   }
 
-  const orders = await listOrders(10, 0, filters).catch(() => null)
-
-  if (!orders) {
-    notFound()
-  }
+  const orders = await listOrders(10, 0, filters)
 
   return (
     <div className="w-full" data-testid="orders-page-wrapper">

@@ -17,7 +17,7 @@ export default async function OverviewTemplate() {
     notFound()
   }
 
-  const orders = (await listOrders().catch(() => null)) || null
+  const orders = await listOrders()
 
   return <Overview customer={customer} orders={orders} />
 }

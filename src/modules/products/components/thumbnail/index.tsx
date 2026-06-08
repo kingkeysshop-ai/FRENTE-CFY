@@ -42,6 +42,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
           priority={priority}
           loading={priority ? "eager" : "lazy"}
           fill
+          unoptimized
         />
       ) : (
         <div className="w-full h-full absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[#1a1a1a]">

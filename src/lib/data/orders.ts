@@ -10,28 +10,32 @@ export const retrieveOrder = async (id: string) => {
     ...(await getCacheOptions("orders")),
   }
 
-  return sdk.client
-    .fetch<{ order: HttpTypes.StoreOrder }>(
-      `/store/orders/${id}`,
-      {
-        method: "GET",
-        query: {
-          expand: "items,items.variant,items.variant.product,items.thumbnail,shipping_address,billing_address,shipping_methods,payment_collections,fulfillments,fulfillments.tracking_links",
-        },
-        headers: {
-          ...(await getAuthHeaders()),
-        },
-        next,
-        cache: "force-cache",
-      }
-    )
-    .then(({ order }) => order)
+  try {
+    const { order } = await sdk.client
+      .fetch<{ order: HttpTypes.StoreOrder }>(
+        `/store/orders/${id}`,
+        {
+          method: "GET",
+          query: {
+            expand: "items,items.variant,items.variant.product,items.thumbnail,shipping_address,billing_address,shipping_methods,payment_collections,fulfillments,fulfillments.tracking_links",
+          },
+          headers: {
+            ...(await getAuthHeaders()),
+          },
+          next,
+          cache: "force-cache",
+        }
+      )
+    return order
+  } catch (e: any) {
+    return null
+  }
 }
 
 // ─── Listar órdenes del cliente (Medusa v1) ──────────────────────────────────
 export const listOrders = async (
-  _limit: number = 10,
-  _offset: number = 0,
+  limit: number = 10,
+  offset: number = 0,
   filters?: Record<string, any>
 ) => {
   const authHeaders = await getAuthHeaders()
@@ -43,46 +47,40 @@ export const listOrders = async (
     ...(await getCacheOptions("orders")),
   }
 
-  const orders = await sdk.client
-    .fetch<{ orders: HttpTypes.StoreOrder[] }>(
-      `/store/orders`,
-      {
-        method: "GET",
-        query: {
-          expand: "items,shipping_address,billing_address,payment_collections",
-        },
-        headers: {
-          ...authHeaders,
-        },
-        next,
-        cache: "force-cache",
-      }
-    )
-    .then(({ orders }) => orders)
-
-  if (!filters || Object.keys(filters).length === 0) {
-    return orders
+  const query: Record<string, any> = {
+    limit,
+    offset,
+    expand: "items,shipping_address,billing_address,payment_collections",
   }
 
-  return orders.filter((order) => {
-    let match = true
-    if (filters.status && order.status !== filters.status) {
-      match = false
-    }
-    if (filters["created_at[gte]"]) {
-      const from = new Date(filters["created_at[gte]"])
-      if (new Date(order.created_at) < from) {
-        match = false
-      }
-    }
-    if (filters["created_at[lte]"]) {
-      const to = new Date(filters["created_at[lte]"])
-      if (new Date(order.created_at) > to) {
-        match = false
-      }
-    }
-    return match
-  })
+  if (filters?.status) {
+    query.status = filters.status
+  }
+  if (filters?.["created_at[gte]"]) {
+    query["created_at[gte]"] = filters["created_at[gte]"]
+  }
+  if (filters?.["created_at[lte]"]) {
+    query["created_at[lte]"] = filters["created_at[lte]"]
+  }
+
+  try {
+    const { orders } = await sdk.client
+      .fetch<{ orders: HttpTypes.StoreOrder[] }>(
+        `/store/orders`,
+        {
+          method: "GET",
+          query,
+          headers: {
+            ...authHeaders,
+          },
+          next,
+          cache: "force-cache",
+        }
+      )
+    return orders || []
+  } catch (e: any) {
+    return []
+  }
 }
 
 // ─── Crear solicitud de transferencia de orden ────────────────────────────────

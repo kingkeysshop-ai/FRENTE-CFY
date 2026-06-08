@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useSearchParams } from "next/navigation"
 import Register from "@modules/account/components/register"
 import Login from "@modules/account/components/login"
 
@@ -11,6 +12,8 @@ export enum LOGIN_VIEW {
 
 const LoginTemplate = () => {
   const [currentView, setCurrentView] = useState("sign-in")
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get("redirectTo") || "/"
 
   return (
     <div className="w-full">
@@ -41,9 +44,9 @@ const LoginTemplate = () => {
       {/* Formulario */}
       <div className="p-10">
         {currentView === "sign-in" ? (
-          <Login setCurrentView={setCurrentView} />
+          <Login setCurrentView={setCurrentView} redirectTo={redirectTo} />
         ) : (
-          <Register setCurrentView={setCurrentView} />
+          <Register setCurrentView={setCurrentView} redirectTo={redirectTo} />
         )}
       </div>
     </div>

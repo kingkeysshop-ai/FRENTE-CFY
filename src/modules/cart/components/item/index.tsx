@@ -52,6 +52,7 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
                 className="object-cover"
                 fill
                 sizes="80px"
+                unoptimized
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-2xl">🔑</div>
@@ -94,6 +95,7 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
                 className="object-cover"
                 fill
                 sizes="80px"
+                unoptimized
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-2xl">🔑</div>
