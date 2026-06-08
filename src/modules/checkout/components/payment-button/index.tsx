@@ -10,6 +10,7 @@ import CryptomusPaymentButton from "./cryptomus-button"
 import AurpayPaymentButton from "./aurpay-button"
 import BoldPaymentButton from "./bold-button"
 import TestPaymentButton from "./test-button"
+import { isCartAllDigital } from "@lib/util/is-digital-cart"
 
 type PaymentButtonProps = {
   cart: HttpTypes.StoreCart
@@ -20,13 +21,14 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
   cart,
   "data-testid": dataTestId,
 }) => {
+  const paymentSession = getActivePaymentSession(cart)
+  const isDigital = isCartAllDigital(cart)
+
   const notReady =
     !cart ||
-    !cart.shipping_address ||
     !cart.email ||
-    (cart.shipping_methods?.length ?? 0) < 1
-
-  const paymentSession = getActivePaymentSession(cart)
+    (!isDigital && !cart.shipping_address) ||
+    (!isDigital && (cart.shipping_methods?.length ?? 0) < 1)
 
   if (typeof window !== "undefined") {
     console.log("[PaymentButton] paymentSession:", paymentSession)
