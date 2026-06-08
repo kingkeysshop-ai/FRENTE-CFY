@@ -42,8 +42,10 @@ const Payment = ({
   useEffect(() => {
     if (liveActiveSession?.provider_id) {
       setSelectedPaymentMethod(liveActiveSession.provider_id)
+    } else if (availablePaymentMethods?.length > 0) {
+      setSelectedPaymentMethod(availablePaymentMethods[0].id)
     }
-  }, [liveActiveSession?.provider_id])
+  }, [liveActiveSession?.provider_id, availablePaymentMethods])
 
   const setPaymentMethod = (method: string) => {
     setError(null)
@@ -142,7 +144,7 @@ const Payment = ({
             onClick={handleSubmit}
             disabled={
               isLoading ||
-              (isStripeLike(selectedPaymentMethod) && !cardComplete) ||
+              (isStripeLike(selectedPaymentMethod) && liveActiveSession && !cardComplete) ||
               (!selectedPaymentMethod && !paidByGiftcard)
             }
             data-testid="submit-payment-button"
@@ -150,8 +152,8 @@ const Payment = ({
           >
             {isLoading ? (
               <span className="inline-block w-5 h-5 border-2 border-gray-900 border-t-transparent rounded-full animate-spin" />
-            ) : !liveActiveSession && isStripeLike(selectedPaymentMethod) ? (
-              "Ingresar datos de tarjeta"
+            ) : liveActiveSession && isStripeLike(selectedPaymentMethod) && !cardComplete ? (
+              "Ingresa los datos de tu tarjeta"
             ) : (
               "Continuar a la revisión"
             )}
