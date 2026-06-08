@@ -7,10 +7,12 @@ import { useSearchParams } from "next/navigation"
 import CheckCircle from "@modules/common/icons/check-circle"
 import Lightning from "@modules/common/icons/lightning"
 import ShieldCheck from "@modules/common/icons/shield-check"
+import { isCartAllDigital } from "@lib/util/is-digital-cart"
 
 const Review = ({ cart }: { cart: any }) => {
   const searchParams = useSearchParams()
   const isOpen = searchParams.get("step") === "review"
+  const isDigital = isCartAllDigital(cart)
 
   const paidByGiftcard =
     cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0
@@ -23,7 +25,7 @@ const Review = ({ cart }: { cart: any }) => {
 
   const previousStepsCompleted =
     hasShippingAddress &&
-    hasShippingMethods &&
+    (isDigital || hasShippingMethods) &&
     (hasPaymentSession || hasPaymentSessions || hasPaymentCollection || paidByGiftcard)
 
   return (

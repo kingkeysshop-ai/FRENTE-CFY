@@ -36,7 +36,7 @@ export default async function CheckoutForm({
   const shippingMethods = await listCartShippingMethods(cart.id)
   const paymentMethods = await listCartPaymentMethods(cart.region.id)
 
-  if (!shippingMethods || !paymentMethods) {
+  if (!paymentMethods) {
     return (
       <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl p-6 text-center">
         <p className="text-[#888888]">Error al cargar opciones de envío o pago. Intenta recargar.</p>
