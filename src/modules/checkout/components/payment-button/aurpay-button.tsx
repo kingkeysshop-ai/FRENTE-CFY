@@ -16,11 +16,14 @@ const AurpayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const session = getActivePaymentSession(cart)
+  const providerId = session?.provider_id || "aurpay"
+
   const handleSubmit = async () => {
     setError(null)
     setIsLoading(true)
     try {
-      await initiatePaymentSession(cart, { provider_id: "aurpay" })
+      await initiatePaymentSession(cart, { provider_id: providerId })
 
       const updatedCart = await retrieveCart(cart.id)
       const updatedSession = getActivePaymentSession(updatedCart)

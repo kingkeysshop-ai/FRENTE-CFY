@@ -23,6 +23,12 @@ const Review = ({ cart }: { cart: any }) => {
   const hasPaymentSessions = (cart?.payment_sessions?.length ?? 0) > 0
   const hasPaymentCollection = !!cart?.payment_collection
 
+  if (typeof window !== "undefined") {
+    console.log("[Review] cart.payment_session:", cart?.payment_session)
+    console.log("[Review] cart.payment_sessions:", cart?.payment_sessions)
+    console.log("[Review] cart.payment_collection:", cart?.payment_collection)
+  }
+
   const previousStepsCompleted =
     hasShippingAddress &&
     (isDigital || hasShippingMethods) &&

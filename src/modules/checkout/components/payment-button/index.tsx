@@ -28,6 +28,14 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
 
   const paymentSession = getActivePaymentSession(cart)
 
+  if (typeof window !== "undefined") {
+    console.log("[PaymentButton] paymentSession:", paymentSession)
+    console.log("[PaymentButton] notReady:", notReady)
+    console.log("[PaymentButton] cart.shipping_address:", cart?.shipping_address)
+    console.log("[PaymentButton] cart.email:", cart?.email)
+    console.log("[PaymentButton] cart.shipping_methods:", cart?.shipping_methods)
+  }
+
   switch (true) {
     case isStripeLike(paymentSession?.provider_id):
       return (

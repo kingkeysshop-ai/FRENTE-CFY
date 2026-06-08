@@ -355,6 +355,25 @@ export async function initiatePaymentSession(
   }
 }
 
+export async function ensurePaymentSessions(cartId: string) {
+  const authHeaders = {
+    ...(await getAuthHeaders()),
+  }
+
+  try {
+    await (sdk as any).carts.createPaymentSessions(cartId, authHeaders)
+    const cartCacheTag = await getCacheTag("carts")
+    revalidateTag(cartCacheTag)
+  } catch (e: any) {
+    const status = e?.response?.status || e?.status
+    const type = e?.response?.data?.type || e?.data?.type
+    if (status === 409 || type === "duplicate_error") {
+      return
+    }
+    console.error("[ensurePaymentSessions] Error:", JSON.stringify({ status, message: e?.message }))
+  }
+}
+
 export async function applyPromotions(codes: string[]) {
   const h = await headers()
   const ip = h.get("x-forwarded-for") || h.get("x-real-ip") || "unknown"

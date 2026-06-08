@@ -2,7 +2,7 @@
 
 import { RadioGroup } from "@headlessui/react"
 import { getActivePaymentSession, isStripeLike, paymentInfoMap } from "@lib/constants"
-import { initiatePaymentSession, retrieveCart } from "@lib/data/cart"
+import { initiatePaymentSession, retrieveCart, ensurePaymentSessions } from "@lib/data/cart"
 import { CheckCircleSolid, CreditCard } from "@medusajs/icons"
 import { clx } from "@medusajs/ui"
 import ErrorMessage from "@modules/checkout/components/error-message"
@@ -29,6 +29,17 @@ const Payment = ({
   const liveCart = freshCart || cart
   const liveActiveSession = getActivePaymentSession(liveCart)
 
+  const derivedPaymentMethods = (() => {
+    const sessions = liveCart?.payment_sessions || liveCart?.payment_collection?.payment_sessions
+    if (!sessions || sessions.length === 0) return null
+    return sessions.map((ps: any) => ({ id: ps.provider_id }))
+  })()
+
+  const effectivePaymentMethods =
+    availablePaymentMethods?.length > 0
+      ? availablePaymentMethods
+      : derivedPaymentMethods || []
+
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -40,12 +51,31 @@ const Payment = ({
   }, [cart?.id])
 
   useEffect(() => {
+    if (!isOpen) return
+    if (effectivePaymentMethods.length > 0) return
+    if (!liveCart?.id) return
+
+    let cancelled = false
+    const init = async () => {
+      try {
+        await ensurePaymentSessions(liveCart.id)
+        if (cancelled) return
+        const updatedCart = await retrieveCart(liveCart.id)
+        if (cancelled) return
+        if (updatedCart) setFreshCart(updatedCart)
+      } catch {}
+    }
+    init()
+    return () => { cancelled = true }
+  }, [isOpen, effectivePaymentMethods.length, liveCart?.id])
+
+  useEffect(() => {
     if (liveActiveSession?.provider_id) {
       setSelectedPaymentMethod(liveActiveSession.provider_id)
-    } else if (availablePaymentMethods?.length > 0) {
-      setSelectedPaymentMethod(availablePaymentMethods[0].id)
+    } else if (effectivePaymentMethods.length > 0) {
+      setSelectedPaymentMethod(effectivePaymentMethods[0].id)
     }
-  }, [liveActiveSession?.provider_id, availablePaymentMethods])
+  }, [liveActiveSession?.provider_id, effectivePaymentMethods])
 
   const setPaymentMethod = (method: string) => {
     setError(null)
@@ -70,11 +100,11 @@ const Payment = ({
 
     try {
       await initiatePaymentSession(liveCart, { provider_id: selectedPaymentMethod })
+      const updatedCart = await retrieveCart(liveCart.id)
+      if (updatedCart) setFreshCart(updatedCart)
       if (!isStripeLike(selectedPaymentMethod) || (paidByGiftcard)) {
         return router.push(pathname + "?" + createQueryString("step", "review"), { scroll: false })
       }
-      const updatedCart = await retrieveCart(liveCart.id)
-      if (updatedCart) setFreshCart(updatedCart)
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -106,9 +136,9 @@ const Payment = ({
 
       <div>
         <div className={isOpen ? "block" : "hidden"}>
-          {!paidByGiftcard && (availablePaymentMethods?.length ?? 0) > 0 && (
+          {!paidByGiftcard && effectivePaymentMethods.length > 0 && (
             <RadioGroup value={selectedPaymentMethod} onChange={(value: string) => setPaymentMethod(value)}>
-              {availablePaymentMethods.map((paymentMethod) => (
+              {effectivePaymentMethods.map((paymentMethod) => (
                 <div key={paymentMethod.id}>
                   {isStripeLike(paymentMethod.id) ? (
                     <StripeCardContainer

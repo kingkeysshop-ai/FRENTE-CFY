@@ -16,11 +16,14 @@ const BoldPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Props)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const session = getActivePaymentSession(cart)
+  const providerId = session?.provider_id || "bold"
+
   const handleSubmit = async () => {
     setIsLoading(true)
     setError(null)
     try {
-      await initiatePaymentSession(cart, { provider_id: "bold" })
+      await initiatePaymentSession(cart, { provider_id: providerId })
 
       const updatedCart = await retrieveCart(cart.id)
       const updatedSession = getActivePaymentSession(updatedCart)
