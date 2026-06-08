@@ -11,6 +11,7 @@ import Divider from "@modules/common/components/divider"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 import ShieldCheck from "@modules/common/icons/shield-check"
+import { isCartAllDigital } from "@lib/util/is-digital-cart"
 
 const Payment = ({
   cart,
@@ -83,8 +84,9 @@ const Payment = ({
     setSelectedPaymentMethod(method)
   }
 
+  const isDigital = isCartAllDigital(liveCart)
   const paidByGiftcard = liveCart?.gift_cards && liveCart?.gift_cards?.length > 0 && Number(liveCart?.total) === 0
-  const paymentReady = (liveActiveSession && (liveCart?.shipping_methods?.length ?? 0) > 0) || paidByGiftcard
+  const paymentReady = (liveActiveSession && (isDigital || (liveCart?.shipping_methods?.length ?? 0) > 0)) || paidByGiftcard
 
   const createQueryString = useCallback((name: string, value: string) => {
     const params = new URLSearchParams(searchParams)
