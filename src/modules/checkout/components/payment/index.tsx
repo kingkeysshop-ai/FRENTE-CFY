@@ -138,7 +138,7 @@ const Payment = ({
         <div className={isOpen ? "block" : "hidden"}>
           {!paidByGiftcard && effectivePaymentMethods.length > 0 && (
             <RadioGroup value={selectedPaymentMethod} onChange={(value: string) => setPaymentMethod(value)}>
-              {effectivePaymentMethods.map((paymentMethod) => (
+              {effectivePaymentMethods.map((paymentMethod: any) => (
                 <div key={paymentMethod.id}>
                   {isStripeLike(paymentMethod.id) ? (
                     <StripeCardContainer
