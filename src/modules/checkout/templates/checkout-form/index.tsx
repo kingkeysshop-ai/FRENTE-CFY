@@ -58,7 +58,7 @@ export default async function CheckoutForm({
               <span className="text-white font-bold text-sm uppercase tracking-wider">📧 Tu Información</span>
             </div>
             <div className="p-6">
-              <DigitalInfo cart={cart} />
+              <DigitalInfo cart={cart} customer={customer} />
             </div>
           </div>
         </>

@@ -10,8 +10,10 @@ import { useRouter } from "next/navigation"
 
 const DigitalInfo = ({
   cart,
+  customer,
 }: {
   cart: HttpTypes.StoreCart
+  customer: HttpTypes.StoreCustomer | null
 }) => {
   const router = useRouter()
   const [message, formAction] = useActionState(setDigitalInfo, null)
@@ -32,14 +34,14 @@ const DigitalInfo = ({
           label="Nombre"
           name="first_name"
           autoComplete="given-name"
-          defaultValue={cart.shipping_address?.first_name || ""}
+          defaultValue={cart.shipping_address?.first_name || customer?.first_name || ""}
           required
         />
         <Input
           label="Apellido"
           name="last_name"
           autoComplete="family-name"
-          defaultValue={cart.shipping_address?.last_name || ""}
+          defaultValue={cart.shipping_address?.last_name || customer?.last_name || ""}
           required
         />
       </div>
@@ -49,7 +51,7 @@ const DigitalInfo = ({
           name="email"
           type="email"
           autoComplete="email"
-          defaultValue={cart.email || ""}
+          defaultValue={cart.email || customer?.email || ""}
           required
         />
       </div>
