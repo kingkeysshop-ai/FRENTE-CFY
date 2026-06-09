@@ -33,9 +33,11 @@ export const retrieveOrder = async (id: string) => {
 }
 
 // ─── Listar órdenes del cliente (Medusa v1) ──────────────────────────────────
+// Medusa v1 /store/orders only supports lookup by display_id+email, not listing.
+// Use the customer's orders from the authenticated user endpoint.
 export const listOrders = async (
-  limit: number = 10,
-  offset: number = 0,
+  _limit: number = 10,
+  _offset: number = 0,
   filters?: Record<string, any>
 ) => {
   const authHeaders = await getAuthHeaders()
@@ -47,29 +49,15 @@ export const listOrders = async (
     ...(await getCacheOptions("orders")),
   }
 
-  const query: Record<string, any> = {
-    limit,
-    offset,
-    expand: "items,shipping_address,billing_address,payment_collections",
-  }
-
-  if (filters?.status) {
-    query.status = filters.status
-  }
-  if (filters?.["created_at[gte]"]) {
-    query["created_at[gte]"] = filters["created_at[gte]"]
-  }
-  if (filters?.["created_at[lte]"]) {
-    query["created_at[lte]"] = filters["created_at[lte]"]
-  }
-
   try {
-    const { orders } = await sdk.client
-      .fetch<{ orders: HttpTypes.StoreOrder[] }>(
-        `/store/orders`,
+    const { customer } = await sdk.client
+      .fetch<{ customer: { orders?: HttpTypes.StoreOrder[] } }>(
+        `/store/customers/me`,
         {
           method: "GET",
-          query,
+          query: {
+            expand: "orders,orders.items,orders.items.variant,orders.items.variant.product,orders.shipping_address,orders.billing_address,orders.payment_collections",
+          },
           headers: {
             ...authHeaders,
           },
@@ -77,7 +65,21 @@ export const listOrders = async (
           cache: "force-cache",
         }
       )
-    return orders || []
+    let orders = customer?.orders || []
+
+    if (filters?.status) {
+      orders = orders.filter((o: any) => o.status === filters.status)
+    }
+    if (filters?.["created_at[gte]"]) {
+      const from = new Date(filters["created_at[gte]"])
+      orders = orders.filter((o: any) => new Date(o.created_at) >= from)
+    }
+    if (filters?.["created_at[lte]"]) {
+      const to = new Date(filters["created_at[lte]"])
+      orders = orders.filter((o: any) => new Date(o.created_at) <= to)
+    }
+
+    return orders
   } catch (e: any) {
     return []
   }

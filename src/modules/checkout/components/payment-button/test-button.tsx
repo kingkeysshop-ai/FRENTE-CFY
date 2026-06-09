@@ -20,11 +20,15 @@ const TestPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Props)
     setError(null)
     try {
       const freshCart = await retrieveCart(cart.id)
+      if (!freshCart?.id) {
+        throw new Error("No se pudo obtener el carrito")
+      }
       await initiatePaymentSession(freshCart, { provider_id: "test-payment" })
       await testPaymentAndCapture(cart.id)
     } catch (e: any) {
       if (e?.digest === "NEXT_REDIRECT") throw e
-      setError("Error al procesar el pago de prueba")
+      setError(e?.message || "Error al procesar el pago de prueba")
+    } finally {
       setIsLoading(false)
     }
   }

@@ -106,16 +106,7 @@ const StripePaymentButton = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const onPaymentCompleted = async () => {
-    try {
-      await placeOrder()
-    } catch (err: any) {
-      if (err?.digest === "NEXT_REDIRECT") {
-        throw err
-      }
-      setErrorMessage(err.message)
-    } finally {
-      setSubmitting(false)
-    }
+    await placeOrder()
   }
 
   const stripe = useStripe()
@@ -167,6 +158,7 @@ const StripePaymentButton = ({
             return onPaymentCompleted()
           }
           setErrorMessage(error.message || null)
+          setSubmitting(false)
           return
         }
         if (
@@ -176,6 +168,11 @@ const StripePaymentButton = ({
           return onPaymentCompleted()
         }
         setErrorMessage("Estado de pago inesperado: " + paymentIntent.status)
+        setSubmitting(false)
+      })
+      .catch((err: any) => {
+        if (err?.digest === "NEXT_REDIRECT") throw err
+        setErrorMessage(err?.message || "Error al procesar el pago")
         setSubmitting(false)
       })
   }
@@ -210,8 +207,14 @@ const ManualTestPaymentButton = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const onPaymentCompleted = async () => {
+    await placeOrder()
+  }
+
+  const handlePayment = async () => {
+    if (submitting) return
+    setSubmitting(true)
     try {
-      await placeOrder()
+      await onPaymentCompleted()
     } catch (err: any) {
       if (err?.digest === "NEXT_REDIRECT") {
         throw err
@@ -220,12 +223,6 @@ const ManualTestPaymentButton = ({
     } finally {
       setSubmitting(false)
     }
-  }
-
-  const handlePayment = async () => {
-    if (submitting) return
-    setSubmitting(true)
-    await onPaymentCompleted()
   }
 
   return (

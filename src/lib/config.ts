@@ -147,6 +147,9 @@ const store = {
   payment: {
     initiatePaymentSession: async (cart: any, data: { provider_id: string }, _opts?: unknown, headers?: Record<string, string>) => {
       const merged = await mergeHeaders(headers)
+      if (!cart?.id) {
+        throw new Error("Cart ID is required to initiate payment session")
+      }
       try {
         await sdk.carts.createPaymentSessions(cart.id, merged)
       } catch (e: any) {

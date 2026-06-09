@@ -580,24 +580,29 @@ export async function placeOrder(cartId?: string) {
     cartRes = await (sdk as any).store.cart
       .complete(id, {}, authHeaders)
 
+    if (!cartRes) {
+      throw new Error("Empty response from cart completion")
+    }
+
     const cartCacheTag = await getCacheTag("carts")
     revalidateTag(cartCacheTag)
   } catch (e: any) {
+    console.error("[placeOrder] Error:", e?.message, "cartId:", id)
     throw new Error("Error al procesar el pedido. Intenta de nuevo.")
   }
 
-  if (cartRes?.type === "order") {
+  if (cartRes?.type === "order" && cartRes?.data?.id) {
     const countryCode =
-      cartRes.order?.shipping_address?.country_code?.toLowerCase() || "gb"
+      cartRes.data?.shipping_address?.country_code?.toLowerCase() || "gb"
 
     const orderCacheTag = await getCacheTag("orders")
     revalidateTag(orderCacheTag)
 
     await removeCartId()
-    redirect(`/${countryCode}/order/${cartRes?.order.id}/confirmed`)
+    redirect(`/${countryCode}/order/${cartRes.data.id}/confirmed`)
   }
 
-  return cartRes.cart
+  return cartRes?.cart || null
 }
 
 /**
@@ -624,14 +629,20 @@ export async function testPaymentAndCapture(cartId?: string) {
     cartRes = await (sdk as any).store.cart
       .complete(id, {}, authHeaders)
 
+    if (!cartRes) {
+      throw new Error("Empty response from cart completion")
+    }
+
     const cartCacheTag = await getCacheTag("carts")
     revalidateTag(cartCacheTag)
   } catch (e: any) {
+    console.error("[testPaymentAndCapture] Error:", e?.message, "cartId:", id)
     throw new Error("Error al procesar el pedido. Intenta de nuevo.")
   }
 
-  if (cartRes?.type === "order") {
-    const order = cartRes.order
+  if (cartRes?.type === "order" && cartRes?.data?.id) {
+    const order = cartRes.data
+    console.log("[testPaymentAndCapture] Order created:", order.id)
 
     const backendUrl = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || process.env.MEDUSA_BACKEND_URL
     const publishableKey = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
@@ -657,7 +668,8 @@ export async function testPaymentAndCapture(cartId?: string) {
     redirect(`/${countryCode}/order/${order.id}/confirmed`)
   }
 
-  return cartRes.cart
+  console.warn("[testPaymentAndCapture] Unexpected response type:", cartRes?.type)
+  return cartRes?.cart || null
 }
 
 /**
