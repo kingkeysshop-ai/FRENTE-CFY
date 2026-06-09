@@ -13,7 +13,7 @@ export default async function TransferPage({
 
   try {
     const response = await acceptTransferRequest(id, token)
-    const order: StoreOrder = response?.order || response?.data || response
+    const order: StoreOrder = "order" in response ? response.order : response
 
     if (!order) {
       notFound()
