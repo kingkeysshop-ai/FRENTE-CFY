@@ -22,9 +22,7 @@ ENV NEXT_PUBLIC_DEFAULT_REGION=${NEXT_PUBLIC_DEFAULT_REGION:-co}
 ENV NEXT_PUBLIC_STRIPE_KEY=${NEXT_PUBLIC_STRIPE_KEY:-}
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_OPTIONS="--max-old-space-size=4096"
-RUN --mount=type=cache,target=/app/.next/cache,id=nextjs-cache \
-    --mount=type=cache,target=/app/node_modules/.cache,id=nextjs-node-cache \
-    pnpm exec next build
+RUN rm -rf .next && pnpm exec next build
 
 FROM base AS runner
 ENV NODE_ENV=production
