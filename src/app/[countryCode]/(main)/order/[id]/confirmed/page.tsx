@@ -1,5 +1,5 @@
 import { retrieveOrder } from "@lib/data/orders"
-import OrderCompletedTemplate from "@modules/order/templates/order-completed-template"
+import OrderKingKeysConfirmed from "@modules/order/templates/order-king-keys-confirmed"
 import OrderConfirmedFallback from "@modules/order/templates/order-confirmed-fallback"
 import { Metadata } from "next"
 
@@ -7,8 +7,8 @@ type Props = {
   params: Promise<{ id: string }>
 }
 export const metadata: Metadata = {
-  title: "Order Confirmed",
-  description: "You purchase was successful",
+  title: "Orden Confirmada | KING KEYS",
+  description: "Tu licencia digital esta lista para ser activada",
 }
 
 export default async function OrderConfirmedPage(props: Props) {
@@ -19,5 +19,5 @@ export default async function OrderConfirmedPage(props: Props) {
     return <OrderConfirmedFallback orderId={params.id} />
   }
 
-  return <OrderCompletedTemplate order={order} />
+  return <OrderKingKeysConfirmed order={order} />
 }
