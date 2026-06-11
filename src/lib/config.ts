@@ -88,7 +88,7 @@ client.fetch = async <T>(
       "status:", err.response?.status,
       "type:", errBody?.type,
       "message:", errMsg,
-      "q:", JSON.stringify(query).slice(0,300)
+      "q:", JSON.stringify(query)?.slice(0,300) ?? ""
     )
     throw err
   })
