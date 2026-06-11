@@ -170,7 +170,7 @@ export default function OrderKingKeysConfirmed({ order }: Props) {
             <div className="terminal-line">
               <span className="terminal-prompt">$</span>
               <span className="terminal-cmd">
-                init --reino="digital" --key={orderId.slice(0, 8)}...
+                init --reino='digital' --key={orderId.slice(0, 8)}...
               </span>
             </div>
             <div className="terminal-out">
