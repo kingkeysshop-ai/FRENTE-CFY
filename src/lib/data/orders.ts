@@ -11,23 +11,24 @@ export const retrieveOrder = async (id: string) => {
   }
 
   try {
-    const { order } = await sdk.client
+    const response = await sdk.client
       .fetch<{ order: HttpTypes.StoreOrder }>(
         `/store/orders/${id}`,
         {
           method: "GET",
           query: {
-            expand: "items,items.variant,items.variant.product,items.thumbnail,shipping_address,billing_address,shipping_methods,payment_collections,fulfillments,fulfillments.tracking_links",
+            expand: "items,items.variant,shipping_address,billing_address,shipping_methods,payments,fulfillments,fulfillments.tracking_links",
           },
           headers: {
             ...(await getAuthHeaders()),
           },
           next,
-          cache: "force-cache",
+          cache: "no-store",
         }
       )
-    return order
+    return response.order
   } catch (e: any) {
+    console.error("[retrieveOrder] Failed to fetch order:", id, "Status:", e?.response?.status, "Message:", e?.message || e)
     return null
   }
 }
@@ -56,7 +57,7 @@ export const listOrders = async (
         {
           method: "GET",
           query: {
-            expand: "orders,orders.items,orders.items.variant,orders.items.variant.product,orders.shipping_address,orders.billing_address,orders.payment_collections",
+            expand: "orders,orders.items,orders.items.variant,orders.shipping_address,orders.billing_address,orders.payments",
           },
           headers: {
             ...authHeaders,
