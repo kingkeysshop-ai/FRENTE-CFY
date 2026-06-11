@@ -44,7 +44,7 @@ const securityHeaders = [
 ]
 
 module.exports = {
-  output: "standalone",
+  // output: "standalone",
   transpilePackages: ["@medusajs/ui"],
   experimental: {
     serverActions: {
