@@ -19,13 +19,13 @@ type OrderCompletedTemplateProps = {
 export default async function OrderCompletedTemplate({ order }: OrderCompletedTemplateProps) {
   // Extraer datos para CartTotals con currency_code
   const orderTotals = {
-    total: order.total,
-    subtotal: order.subtotal,
-    tax_total: order.tax_total,
-    currency_code: order.currency_code || "USD",
-    item_subtotal: order.item_subtotal,
-    shipping_subtotal: order.shipping_subtotal,
-    discount_total: order.discount_total,
+    total: order?.total ?? 0,
+    subtotal: order?.subtotal ?? 0,
+    tax_total: order?.tax_total ?? 0,
+    currency_code: order?.currency_code || "USD",
+    item_subtotal: order?.item_subtotal ?? 0,
+    shipping_subtotal: order?.shipping_subtotal ?? 0,
+    discount_total: order?.discount_total ?? 0,
   }
 
   return (
