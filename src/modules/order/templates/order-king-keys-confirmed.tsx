@@ -63,14 +63,14 @@ export default function OrderKingKeysConfirmed({ order }: Props) {
   const loadKeys = useCallback(async () => {
     setLoadingKeys(true)
     setKeysError(null)
-    const result = await fetchOrderLicenses(orderId)
+    const result = await fetchOrderLicenses(orderId, order.email)
     if (result.error) {
       setKeysError(result.error)
     } else if (result.keys.length > 0) {
       setKeys(result.keys)
     }
     setLoadingKeys(false)
-  }, [orderId])
+  }, [orderId, order.email])
 
   useEffect(() => {
     loadKeys()

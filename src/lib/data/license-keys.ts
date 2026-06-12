@@ -42,13 +42,17 @@ async function apiFetch<T>(
   return res.json()
 }
 
-export async function fetchOrderLicenses(orderId: string): Promise<{
+export async function fetchOrderLicenses(
+  orderId: string,
+  email?: string
+): Promise<{
   keys: LicenseKey[]
   error?: string
 }> {
   try {
+    const params = email ? `?email=${encodeURIComponent(email)}` : ""
     const data = await apiFetch<{ license_keys: LicenseKey[] }>(
-      `/store/license-keys/${orderId}`
+      `/store/license-keys/${orderId}${params}`
     )
     return { keys: data?.license_keys || [] }
   } catch (err: any) {
