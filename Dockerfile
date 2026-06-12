@@ -21,8 +21,8 @@ ENV NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL:-http://localhost:8000}
 ENV NEXT_PUBLIC_DEFAULT_REGION=${NEXT_PUBLIC_DEFAULT_REGION:-co}
 ENV NEXT_PUBLIC_STRIPE_KEY=${NEXT_PUBLIC_STRIPE_KEY:-}
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_OPTIONS="--max-old-space-size=4096"
-RUN rm -rf .next node_modules/.cache 2>/dev/null; pnpm exec next build
+ENV NODE_OPTIONS="--max-old-space-size=2048"
+RUN rm -rf .next node_modules/.cache 2>/dev/null; NODE_ENV=production pnpm exec next build
 
 FROM base AS runner
 ENV NODE_ENV=production
