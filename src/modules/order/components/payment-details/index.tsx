@@ -7,7 +7,7 @@ type PaymentDetailsProps = {
 }
 
 const PaymentDetails = ({ order }: PaymentDetailsProps) => {
-  const payment = order.payment_collections?.[0].payments?.[0]
+  const payment = order.payments?.[0]
 
   return (
     <div className="flex flex-wrap gap-6" data-testid="payment-details">

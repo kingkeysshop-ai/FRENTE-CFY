@@ -1,0 +1,71 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: medusa-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: medusa
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: medusa-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    container_name: medusa-backend
+    ports:
+      - "9000:9000"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/medusa
+      REDIS_URL: redis://redis:6379
+      STORE_CORS: http://localhost:3000
+      ADMIN_CORS: http://localhost:5173,http://localhost:9000
+      AUTH_CORS: http://localhost:5173,http://localhost:9000,http://localhost:3000
+      JWT_SECRET: supersecret-jwt
+      COOKIE_SECRET: supersecret-cookie
+      BACKEND_URL: http://localhost:9000
+      MEDUSA_WORKER_MODE: shared
+      STRIPE_API_KEY: ${STRIPE_API_KEY:-sk_test_placeholder}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-whsec_placeholder}
+      AURPAY_API_KEY: ${AURPAY_API_KEY:-}
+      AURPAY_API_BASE: ${AURPAY_API_BASE:-https://api.aurpay.net}
+      AURPAY_WEBHOOK_SECRET: ${AURPAY_WEBHOOK_SECRET:-}
+      CRYPTOMUS_MERCHANT_ID: ${CRYPTOMUS_MERCHANT_ID:-}
+      CRYPTOMUS_API_KEY: ${CRYPTOMUS_API_KEY:-}
+      BOLD_API_KEY: ${BOLD_API_KEY:-}
+      BOLD_SECRET_KEY: ${BOLD_SECRET_KEY:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: >
+      sh -c "
+        npx medusa db:migrate &&
+        npx medusa start
+      "
+
+volumes:
+  postgres_data:
+  redis_data:
