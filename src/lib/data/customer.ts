@@ -249,12 +249,19 @@ export async function generatePasswordToken(
   const email = formData.get("email") as string
   if (!email) return { error: "El correo electrónico es obligatorio", submitted: true }
 
-  const headers = {
-    ...(await getAuthHeaders()),
-  }
-
   try {
-    await (sdk as any).store.customer.generatePasswordToken(email, {}, headers)
+    const res = await fetch("/api/resend/send-recovery", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      return { error: data.error || "Error al enviar el correo de recuperación", submitted: true }
+    }
+
     return { error: null, submitted: true }
   } catch (error: any) {
     console.error("Error al generar token de recuperación:", error.message)
@@ -277,7 +284,18 @@ export async function resetPassword(
   if (password !== passwordConfirm) return { error: "Las contraseñas no coinciden", submitted: true }
 
   try {
-    await (sdk as any).store.customer.resetPassword({ email, token, password }, {}, {})
+    const res = await fetch("/api/resend/reset-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, token, password }),
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      return { error: data.error || "Error al restablecer la contraseña", submitted: true }
+    }
+
     return { error: null, submitted: true }
   } catch (error: any) {
     console.error("Error al restablecer contraseña:", error.message)
