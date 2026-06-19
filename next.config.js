@@ -38,7 +38,7 @@ const securityHeaders = [
       "frame-src 'self' https://js.stripe.com https://*.stripe.com",
       "connect-src 'self' https://backend.cfynet.xyz https://api.stripe.com https://dashboard.aurpay.net https://integrations.api.bold.co https://api.cryptomus.com",
       "base-uri 'self'",
-      "form-action 'self' https://dashboard.aurpay.net https://integrations.api.bold.co https://pay.cryptomus.com",
+      "form-action 'self' https://dashboard.aurpay.net https://integrations.api.bold.co https://checkout.bold.co https://pay.cryptomus.com",
     ].join("; "),
   },
 ]
@@ -74,6 +74,12 @@ module.exports = {
       {
         protocol: "https",
         hostname: "minio.cfynet.xyz",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "aurpay.net",
         port: "",
         pathname: "/**",
       },

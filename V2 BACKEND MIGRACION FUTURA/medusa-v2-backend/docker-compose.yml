@@ -54,7 +54,9 @@ services:
       CRYPTOMUS_MERCHANT_ID: ${CRYPTOMUS_MERCHANT_ID:-}
       CRYPTOMUS_API_KEY: ${CRYPTOMUS_API_KEY:-}
       BOLD_API_KEY: ${BOLD_API_KEY:-}
+      BOLD_API_URL: ${BOLD_API_URL:-https://integrations.api.bold.co}
       BOLD_SECRET_KEY: ${BOLD_SECRET_KEY:-}
+      BOLD_WEBHOOK_SECRET: ${BOLD_WEBHOOK_SECRET:-}
     depends_on:
       postgres:
         condition: service_healthy

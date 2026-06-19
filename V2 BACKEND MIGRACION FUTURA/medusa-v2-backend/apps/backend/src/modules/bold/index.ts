@@ -21,6 +21,7 @@ import type {
   ProviderWebhookPayload,
   WebhookActionResult,
 } from "@medusajs/framework/types"
+import crypto from "crypto"
 
 class BoldPaymentService extends AbstractPaymentProvider {
   static identifier = "bold"
@@ -33,20 +34,40 @@ class BoldPaymentService extends AbstractPaymentProvider {
     return process.env.BOLD_API_KEY || ""
   }
 
+  private getSecretKey(): string {
+    return process.env.BOLD_SECRET_KEY || ""
+  }
+
+  private getBaseUrl(): string {
+    return process.env.BOLD_API_URL || "https://integrations.api.bold.co"
+  }
+
   async initiatePayment(input: InitiatePaymentInput): Promise<InitiatePaymentOutput> {
-    const response = await fetch("https://api.bold.co/v1/payment-link", {
+    const totalAmount = Math.round(Number(input.amount) || 0)
+    const reference = (input.context as any)?.order_id || (input.context as any)?.cart_id || `ORD-${Date.now()}`
+    const returnUrl = (input.context as any)?.success_url || `${process.env.BACKEND_URL}/payment/success?cart_id=${reference}`
+    const callbackUrl = `${process.env.BACKEND_URL}/hooks/bold/webhook`
+
+    const response = await fetch(`${this.getBaseUrl()}/online/link/v1`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${this.getApiKey()}`,
+        Authorization: `x-api-key ${this.getApiKey()}`,
       },
       body: JSON.stringify({
-        amount: input.amount,
-        currency: input.currency_code,
-        reference: (input.context as any)?.order_id || (input.context as any)?.cart_id,
+        amount_type: "CLOSE",
+        amount: {
+          currency: (input.currency_code || "COP").toUpperCase(),
+          total: totalAmount,
+          taxes: [],
+          tip_amount: 0,
+        },
         description: (input.context as any)?.description || "Compra en El Reino Digital",
-        callback_url: `${process.env.BACKEND_URL}/hooks/bold/webhook`,
-        return_url: (input.context as any)?.success_url,
+        reference,
+        callback_url: callbackUrl,
+        return_url: returnUrl,
+        payer_email: (input.context as any)?.email || "",
+        payment_methods: ["CREDIT_CARD", "PSE", "NEQUI", "BOTON_BANCOLOMBIA"],
       }),
     })
 
@@ -56,12 +77,13 @@ class BoldPaymentService extends AbstractPaymentProvider {
     }
 
     const data = await response.json()
+    const payload = data.payload || data
 
     return {
-      id: data.id || data.payment_id || "",
+      id: payload.payment_link || payload.id || "",
       data: {
-        redirect_url: data.url || data.payment_url,
-        payment_id: data.id || data.payment_id,
+        redirect_url: payload.url || payload.payment_url,
+        payment_link: payload.payment_link || payload.id,
       },
     }
   }
@@ -101,16 +123,45 @@ class BoldPaymentService extends AbstractPaymentProvider {
   async getWebhookActionAndData(
     payload: ProviderWebhookPayload["payload"]
   ): Promise<WebhookActionResult> {
-    const data = payload.data as any
-    if (data?.status === "APPROVED" || data?.status === "success") {
+    const rawPayload = payload as any
+    const headers = rawPayload?.headers || {}
+    const body = rawPayload?.body || rawPayload?.data || {}
+
+    const receivedSignature = headers["x-bold-signature"] || ""
+    const secretKey = this.getSecretKey()
+    if (secretKey && receivedSignature) {
+      const rawBody = typeof rawPayload?.rawBody === "string" ? rawPayload.rawBody : JSON.stringify(body)
+      const encoded = Buffer.from(rawBody).toString("base64")
+      const expected = crypto.createHmac("sha256", secretKey).update(encoded).digest("hex")
+      if (!crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(receivedSignature))) {
+        console.warn("[Bold Webhook] Invalid signature")
+        return { action: "not_supported", data: { session_id: "", amount: 0 } }
+      }
+    }
+
+    const eventType = body.type || ""
+    const eventData = body.data || body
+
+    if (eventType === "SALE_APPROVED") {
       return {
         action: "captured",
         data: {
-          session_id: data.payment_id || "",
-          amount: data.amount || 0,
+          session_id: eventData.payment_id || eventData.metadata?.reference || "",
+          amount: eventData.amount?.total || 0,
         },
       }
     }
+
+    if (eventType === "SALE_REJECTED") {
+      return {
+        action: "canceled",
+        data: {
+          session_id: eventData.payment_id || "",
+          amount: 0,
+        },
+      }
+    }
+
     return { action: "not_supported", data: { session_id: "", amount: 0 } }
   }
 }
