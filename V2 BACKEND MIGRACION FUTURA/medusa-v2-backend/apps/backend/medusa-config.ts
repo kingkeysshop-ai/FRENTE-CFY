@@ -18,6 +18,17 @@ module.exports = defineConfig({
     {
       resolve: "./src/modules/license-key",
     },
+    {
+      resolve: "@medusajs/notification-sendgrid",
+      options: {
+        channels: {
+          email: {
+            from: process.env.SENGRID_FROM_EMAIL || "noreply@elreino.digital",
+            api_key: process.env.SENDGRID_API_KEY || "",
+          },
+        },
+      },
+    },
   ],
   plugins: [
     {
