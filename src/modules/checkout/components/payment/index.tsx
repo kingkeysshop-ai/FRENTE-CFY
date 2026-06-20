@@ -9,7 +9,7 @@ import ErrorMessage from "@modules/checkout/components/error-message"
 import PaymentContainer, { StripeCardContainer } from "@modules/checkout/components/payment-container"
 import Divider from "@modules/common/components/divider"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import ShieldCheck from "@modules/common/icons/shield-check"
 import { isCartAllDigital } from "@lib/util/is-digital-cart"
 
@@ -36,10 +36,10 @@ const Payment = ({
     return sessions.map((ps: any) => ({ id: ps.provider_id }))
   })()
 
-  const effectivePaymentMethods =
-    availablePaymentMethods?.length > 0
-      ? availablePaymentMethods
-      : derivedPaymentMethods || []
+  const effectivePaymentMethods = useMemo(
+    () => (availablePaymentMethods?.length > 0 ? availablePaymentMethods : derivedPaymentMethods || []),
+    [availablePaymentMethods, derivedPaymentMethods]
+  )
 
   const searchParams = useSearchParams()
   const router = useRouter()

@@ -69,11 +69,11 @@ const Register = ({ setCurrentView, redirectTo }: Props) => {
         <ErrorMessage error={message} data-testid="register-error" />
         <span className="text-center text-[#888888] text-xs mt-6">
           Al crear una cuenta aceptas los{" "}
-          <LocalizedClientLink href="/content/privacy-policy" className="text-[#facc15] hover:text-[#e6b800] transition-colors">
-            Términos de Privacidad
+          <LocalizedClientLink href="/privacy" className="text-[#facc15] hover:text-[#e6b800] transition-colors">
+            Política de Privacidad
           </LocalizedClientLink>{" "}
           y los{" "}
-          <LocalizedClientLink href="/content/terms-of-use" className="text-[#facc15] hover:text-[#e6b800] transition-colors">
+          <LocalizedClientLink href="/terms" className="text-[#facc15] hover:text-[#e6b800] transition-colors">
             Términos de Uso
           </LocalizedClientLink>{" "}
           de King Keys.

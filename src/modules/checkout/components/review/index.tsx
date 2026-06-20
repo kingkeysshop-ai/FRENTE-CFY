@@ -50,12 +50,12 @@ const Review = ({ cart }: { cart: any }) => {
       {isOpen && previousStepsCompleted && (
         <div className="flex flex-col gap-6">
 
-          {/* Resumen de garantias */}
+          {/* Resumen de garantías */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {[
-              { icon: CheckCircle, title: "Licencia Original", desc: "100% autentica y activable" },
-              { icon: Lightning, title: "Entrega Inmediata", desc: "Por correo electronico" },
-              { icon: ShieldCheck, title: "Pago Seguro", desc: "Transaccion cifrada" },
+              { icon: CheckCircle, title: "Licencia Original", desc: "100% auténtica y activable" },
+              { icon: Lightning, title: "Entrega Inmediata", desc: "Por correo electrónico" },
+              { icon: ShieldCheck, title: "Pago Seguro", desc: "Transacción cifrada" },
             ].map((g) => (
               <div key={g.title} className="bg-[#1a1a1a]/60 border border-[#2a2a2a] rounded-xl p-4 flex flex-col gap-1">
                 <g.icon size="24" color="#facc15" />
@@ -70,11 +70,11 @@ const Review = ({ cart }: { cart: any }) => {
             <p className="text-[#888888] text-sm leading-relaxed">
               Al hacer clic en{" "}
               <span className="text-[#facc15] font-bold">Realizar Pedido</span>
-              , confirmas que has leido y aceptas nuestros{" "}
-              <span className="text-[#facc15] font-semibold">Terminos de Uso</span>,{" "}
-              <span className="text-[#facc15] font-semibold">Terminos de Venta</span>{" "}
+              , confirmas que has leído y aceptas nuestros{" "}
+              <span className="text-[#facc15] font-semibold">Términos de Uso</span>,{" "}
+              <span className="text-[#facc15] font-semibold">Términos de Venta</span>{" "}
               y{" "}
-              <span className="text-[#facc15] font-semibold">Politica de Privacidad</span>.
+              <span className="text-[#facc15] font-semibold">Política de Privacidad</span>.
             </p>
           </div>
 

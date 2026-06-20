@@ -30,7 +30,7 @@ export default function TransferRequestForm() {
             Order transfers
           </Heading>
           <Text className="text-base-regular text-neutral-500">
-            Can&apos;t find the order you are looking for?
+            Can't find the order you are looking for?
             <br /> Connect an order to your account.
           </Text>
         </div>
