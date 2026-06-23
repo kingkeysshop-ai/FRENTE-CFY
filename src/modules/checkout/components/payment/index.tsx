@@ -1,7 +1,7 @@
 "use client"
 
 import { RadioGroup } from "@headlessui/react"
-import { getActivePaymentSession, isStripeLike, paymentInfoMap } from "@lib/constants"
+import { getActivePaymentSession, isStripeLike, isOxapay, paymentInfoMap } from "@lib/constants"
 import { initiatePaymentSession, retrieveCart, ensurePaymentSessions } from "@lib/data/cart"
 import { CheckCircleSolid, CreditCard } from "@medusajs/icons"
 import { clx } from "@medusajs/ui"
@@ -86,7 +86,8 @@ const Payment = ({
 
   const isDigital = isCartAllDigital(liveCart)
   const paidByGiftcard = liveCart?.gift_cards && liveCart?.gift_cards?.length > 0 && Number(liveCart?.total) === 0
-  const paymentReady = (liveActiveSession && (isDigital || (liveCart?.shipping_methods?.length ?? 0) > 0)) || paidByGiftcard
+  const hasShipping = isDigital || (liveCart?.shipping_methods?.length ?? 0) > 0
+  const paymentReady = (liveActiveSession && hasShipping) || paidByGiftcard || (selectedPaymentMethod && isOxapay(selectedPaymentMethod) && hasShipping)
 
   const createQueryString = useCallback((name: string, value: string) => {
     const params = new URLSearchParams(searchParams)
@@ -101,7 +102,9 @@ const Payment = ({
     setError(null)
 
     try {
-      await initiatePaymentSession(liveCart, { provider_id: selectedPaymentMethod })
+      if (!isOxapay(selectedPaymentMethod)) {
+        await initiatePaymentSession(liveCart, { provider_id: selectedPaymentMethod })
+      }
       const updatedCart = await retrieveCart(liveCart.id)
       if (updatedCart) setFreshCart(updatedCart)
       if (!isStripeLike(selectedPaymentMethod) || (paidByGiftcard)) {
@@ -193,12 +196,12 @@ const Payment = ({
         </div>
 
         <div className={isOpen ? "hidden" : "block"}>
-          {liveCart && paymentReady && liveActiveSession ? (
+          {liveCart && paymentReady && (liveActiveSession || isOxapay(selectedPaymentMethod)) ? (
             <div className="flex items-start gap-x-1 w-full">
               <div className="flex flex-col w-1/3">
                 <p className="font-bold text-white mb-1">Método de pago</p>
                 <p className="text-[#888888]" data-testid="payment-method-summary">
-                  {paymentInfoMap[liveActiveSession?.provider_id]?.title || liveActiveSession?.provider_id}
+                  {paymentInfoMap[selectedPaymentMethod]?.title || selectedPaymentMethod}
                 </p>
               </div>
               <div className="flex flex-col w-1/3">
