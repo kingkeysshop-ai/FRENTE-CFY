@@ -700,6 +700,20 @@ export async function updateRegion(countryCode: string, currentPath: string) {
   redirect(`/${countryCode}${currentPath}`)
 }
 
+export async function getOrderIdByCartId(cartId: string): Promise<string | null> {
+  const authHeaders = { ...(await getAuthHeaders()) }
+  try {
+    const { orders } = await sdk.client.fetch<{ orders: any[] }>(
+      `/store/orders?cart_id=${cartId}`,
+      { method: "GET", headers: authHeaders }
+    )
+    if (orders?.length > 0) return orders[0].id
+    return null
+  } catch {
+    return null
+  }
+}
+
 export async function listCartOptions() {
   const cartId = await getCartId()
   if (!cartId) {

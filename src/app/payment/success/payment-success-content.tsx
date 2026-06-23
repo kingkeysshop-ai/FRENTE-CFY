@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
-import { placeOrder } from "@lib/data/cart"
+import { placeOrder, getOrderIdByCartId } from "@lib/data/cart"
 
 export default function PaymentSuccessContent() {
   const searchParams = useSearchParams()
@@ -11,7 +11,7 @@ export default function PaymentSuccessContent() {
   const [errorMessage, setErrorMessage] = useState("")
   const mounted = useRef(true)
 
-  const cartId = searchParams.get("cart_id") || searchParams.get("cartId")
+  const cartId = searchParams.get("cart_id") || searchParams.get("cartId") || searchParams.get("reference")
 
   useEffect(() => {
     mounted.current = true
@@ -34,7 +34,12 @@ export default function PaymentSuccessContent() {
         } catch (err: any) {
           if (!mounted.current) return
           if (err.message?.includes("completado") || err.message?.includes("already been completed")) {
-            router.push("/")
+            const orderId = cartId ? await getOrderIdByCartId(cartId) : null
+            if (orderId) {
+              router.push(`/order/${orderId}/confirmed`)
+            } else {
+              router.push("/")
+            }
             return
           }
           if (i < maxRetries) {
