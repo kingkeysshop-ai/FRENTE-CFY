@@ -1,4 +1,4 @@
-import { AbstractPaymentProvider, ModuleProvider, Modules } from "@medusajs/framework/utils"
+import { AbstractPaymentProvider, MedusaError, ModuleProvider, Modules } from "@medusajs/framework/utils"
 import type {
   InitiatePaymentInput,
   InitiatePaymentOutput,
@@ -43,10 +43,10 @@ class BoldPaymentService extends AbstractPaymentProvider {
   }
 
   async initiatePayment(input: InitiatePaymentInput): Promise<InitiatePaymentOutput> {
-    const totalAmount = Math.round(Number(input.amount) || 0)
+    const totalAmount = Math.round((Number(input.amount) || 0) / 100)
     const reference = (input.context as any)?.order_id || (input.context as any)?.cart_id || `ORD-${Date.now()}`
     const returnUrl = (input.context as any)?.success_url || `${process.env.BACKEND_URL}/payment/success?cart_id=${reference}`
-    const callbackUrl = `${process.env.BACKEND_URL}/hooks/bold/webhook`
+    const callbackUrl = `${process.env.BACKEND_URL}/hooks/bold`
 
     const response = await fetch(`${this.getBaseUrl()}/online/link/v1`, {
       method: "POST",
@@ -73,7 +73,7 @@ class BoldPaymentService extends AbstractPaymentProvider {
 
     if (!response.ok) {
       const errBody = await response.json().catch(() => ({}))
-      throw new Error(`Bold initiation failed: ${JSON.stringify(errBody)}`)
+      throw new MedusaError(MedusaError.Types.INVALID_DATA, `Bold initiation failed: ${JSON.stringify(errBody)}`)
     }
 
     const data = await response.json()

@@ -4,7 +4,7 @@ import { checkRateLimit } from "@lib/rate-limit"
 
 const BOLD_WEBHOOK_SECRET = process.env.BOLD_WEBHOOK_SECRET
 const MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
-const MEDUSA_API_KEY = process.env.MEDUSA_API_KEY
+const MEDUSA_API_KEY = process.env.MEDUSA_API_KEY || process.env.MEDUSA_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
 
 const PROCESSED_EVENTS = new Set<string>()
 

@@ -33,7 +33,6 @@ export default function PaymentSuccessContent() {
           return
         } catch (err: any) {
           if (!mounted.current) return
-          if (err?.digest === "NEXT_REDIRECT") throw err
           if (err.message?.includes("completado") || err.message?.includes("already been completed")) {
             router.push("/")
             return

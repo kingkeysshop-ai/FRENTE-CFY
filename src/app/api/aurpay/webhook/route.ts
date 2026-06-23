@@ -4,7 +4,7 @@ import { checkRateLimit } from "@lib/rate-limit"
 
 const AURPAY_ENV_SECRET = process.env.AURPAY_WEBHOOK_SECRET
 const MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
-const MEDUSA_API_KEY = process.env.MEDUSA_API_KEY
+const MEDUSA_API_KEY = process.env.MEDUSA_API_KEY || process.env.MEDUSA_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
 
 async function completeCart(cartId: string): Promise<{ ok: boolean; orderId?: string; alreadyCompleted?: boolean }> {
   // First check if order already exists for this cart
