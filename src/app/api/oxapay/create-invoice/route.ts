@@ -51,6 +51,8 @@ export async function POST(req: NextRequest) {
       } catch {} // cart verification is optional
     }
 
+    const isSandbox = OXAPAY_MERCHANT_API_KEY === "sandbox" || process.env.NODE_ENV !== "production"
+
     const payload: Record<string, unknown> = {
       amount: Number(amount),
       currency: currency.toUpperCase(),
@@ -61,6 +63,7 @@ export async function POST(req: NextRequest) {
       lifetime: 60,
       fee_paid_by_payer: 1,
       under_paid_coverage: 0,
+      sandbox: isSandbox,
     }
 
     const response = await fetch(`${OXAPAY_API_BASE}/payment/invoice`, {
