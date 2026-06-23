@@ -5,6 +5,7 @@ import Ideal from "@modules/common/icons/ideal"
 import Bancontact from "@modules/common/icons/bancontact"
 import PayPal from "@modules/common/icons/paypal"
 import Cryptomus from "@modules/common/icons/cryptomus"
+import Oxapay from "@modules/common/icons/oxapay"
 
 /* Map of payment provider_id to their title and icon. Add in any payment providers you want to use. */
 export const paymentInfoMap: Record<
@@ -63,6 +64,14 @@ export const paymentInfoMap: Record<
     title: "Bold (Colombia)",
     icon: <CreditCard />,
   },
+  pp_oxapay_oxapay: {
+    title: "Oxapay (Crypto)",
+    icon: <Oxapay />,
+  },
+  oxapay: {
+    title: "Oxapay (Crypto)",
+    icon: <Oxapay />,
+  },
   "test-payment": {
     title: "Pago de Prueba",
     icon: <CreditCard />,
@@ -94,6 +103,10 @@ export const isAurapay = (providerId?: string) => {
 
 export const isBold = (providerId?: string) => {
   return providerId?.startsWith("pp_bold") || providerId === "bold"
+}
+
+export const isOxapay = (providerId?: string) => {
+  return providerId?.startsWith("pp_oxapay") || providerId === "oxapay"
 }
 
 export const isTestPayment = (providerId?: string) => {
