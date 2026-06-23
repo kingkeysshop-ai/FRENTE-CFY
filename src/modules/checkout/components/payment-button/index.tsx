@@ -12,6 +12,7 @@ import BoldPaymentButton from "./bold-button"
 import OxapayPaymentButton from "./oxapay-button"
 import TestPaymentButton from "./test-button"
 import { isCartAllDigital } from "@lib/util/is-digital-cart"
+import { useSearchParams } from "next/navigation"
 
 type PaymentButtonProps = {
   cart: HttpTypes.StoreCart
@@ -23,6 +24,8 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
   "data-testid": dataTestId,
 }) => {
   const paymentSession = getActivePaymentSession(cart)
+  const searchParams = useSearchParams()
+  const urlProvider = searchParams.get("provider")
   const isDigital = isCartAllDigital(cart)
 
   const notReady =
@@ -76,7 +79,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
           data-testid={dataTestId}
         />
       )
-    case isOxapay(paymentSession?.provider_id):
+    case isOxapay(paymentSession?.provider_id || urlProvider):
       return (
         <OxapayPaymentButton
           cart={cart}

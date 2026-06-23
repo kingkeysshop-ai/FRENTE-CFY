@@ -108,7 +108,10 @@ const Payment = ({
       const updatedCart = await retrieveCart(liveCart.id)
       if (updatedCart) setFreshCart(updatedCart)
       if (!isStripeLike(selectedPaymentMethod) || (paidByGiftcard)) {
-        return router.push(pathname + "?" + createQueryString("step", "review"), { scroll: false })
+        const params = new URLSearchParams(searchParams)
+        params.set("step", "review")
+        params.set("provider", selectedPaymentMethod)
+        return router.push(pathname + "?" + params.toString(), { scroll: false })
       }
     } catch (err: any) {
       setError(err.message)
