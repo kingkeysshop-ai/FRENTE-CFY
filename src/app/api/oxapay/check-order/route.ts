@@ -11,39 +11,26 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const orderRes = await fetch(
-      `${MEDUSA_BACKEND_URL}/store/orders?cart_id=${cartId}`,
-      { headers: { "x-publishable-api-key": MEDUSA_API_KEY } }
+    const headers = { "x-publishable-api-key": MEDUSA_API_KEY, "Content-Type": "application/json" }
+
+    const completeRes = await fetch(
+      `${MEDUSA_BACKEND_URL}/store/carts/${cartId}/complete`,
+      { method: "POST", headers }
     )
 
-    if (orderRes.ok) {
-      const { orders } = await orderRes.json()
-      if (orders?.length > 0) {
-        return NextResponse.json({ orderId: orders[0].id })
-      }
+    const completeData = await completeRes.json()
+
+    // If complete succeeds or returns order data
+    if (completeData?.type === "order" && completeData?.data?.id) {
+      return NextResponse.json({ orderId: completeData.data.id })
     }
 
-    const cartRes = await fetch(
-      `${MEDUSA_BACKEND_URL}/store/carts/${cartId}`,
-      { headers: { "x-publishable-api-key": MEDUSA_API_KEY } }
-    )
-
-    if (cartRes.ok) {
-      const { cart } = await cartRes.json()
-      if (cart?.completed_at) {
-        const orderRes2 = await fetch(
-          `${MEDUSA_BACKEND_URL}/store/orders?cart_id=${cartId}`,
-          { headers: { "x-publishable-api-key": MEDUSA_API_KEY } }
-        )
-        if (orderRes2.ok) {
-          const { orders: orders2 } = await orderRes2.json()
-          if (orders2?.length > 0) {
-            return NextResponse.json({ orderId: orders2[0].id })
-          }
-        }
-      }
+    // If cart is already completed but we couldn't get order from complete
+    if (completeData?.cart?.completed_at) {
+      return NextResponse.json({ orderId: "completed" })
     }
 
+    // Order not ready yet
     return NextResponse.json({ orderId: null })
   } catch {
     return NextResponse.json({ orderId: null })

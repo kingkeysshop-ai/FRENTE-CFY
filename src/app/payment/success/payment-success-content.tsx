@@ -15,7 +15,7 @@ export default function PaymentSuccessContent() {
 
   const checkOrder = useCallback(async (cid: string): Promise<string | null> => {
     try {
-      const res = await fetch(`/api/oxapay/check-order?cart_id=${cid}`)
+      const res = await fetch(`/api/oxapay/check-order?cart_id=${cid}&_=${Date.now()}`)
       const data = await res.json()
       return data.orderId || null
     } catch {
@@ -45,12 +45,8 @@ export default function PaymentSuccessContent() {
         setStatus("retrying")
         await delay(3000)
       }
-      setStatus("error")
-      setErrorMessage(
-        provider === "oxapay"
-          ? "El pago no se confirmó. Si el problema persiste, contacta a soporte."
-          : "Error al procesar el pago"
-      )
+      // Si el webhook ya creó la orden pero no pudimos obtener el ID, redirigir al home
+      router.push("/")
     }
 
     attemptOrder()
@@ -71,8 +67,7 @@ export default function PaymentSuccessContent() {
       setStatus("retrying")
       await new Promise((r) => setTimeout(r, 3000))
     }
-    setStatus("error")
-    setErrorMessage("El pago no se confirmó. Si el problema persiste, contacta a soporte.")
+    router.push("/")
   }, [cartId, router, checkOrder])
 
   if (!cartId) {
@@ -102,16 +97,16 @@ export default function PaymentSuccessContent() {
             </p>
           </>
         ) : (
-          <>
+          <div className="text-center">
             <h1 className="text-white text-xl font-bold mb-2">Error al procesar el pago</h1>
             <p className="text-[#888888] mb-4">{errorMessage}</p>
             <button
-              onClick={provider === "oxapay" ? handleRetry : () => window.location.reload()}
+              onClick={handleRetry}
               className="px-6 py-3 bg-[#facc15] text-[#0a0a0a] font-bold rounded-xl hover:bg-[#e6b800] transition-colors"
             >
               Reintentar
             </button>
-          </>
+          </div>
         )}
       </div>
     </div>
