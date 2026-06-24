@@ -5,6 +5,8 @@ import { checkRateLimit } from "@lib/rate-limit"
 const OXAPAY_MERCHANT_API_KEY = process.env.OXAPAY_MERCHANT_API_KEY
 const MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
 const MEDUSA_API_KEY = process.env.MEDUSA_API_KEY || process.env.MEDUSA_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
+const MEDUSA_ADMIN_EMAIL = process.env.MEDUSA_ADMIN_EMAIL || "admin@elreino.digital"
+const MEDUSA_ADMIN_PASSWORD = process.env.MEDUSA_ADMIN_PASSWORD
 
 function verifyWebhookSignature(rawBody: string, receivedHmac: string, apiKey: string): boolean {
   try {
@@ -33,21 +35,25 @@ async function getCartRegion(cartId: string): Promise<string | null> {
   return null
 }
 
-async function ensurePaymentSession(cartId: string, regionId?: string): Promise<boolean> {
-  // Try to create sessions for all available providers first
+async function getAdminToken(): Promise<string | null> {
+  if (!MEDUSA_ADMIN_PASSWORD) return null
   try {
-    await fetch(`${MEDUSA_BACKEND_URL}/store/carts/${cartId}/payment-sessions`, {
+    const res = await fetch(`${MEDUSA_BACKEND_URL}/admin/auth/token`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-publishable-api-key": MEDUSA_API_KEY!,
-      },
-      body: JSON.stringify({}),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: MEDUSA_ADMIN_EMAIL, password: MEDUSA_ADMIN_PASSWORD }),
     })
+    if (res.ok) {
+      const { access_token } = await res.json()
+      return access_token || null
+    }
   } catch {}
+  return null
+}
 
-  // Try each provider
-  for (const pid of ["system", "manual", "pp_stripe_stripe"]) {
+async function ensurePaymentSession(cartId: string, regionId?: string): Promise<boolean> {
+  // Try each storefront provider first
+  for (const pid of ["system", "manual"]) {
     try {
       const res = await fetch(
         `${MEDUSA_BACKEND_URL}/store/carts/${cartId}/payment-session`,
@@ -64,22 +70,20 @@ async function ensurePaymentSession(cartId: string, regionId?: string): Promise<
     } catch {}
   }
 
-  // If regionId is available, try registering manual provider via admin API
-  if (regionId && MEDUSA_API_KEY?.startsWith("sk_")) {
-    try {
-      const regRes = await fetch(
-        `${MEDUSA_BACKEND_URL}/admin/regions/${regionId}/payment-providers`,
-        {
+  // Try registering manual provider via admin API (login first)
+  if (regionId) {
+    const token = await getAdminToken()
+    if (token) {
+      try {
+        await fetch(`${MEDUSA_BACKEND_URL}/admin/regions/${regionId}/payment-providers`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${MEDUSA_API_KEY}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ provider_id: "manual" }),
-        }
-      )
-      if (regRes.ok) {
-        // Retry selecting manual
+        })
+
         const retryRes = await fetch(
           `${MEDUSA_BACKEND_URL}/store/carts/${cartId}/payment-session`,
           {
@@ -91,9 +95,9 @@ async function ensurePaymentSession(cartId: string, regionId?: string): Promise<
             body: JSON.stringify({ provider_id: "manual" }),
           }
         )
-        return retryRes.ok
-      }
-    } catch {}
+        if (retryRes.ok) return true
+      } catch {}
+    }
   }
 
   return false
