@@ -19,47 +19,6 @@ function verifyWebhookSignature(rawBody: string, receivedHmac: string, apiKey: s
   }
 }
 
-async function createPaymentSession(cartId: string): Promise<boolean> {
-  const providers = [
-    "pp_cryptomus_cryptomus",
-    "pp_bold_bold",
-    "pp_aurpay_aurpay",
-    "pp_stripe_stripe",
-  ]
-  const headers = {
-    "Content-Type": "application/json",
-    "x-publishable-api-key": MEDUSA_API_KEY!,
-  }
-
-  // First initialize all payment sessions
-  await fetch(`${MEDUSA_BACKEND_URL}/store/carts/${cartId}/payment-sessions`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({}),
-  }).catch(() => {})
-
-  // Then try to select one that works
-  for (const provider of providers) {
-    try {
-      const res = await fetch(
-        `${MEDUSA_BACKEND_URL}/store/carts/${cartId}/payment-session`,
-        {
-          method: "POST",
-          headers,
-          body: JSON.stringify({ provider_id: provider }),
-        }
-      )
-      if (res.ok) {
-        console.log(`[Oxapay Webhook] Payment session created with provider: ${provider}`)
-        return true
-      }
-    } catch {}
-  }
-
-  console.warn(`[Oxapay Webhook] Could not create any payment session for cart ${cartId}`)
-  return false
-}
-
 async function completeCart(cartId: string): Promise<{ ok: boolean; orderId?: string; alreadyCompleted?: boolean }> {
   try {
     const checkRes = await fetch(
@@ -85,9 +44,6 @@ async function completeCart(cartId: string): Promise<{ ok: boolean; orderId?: st
   } catch (e: any) {
     console.warn(`[Oxapay Webhook] Could not check cart status for ${cartId}: ${e.message}`)
   }
-
-  // Create payment session before completing
-  await createPaymentSession(cartId)
 
   try {
     const medusaRes = await fetch(

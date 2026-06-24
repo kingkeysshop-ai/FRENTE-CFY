@@ -102,9 +102,9 @@ const Payment = ({
     setError(null)
 
     try {
-      if (!isOxapay(selectedPaymentMethod)) {
-        await initiatePaymentSession(liveCart, { provider_id: selectedPaymentMethod })
-      }
+      await initiatePaymentSession(liveCart, {
+        provider_id: isOxapay(selectedPaymentMethod) ? "pp_cryptomus_cryptomus" : selectedPaymentMethod,
+      })
       const updatedCart = await retrieveCart(liveCart.id)
       if (updatedCart) setFreshCart(updatedCart)
       if (!isStripeLike(selectedPaymentMethod) || (paidByGiftcard)) {
