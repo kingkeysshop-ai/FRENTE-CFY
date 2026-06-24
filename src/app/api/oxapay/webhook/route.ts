@@ -19,6 +19,86 @@ function verifyWebhookSignature(rawBody: string, receivedHmac: string, apiKey: s
   }
 }
 
+async function getCartRegion(cartId: string): Promise<string | null> {
+  try {
+    const res = await fetch(
+      `${MEDUSA_BACKEND_URL}/store/carts/${cartId}`,
+      { headers: { "x-publishable-api-key": MEDUSA_API_KEY! } }
+    )
+    if (res.ok) {
+      const { cart } = await res.json()
+      return cart?.region_id || null
+    }
+  } catch {}
+  return null
+}
+
+async function ensurePaymentSession(cartId: string, regionId?: string): Promise<boolean> {
+  // Try to create sessions for all available providers first
+  try {
+    await fetch(`${MEDUSA_BACKEND_URL}/store/carts/${cartId}/payment-sessions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-publishable-api-key": MEDUSA_API_KEY!,
+      },
+      body: JSON.stringify({}),
+    })
+  } catch {}
+
+  // Try each provider
+  for (const pid of ["system", "manual", "pp_stripe_stripe"]) {
+    try {
+      const res = await fetch(
+        `${MEDUSA_BACKEND_URL}/store/carts/${cartId}/payment-session`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-publishable-api-key": MEDUSA_API_KEY!,
+          },
+          body: JSON.stringify({ provider_id: pid }),
+        }
+      )
+      if (res.ok) return true
+    } catch {}
+  }
+
+  // If regionId is available, try registering manual provider via admin API
+  if (regionId && MEDUSA_API_KEY?.startsWith("sk_")) {
+    try {
+      const regRes = await fetch(
+        `${MEDUSA_BACKEND_URL}/admin/regions/${regionId}/payment-providers`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${MEDUSA_API_KEY}`,
+          },
+          body: JSON.stringify({ provider_id: "manual" }),
+        }
+      )
+      if (regRes.ok) {
+        // Retry selecting manual
+        const retryRes = await fetch(
+          `${MEDUSA_BACKEND_URL}/store/carts/${cartId}/payment-session`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-publishable-api-key": MEDUSA_API_KEY!,
+            },
+            body: JSON.stringify({ provider_id: "manual" }),
+          }
+        )
+        return retryRes.ok
+      }
+    } catch {}
+  }
+
+  return false
+}
+
 async function completeCart(cartId: string): Promise<{ ok: boolean; orderId?: string; alreadyCompleted?: boolean }> {
   try {
     const checkRes = await fetch(
@@ -43,6 +123,14 @@ async function completeCart(cartId: string): Promise<{ ok: boolean; orderId?: st
     }
   } catch (e: any) {
     console.warn(`[Oxapay Webhook] Could not check cart status for ${cartId}: ${e.message}`)
+  }
+
+  // Ensure a payment session exists (try system/manual, or register via admin)
+  const regionId = await getCartRegion(cartId)
+  const hasSession = await ensurePaymentSession(cartId, regionId)
+  if (!hasSession) {
+    console.error(`[Oxapay Webhook] Could not create any payment session for cart ${cartId}`)
+    return { ok: false }
   }
 
   try {
