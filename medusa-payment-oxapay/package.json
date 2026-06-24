@@ -1,0 +1,10 @@
+{
+  "name": "medusa-payment-oxapay",
+  "version": "1.0.0",
+  "description": "Oxapay payment provider for Medusa v1",
+  "main": "index.js",
+  "dependencies": {},
+  "peerDependencies": {
+    "@medusajs/medusa": "^1.0.0"
+  }
+}
