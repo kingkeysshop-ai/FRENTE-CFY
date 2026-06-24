@@ -1,7 +1,7 @@
 "use client"
 
 import { useSearchParams, useRouter } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
 import { placeOrder, getOrderIdByCartId } from "@lib/data/cart"
 
 export default function PaymentSuccessContent() {
@@ -27,8 +27,7 @@ export default function PaymentSuccessContent() {
 
     const attemptOrder = async () => {
       if (provider === "oxapay") {
-        // Oxapay: esperar a que el webhook confirme el pago
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 30; i++) {
           if (!mounted.current) return
           try {
             const orderId = await getOrderIdByCartId(cartId)
@@ -79,6 +78,25 @@ export default function PaymentSuccessContent() {
     return () => { mounted.current = false }
   }, [cartId, provider, router])
 
+  const handleRetry = useCallback(async () => {
+    setStatus("loading")
+    if (!cartId) return
+    for (let i = 0; i < 30; i++) {
+      if (!mounted.current) return
+      try {
+        const orderId = await getOrderIdByCartId(cartId)
+        if (orderId) {
+          router.push(`/order/${orderId}/confirmed`)
+          return
+        }
+      } catch {}
+      setStatus("retrying")
+      await new Promise((r) => setTimeout(r, 3000))
+    }
+    setStatus("error")
+    setErrorMessage("El pago no se confirmó. Si el problema persiste, contacta a soporte.")
+  }, [cartId, router])
+
   if (!cartId) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-black">
@@ -110,7 +128,7 @@ export default function PaymentSuccessContent() {
             <h1 className="text-white text-xl font-bold mb-2">Error al procesar el pago</h1>
             <p className="text-[#888888] mb-4">{errorMessage}</p>
             <button
-              onClick={() => window.location.reload()}
+              onClick={provider === "oxapay" ? handleRetry : () => window.location.reload()}
               className="px-6 py-3 bg-[#facc15] text-[#0a0a0a] font-bold rounded-xl hover:bg-[#e6b800] transition-colors"
             >
               Reintentar
