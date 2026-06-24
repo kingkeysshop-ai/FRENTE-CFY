@@ -21,16 +21,6 @@ const OxapayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
     setError(null)
 
     try {
-      // Create a manual payment session so Medusa can complete the order later
-      try {
-        await initiatePaymentSession(cart, { provider_id: "pp_system_default" })
-      } catch {
-        // fallback: try manual
-        try {
-          await initiatePaymentSession(cart, { provider_id: "manual" })
-        } catch {}
-      }
-
       const orderId = `${cart.id}-${Date.now()}`
       const amount = ((cart.total ?? 0) / 100).toFixed(2)
       const currency = (cart.region?.currency_code ?? "USD").toUpperCase()
@@ -45,6 +35,15 @@ const OxapayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
 
       if (!res.ok || !data.url) {
         throw new Error(data.error || "No se pudo crear la factura en Oxapay")
+      }
+
+      // Create a manual payment session so Medusa can complete the order later
+      try {
+        await initiatePaymentSession(cart, { provider_id: "pp_system_default" })
+      } catch {
+        try {
+          await initiatePaymentSession(cart, { provider_id: "manual" })
+        } catch {}
       }
 
       window.location.href = data.url
