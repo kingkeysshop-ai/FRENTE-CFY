@@ -2,7 +2,6 @@
 
 import { HttpTypes } from "@medusajs/types"
 import { useState } from "react"
-import { initiatePaymentSession } from "@lib/data/cart"
 import ErrorMessage from "../error-message"
 
 type Props = {
@@ -35,15 +34,6 @@ const OxapayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
 
       if (!res.ok || !data.url) {
         throw new Error(data.error || "No se pudo crear la factura en Oxapay")
-      }
-
-      // Create a manual payment session so Medusa can complete the order later
-      try {
-        await initiatePaymentSession(cart, { provider_id: "pp_system_default" })
-      } catch {
-        try {
-          await initiatePaymentSession(cart, { provider_id: "manual" })
-        } catch {}
       }
 
       window.location.href = data.url
