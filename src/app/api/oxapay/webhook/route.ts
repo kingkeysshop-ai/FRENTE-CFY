@@ -5,33 +5,26 @@ import { checkRateLimit } from "@lib/rate-limit"
 const OXAPAY_MERCHANT_API_KEY = process.env.OXAPAY_MERCHANT_API_KEY
 const MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
 const MEDUSA_API_KEY = process.env.MEDUSA_API_KEY || process.env.MEDUSA_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
+const MEDUSA_ADMIN_EMAIL = process.env.MEDUSA_ADMIN_EMAIL || "admin@elreino.digital"
+const MEDUSA_ADMIN_PASSWORD = process.env.MEDUSA_ADMIN_PASSWORD
+
+const h = { "Content-Type": "application/json", "x-publishable-api-key": MEDUSA_API_KEY! }
 
 function verifyWebhookSignature(rawBody: string, receivedHmac: string, apiKey: string): boolean {
   try {
-    const expectedHmac = crypto
-      .createHmac("sha512", apiKey)
-      .update(rawBody)
-      .digest("hex")
+    const expectedHmac = crypto.createHmac("sha512", apiKey).update(rawBody).digest("hex")
     if (expectedHmac.length !== receivedHmac.length) return false
     return crypto.timingSafeEqual(Buffer.from(expectedHmac), Buffer.from(receivedHmac))
-  } catch {
-    return false
-  }
+  } catch { return false }
 }
 
 async function completeCart(cartId: string): Promise<{ ok: boolean; orderId?: string; alreadyCompleted?: boolean }> {
   try {
-    const checkRes = await fetch(
-      `${MEDUSA_BACKEND_URL}/store/carts/${cartId}`,
-      { headers: { "x-publishable-api-key": MEDUSA_API_KEY! } }
-    )
+    const checkRes = await fetch(`${MEDUSA_BACKEND_URL}/store/carts/${cartId}`, { headers: h })
     if (checkRes.ok) {
       const { cart } = await checkRes.json()
       if (cart?.completed_at) {
-        const orderCheck = await fetch(
-          `${MEDUSA_BACKEND_URL}/store/orders?cart_id=${cartId}`,
-          { headers: { "x-publishable-api-key": MEDUSA_API_KEY! } }
-        )
+        const orderCheck = await fetch(`${MEDUSA_BACKEND_URL}/store/orders?cart_id=${cartId}`, { headers: h })
         if (orderCheck.ok) {
           const { orders } = await orderCheck.json()
           if (orders?.length > 0) {
@@ -41,29 +34,55 @@ async function completeCart(cartId: string): Promise<{ ok: boolean; orderId?: st
         }
       }
     }
-  } catch (e: any) {
-    console.warn(`[Oxapay Webhook] Could not check cart status for ${cartId}: ${e.message}`)
-  }
+  } catch (e: any) { console.warn(`[Oxapay Webhook] Could not check cart status for ${cartId}: ${e.message}`) }
+
+  // Try to login to admin and add cryptomus to region, then create session and complete
+  try {
+    if (MEDUSA_ADMIN_PASSWORD) {
+      const loginRes = await fetch(`${MEDUSA_BACKEND_URL}/admin/auth/token`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: MEDUSA_ADMIN_EMAIL, password: MEDUSA_ADMIN_PASSWORD }),
+      })
+      if (loginRes.ok) {
+        const { access_token } = await loginRes.json()
+        const auth = { "Content-Type": "application/json", Authorization: `Bearer ${access_token}` }
+
+        // Get cart region
+        const cartRes = await fetch(`${MEDUSA_BACKEND_URL}/store/carts/${cartId}`, { headers: h })
+        if (cartRes.ok) {
+          const { cart } = await cartRes.json()
+          const regionId = cart?.region_id
+
+          if (regionId) {
+            // Add cryptomus to region via admin API
+            await fetch(`${MEDUSA_BACKEND_URL}/admin/regions/${regionId}/payment-providers`, {
+              method: "POST", headers: auth,
+              body: JSON.stringify({ provider_id: "pp_cryptomus_cryptomus" }),
+            })
+
+            // Create payment session
+            await fetch(`${MEDUSA_BACKEND_URL}/store/carts/${cartId}/payment-sessions`, {
+              method: "POST", headers: h, body: JSON.stringify({}),
+            })
+            await fetch(`${MEDUSA_BACKEND_URL}/store/carts/${cartId}/payment-session`, {
+              method: "POST", headers: h,
+              body: JSON.stringify({ provider_id: "pp_cryptomus_cryptomus" }),
+            }).catch(() => {})
+          }
+        }
+      }
+    }
+  } catch (e: any) { console.warn(`[Oxapay Webhook] Admin setup failed: ${e.message}`) }
 
   try {
-    const medusaRes = await fetch(
-      `${MEDUSA_BACKEND_URL}/store/carts/${cartId}/complete`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-publishable-api-key": MEDUSA_API_KEY!,
-        },
-      }
-    )
-
+    const medusaRes = await fetch(`${MEDUSA_BACKEND_URL}/store/carts/${cartId}/complete`, {
+      method: "POST", headers: h,
+    })
     const medusaData = await medusaRes.json()
 
     if (!medusaRes.ok) {
-      const isCompleted = medusaData?.type === "order"
-      if (isCompleted) {
-        return { ok: true, orderId: medusaData?.data?.id }
-      }
+      if (medusaData?.type === "order") return { ok: true, orderId: medusaData?.data?.id }
       console.error(`[Oxapay Webhook] Failed to complete cart ${cartId}: ${JSON.stringify(medusaData)}`)
       return { ok: false }
     }
