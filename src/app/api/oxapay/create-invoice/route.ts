@@ -30,6 +30,8 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    let itemNames = ""
+
     if (MEDUSA_BACKEND_URL && MEDUSA_API_KEY) {
       try {
         const cartRes = await fetch(
@@ -47,6 +49,11 @@ export async function POST(req: NextRequest) {
               { status: 400 }
             )
           }
+          if (actualCart?.items?.length > 0) {
+            itemNames = actualCart.items
+              .map((item: any) => item.title || item.variant?.product?.title || "Producto")
+              .join(", ")
+          }
         }
       } catch {} // cart verification is optional
     }
@@ -59,7 +66,7 @@ export async function POST(req: NextRequest) {
       order_id: cartId,
       callback_url: `${NEXT_PUBLIC_BASE_URL}/api/oxapay/webhook`,
       return_url: `${NEXT_PUBLIC_BASE_URL}/payment/success?cart_id=${cartId}`,
-      description: "Compra en El Reino Digital",
+      description: itemNames || "Compra en El Reino Digital",
       lifetime: 60,
       fee_paid_by_payer: 1,
       under_paid_coverage: 0,
