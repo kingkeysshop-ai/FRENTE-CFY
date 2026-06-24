@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
       } catch {} // cart verification is optional
     }
 
-    const isSandbox = OXAPAY_MERCHANT_API_KEY === "sandbox" || process.env.NODE_ENV !== "production"
+    const isSandbox = process.env.OXAPAY_SANDBOX !== "false"
 
     const payload: Record<string, unknown> = {
       amount: Number(amount),
