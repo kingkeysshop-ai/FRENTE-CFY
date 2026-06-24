@@ -8,6 +8,7 @@ class OxapayPaymentService extends AbstractPaymentProcessor {
     super(container, options)
     this.oxapayApiKey = options.api_key || process.env.OXAPAY_MERCHANT_API_KEY
     this.oxapayApiBase = options.api_base || "https://api.oxapay.com/v1"
+    this.storeUrl = options.store_url || process.env.STORE_URL || process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000"
   }
 
   async initiatePayment(context) {
@@ -17,8 +18,8 @@ class OxapayPaymentService extends AbstractPaymentProcessor {
       amount: amount / 100,
       currency: (currency_code || "USD").toUpperCase(),
       order_id: resource_id,
-      callback_url: `${process.env.BACKEND_URL || process.env.MEDUSA_BACKEND_URL}/hooks/oxapay`,
-      return_url: `${process.env.STORE_URL}/payment/success?cart_id=${resource_id}&provider=oxapay`,
+      callback_url: `${this.storeUrl}/api/oxapay/webhook`,
+      return_url: `${this.storeUrl}/payment/success?cart_id=${resource_id}&provider=oxapay`,
       description: `Order ${resource_id}`,
       lifetime: 60,
       fee_paid_by_payer: 1,

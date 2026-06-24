@@ -55,10 +55,10 @@ async function completeCart(cartId: string): Promise<{ ok: boolean; orderId?: st
           const regionId = cart?.region_id
 
           if (regionId) {
-            // Add cryptomus to region via admin API
+            // Add oxapay to region via admin API
             await fetch(`${MEDUSA_BACKEND_URL}/admin/regions/${regionId}/payment-providers`, {
               method: "POST", headers: auth,
-              body: JSON.stringify({ provider_id: "pp_cryptomus_cryptomus" }),
+              body: JSON.stringify({ provider_id: "pp_oxapay_oxapay" }),
             })
 
             // Create payment session
@@ -67,7 +67,7 @@ async function completeCart(cartId: string): Promise<{ ok: boolean; orderId?: st
             })
             await fetch(`${MEDUSA_BACKEND_URL}/store/carts/${cartId}/payment-session`, {
               method: "POST", headers: h,
-              body: JSON.stringify({ provider_id: "pp_cryptomus_cryptomus" }),
+              body: JSON.stringify({ provider_id: "pp_oxapay_oxapay" }),
             }).catch(() => {})
           }
         }

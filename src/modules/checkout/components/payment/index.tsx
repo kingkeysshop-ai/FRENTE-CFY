@@ -103,7 +103,7 @@ const Payment = ({
 
     try {
       if (isOxapay(selectedPaymentMethod)) {
-        try { await initiatePaymentSession(liveCart, { provider_id: "pp_cryptomus_cryptomus" }) } catch {}
+        try { await initiatePaymentSession(liveCart, { provider_id: "pp_oxapay_oxapay" }) } catch {}
       } else {
         await initiatePaymentSession(liveCart, { provider_id: selectedPaymentMethod })
       }
