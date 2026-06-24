@@ -22,17 +22,23 @@ function verifyWebhookSignature(rawBody: string, receivedHmac: string, apiKey: s
 async function createPaymentSession(cartId: string): Promise<boolean> {
   const providers = [
     "pp_cryptomus_cryptomus",
-    "pp_aurpay_aurpay",
     "pp_bold_bold",
+    "pp_aurpay_aurpay",
     "pp_stripe_stripe",
-    "manual",
-    "pp_system_default",
   ]
   const headers = {
     "Content-Type": "application/json",
     "x-publishable-api-key": MEDUSA_API_KEY!,
   }
 
+  // First initialize all payment sessions
+  await fetch(`${MEDUSA_BACKEND_URL}/store/carts/${cartId}/payment-sessions`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({}),
+  }).catch(() => {})
+
+  // Then try to select one that works
   for (const provider of providers) {
     try {
       const res = await fetch(
