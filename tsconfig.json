@@ -33,6 +33,7 @@
     ".next",
     ".nyc_output",
     "coverage",
-    "jest-coverage"
+    "jest-coverage",
+    "V2 BACKEND MIGRACION FUTURA/**"
   ]
 }
