@@ -2,6 +2,7 @@
 
 import { HttpTypes } from "@medusajs/types"
 import { useState } from "react"
+import { initiatePaymentSession } from "@lib/data/cart"
 import ErrorMessage from "../error-message"
 
 type Props = {
@@ -20,6 +21,16 @@ const OxapayPaymentButton = ({ cart, notReady, "data-testid": dataTestId }: Prop
     setError(null)
 
     try {
+      // Create a manual payment session so Medusa can complete the order later
+      try {
+        await initiatePaymentSession(cart, { provider_id: "pp_system_default" })
+      } catch {
+        // fallback: try manual
+        try {
+          await initiatePaymentSession(cart, { provider_id: "manual" })
+        } catch {}
+      }
+
       const orderId = `${cart.id}-${Date.now()}`
       const amount = ((cart.total ?? 0) / 100).toFixed(2)
       const currency = (cart.region?.currency_code ?? "USD").toUpperCase()
