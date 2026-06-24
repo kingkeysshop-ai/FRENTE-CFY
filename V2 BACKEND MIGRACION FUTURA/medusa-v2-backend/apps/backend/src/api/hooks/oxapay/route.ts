@@ -5,7 +5,7 @@ export async function POST(
   req: MedusaRequest,
   res: MedusaResponse
 ): Promise<void> {
-  const provider = "test-payment"
+  const provider = "oxapay"
 
   try {
     const eventBus = req.scope.resolve(Modules.EVENT_BUS)
@@ -23,11 +23,11 @@ export async function POST(
       name: PaymentWebhookEvents.WebhookReceived,
       data: event,
     }, {
-      delay: 0,
-      attempts: 1,
+      delay: 5000,
+      attempts: 3,
     })
 
-    res.status(200).json({ message: "Test payment webhook received" })
+    res.status(200).json({ message: "Webhook received" })
   } catch (error: any) {
     res.status(400).json({ error: error.message || "Webhook processing failed" })
   }

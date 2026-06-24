@@ -10,13 +10,29 @@ module.exports = defineConfig({
       storeCors: process.env.STORE_CORS!,
       adminCors: process.env.ADMIN_CORS!,
       authCors: process.env.AUTH_CORS!,
-      jwtSecret: process.env.JWT_SECRET || "supersecret",
-      cookieSecret: process.env.COOKIE_SECRET || "supersecret",
+      jwtSecret: process.env.JWT_SECRET,
+      cookieSecret: process.env.COOKIE_SECRET,
     },
   },
   modules: [
     {
       resolve: "./src/modules/license-key",
+    },
+    {
+      resolve: "./src/modules/license-notification",
+    },
+    {
+      resolve: "@medusajs/medusa/payment",
+      options: {
+        providers: [
+          { resolve: "./src/modules/aurpay", options: {} },
+          { resolve: "./src/modules/bold", options: {} },
+          { resolve: "./src/modules/cryptomus", options: {} },
+          { resolve: "./src/modules/btcpay", options: {} },
+          { resolve: "./src/modules/test-payment", options: {} },
+          { resolve: "./src/modules/oxapay", options: {} },
+        ],
+      },
     },
 
   ],

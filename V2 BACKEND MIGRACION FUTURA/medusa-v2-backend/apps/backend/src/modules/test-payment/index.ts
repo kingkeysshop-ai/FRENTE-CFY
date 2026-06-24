@@ -21,67 +21,30 @@ import type {
   ProviderWebhookPayload,
   WebhookActionResult,
 } from "@medusajs/framework/types"
-import crypto from "crypto"
 
-class CryptomusPaymentService extends AbstractPaymentProvider {
-  static identifier = "cryptomus"
+class TestPaymentService extends AbstractPaymentProvider {
+  static identifier = "test-payment"
 
   constructor(container: Record<string, unknown>, options: Record<string, unknown> = {}) {
     super(container, options)
-  }
-
-  private getMerchantId(): string {
-    return process.env.CRYPTOMUS_MERCHANT_ID || ""
-  }
-
-  private getApiKey(): string {
-    return process.env.CRYPTOMUS_API_KEY || ""
+    if (process.env.NODE_ENV === "production") {
+      throw new MedusaError(MedusaError.Types.INVALID_DATA, "TestPaymentService cannot be used in production")
+    }
   }
 
   async initiatePayment(input: InitiatePaymentInput): Promise<InitiatePaymentOutput> {
-    const payload = {
-      amount: input.amount,
-      currency: input.currency_code,
-      order_id: (input.context as any)?.order_id || (input.context as any)?.cart_id,
-      url_callback: `${process.env.BACKEND_URL}/hooks/cryptomus`,
-      url_return: (input.context as any)?.success_url,
-      url_success: (input.context as any)?.success_url,
+    if (process.env.NODE_ENV === "production") {
+      throw new MedusaError(MedusaError.Types.INVALID_DATA, "Test payment provider is not available in production")
     }
-
-    const sign = crypto
-      .createHash("md5")
-      .update(Buffer.from(JSON.stringify(payload)).toString("base64") + this.getApiKey())
-      .digest("hex")
-
-    const response = await fetch("https://api.cryptomus.com/v1/payment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        merchant: this.getMerchantId(),
-        sign,
-      },
-      body: JSON.stringify(payload),
-    })
-
-    if (!response.ok) {
-      const errBody = await response.json().catch(() => ({}))
-      throw new MedusaError(MedusaError.Types.INVALID_DATA, `Cryptomus initiation failed: ${JSON.stringify(errBody)}`)
-    }
-
-    const data = await response.json()
 
     return {
-      id: data.result?.uuid || data.result?.order_id || "",
-      data: {
-        redirect_url: data.result?.url,
-        uuid: data.result?.uuid,
-        order_id: data.result?.order_id,
-      },
+      id: `test_${Date.now()}`,
+      data: { status: "authorized" },
     }
   }
 
   async authorizePayment(input: AuthorizePaymentInput): Promise<AuthorizePaymentOutput> {
-    return { status: "authorized" as const, data: input.data as Record<string, unknown> }
+    return { status: "authorized", data: input.data as Record<string, unknown> }
   }
 
   async capturePayment(input: CapturePaymentInput): Promise<CapturePaymentOutput> {
@@ -97,7 +60,7 @@ class CryptomusPaymentService extends AbstractPaymentProvider {
   }
 
   async getPaymentStatus(input: GetPaymentStatusInput): Promise<GetPaymentStatusOutput> {
-    return { status: "authorized" as const }
+    return { status: "authorized" }
   }
 
   async refundPayment(input: RefundPaymentInput): Promise<RefundPaymentOutput> {
@@ -115,20 +78,16 @@ class CryptomusPaymentService extends AbstractPaymentProvider {
   async getWebhookActionAndData(
     payload: ProviderWebhookPayload["payload"]
   ): Promise<WebhookActionResult> {
-    const data = payload.data as any
-    if (data?.status === "paid" || data?.status === "success") {
-      return {
-        action: "captured",
-        data: {
-          session_id: data.uuid || "",
-          amount: data.amount || 0,
-        },
-      }
+    return {
+      action: "captured",
+      data: {
+        session_id: (payload.data as any)?.session_id || "",
+        amount: (payload.data as any)?.amount || 0,
+      },
     }
-    return { action: "not_supported", data: { session_id: "", amount: 0 } }
   }
 }
 
 export default ModuleProvider(Modules.PAYMENT, {
-  services: [CryptomusPaymentService],
+  services: [TestPaymentService],
 })

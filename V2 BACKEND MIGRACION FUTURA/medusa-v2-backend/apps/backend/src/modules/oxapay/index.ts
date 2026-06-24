@@ -23,63 +23,60 @@ import type {
 } from "@medusajs/framework/types"
 import crypto from "crypto"
 
-class AurpayPaymentService extends AbstractPaymentProvider {
-  static identifier = "aurpay"
+class OxapayPaymentService extends AbstractPaymentProvider {
+  static identifier = "oxapay"
 
   constructor(container: Record<string, unknown>, options: Record<string, unknown> = {}) {
     super(container, options)
   }
 
-  private getBaseUrl(): string {
-    return process.env.AURPAY_API_BASE || "https://api.aurpay.net"
-  }
-
   private getApiKey(): string {
-    return process.env.AURPAY_API_KEY || ""
+    return process.env.OXAPAY_MERCHANT_API_KEY || ""
   }
 
-  private getWebhookSecret(): string {
-    return process.env.AURPAY_WEBHOOK_SECRET || ""
+  private getBaseUrl(): string {
+    return process.env.OXAPAY_API_BASE || "https://api.oxapay.com/v1"
   }
 
   async initiatePayment(input: InitiatePaymentInput): Promise<InitiatePaymentOutput> {
-    const webhookToken = crypto.randomBytes(32).toString("hex")
-    const hmac = crypto
-      .createHmac("sha256", this.getWebhookSecret())
-      .update(webhookToken)
-      .digest("hex")
+    const storeUrl = process.env.STORE_URL || process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000"
+    const backendUrl = process.env.BACKEND_URL || process.env.MEDUSA_BACKEND_URL || "http://localhost:9000"
 
-    const callbackUrl = `${process.env.BACKEND_URL}/hooks/aurpay?token=${webhookToken}&hmac=${hmac}`
+    const payload: Record<string, unknown> = {
+      amount: input.amount,
+      currency: input.currency_code?.toUpperCase() || "USD",
+      order_id: (input.context as any)?.order_id || (input.context as any)?.cart_id,
+      callback_url: `${backendUrl}/api/hooks/oxapay`,
+      return_url: (input.context as any)?.success_url || `${storeUrl}/payment/success?cart_id=${(input.context as any)?.cart_id}&provider=oxapay`,
+      description: (input.context as any)?.description || `Order ${(input.context as any)?.cart_id}`,
+      email: (input.context as any)?.email,
+      lifetime: 60,
+      fee_paid_by_payer: 1,
+      under_paid_coverage: 0,
+      sandbox: process.env.NODE_ENV !== "production",
+    }
 
-    const response = await fetch(`${this.getBaseUrl()}/api/order/pay-url`, {
+    const response = await fetch(`${this.getBaseUrl()}/payment/invoice`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "API-Key": this.getApiKey(),
+        "merchant_api_key": this.getApiKey(),
       },
-      body: JSON.stringify({
-        price_amount: input.amount,
-        price_currency: input.currency_code,
-        order_id: (input.context as any)?.order_id || (input.context as any)?.cart_id,
-        callback_url: callbackUrl,
-        success_url: (input.context as any)?.success_url,
-        cancel_url: (input.context as any)?.cancel_url,
-      }),
+      body: JSON.stringify(payload),
     })
 
     if (!response.ok) {
       const errBody = await response.json().catch(() => ({}))
-      throw new MedusaError(MedusaError.Types.INVALID_DATA, `Aurpay initiation failed: ${JSON.stringify(errBody)}`)
+      throw new MedusaError(MedusaError.Types.INVALID_DATA, `Oxapay initiation failed: ${JSON.stringify(errBody)}`)
     }
 
-    const data = await response.json()
+    const result = await response.json()
 
     return {
-      id: data.id || data.invoice_id || webhookToken,
+      id: result.data?.track_id || "",
       data: {
-        redirect_url: data.url,
-        invoice_id: data.invoice_id || data.id,
-        webhook_token: webhookToken,
+        redirect_url: result.data?.payment_url,
+        track_id: result.data?.track_id,
       },
     }
   }
@@ -120,11 +117,11 @@ class AurpayPaymentService extends AbstractPaymentProvider {
     payload: ProviderWebhookPayload["payload"]
   ): Promise<WebhookActionResult> {
     const data = payload.data as any
-    if (data?.status === "SUCCEED") {
+    if (data?.status === "Paid") {
       return {
         action: "captured",
         data: {
-          session_id: data.session_id || "",
+          session_id: data.track_id || "",
           amount: data.amount || 0,
         },
       }
@@ -134,5 +131,5 @@ class AurpayPaymentService extends AbstractPaymentProvider {
 }
 
 export default ModuleProvider(Modules.PAYMENT, {
-  services: [AurpayPaymentService],
+  services: [OxapayPaymentService],
 })
