@@ -79,7 +79,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
           data-testid={dataTestId}
         />
       )
-    case isOxapay(paymentSession?.provider_id || urlProvider):
+    case isOxapay(paymentSession?.provider_id ?? urlProvider ?? undefined):
       return (
         <OxapayPaymentButton
           cart={cart}

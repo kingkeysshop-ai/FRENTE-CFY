@@ -34,7 +34,7 @@ const Review = ({ cart }: { cart: any }) => {
   const previousStepsCompleted =
     hasShippingAddress &&
     (isDigital || hasShippingMethods) &&
-    (hasPaymentSession || hasPaymentSessions || hasPaymentCollection || paidByGiftcard || isOxapay(urlProvider))
+    (hasPaymentSession || hasPaymentSessions || hasPaymentCollection || paidByGiftcard || isOxapay(urlProvider ?? undefined))
 
   return (
     <div className="bg-transparent">
