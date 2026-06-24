@@ -8,10 +8,12 @@ import CheckCircle from "@modules/common/icons/check-circle"
 import Lightning from "@modules/common/icons/lightning"
 import ShieldCheck from "@modules/common/icons/shield-check"
 import { isCartAllDigital } from "@lib/util/is-digital-cart"
+import { isOxapay } from "@lib/constants"
 
 const Review = ({ cart }: { cart: any }) => {
   const searchParams = useSearchParams()
   const isOpen = searchParams.get("step") === "review"
+  const urlProvider = searchParams.get("provider")
   const isDigital = isCartAllDigital(cart)
 
   const paidByGiftcard =
@@ -32,7 +34,7 @@ const Review = ({ cart }: { cart: any }) => {
   const previousStepsCompleted =
     hasShippingAddress &&
     (isDigital || hasShippingMethods) &&
-    (hasPaymentSession || hasPaymentSessions || hasPaymentCollection || paidByGiftcard)
+    (hasPaymentSession || hasPaymentSessions || hasPaymentCollection || paidByGiftcard || isOxapay(urlProvider))
 
   return (
     <div className="bg-transparent">
