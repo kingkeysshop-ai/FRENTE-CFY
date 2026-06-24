@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
       currency: currency.toUpperCase(),
       order_id: cartId,
       callback_url: `${NEXT_PUBLIC_BASE_URL}/api/oxapay/webhook`,
-      return_url: `${NEXT_PUBLIC_BASE_URL}/payment/success?cart_id=${cartId}`,
+      return_url: `${NEXT_PUBLIC_BASE_URL}/payment/success?cart_id=${cartId}&provider=oxapay`,
       description: itemNames || "Compra en El Reino Digital",
       lifetime: 60,
       fee_paid_by_payer: 1,

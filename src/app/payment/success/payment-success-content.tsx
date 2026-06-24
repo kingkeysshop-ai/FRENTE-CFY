@@ -12,6 +12,7 @@ export default function PaymentSuccessContent() {
   const mounted = useRef(true)
 
   const cartId = searchParams.get("cart_id") || searchParams.get("cartId") || searchParams.get("reference")
+  const provider = searchParams.get("provider")
 
   useEffect(() => {
     mounted.current = true
@@ -22,10 +23,30 @@ export default function PaymentSuccessContent() {
       return
     }
 
-    const maxRetries = 3
     const delay = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
     const attemptOrder = async () => {
+      if (provider === "oxapay") {
+        // Oxapay: esperar a que el webhook confirme el pago
+        for (let i = 0; i < 20; i++) {
+          if (!mounted.current) return
+          try {
+            const orderId = await getOrderIdByCartId(cartId)
+            if (orderId) {
+              router.push(`/order/${orderId}/confirmed`)
+              return
+            }
+          } catch {}
+          setStatus("retrying")
+          await delay(3000)
+        }
+        setStatus("error")
+        setErrorMessage("El pago no se confirmó. Si el problema persiste, contacta a soporte.")
+        return
+      }
+
+      // Otros proveedores: placeOrder directo
+      const maxRetries = 3
       for (let i = 0; i <= maxRetries; i++) {
         if (!mounted.current) return
         try {
@@ -56,7 +77,7 @@ export default function PaymentSuccessContent() {
     attemptOrder()
 
     return () => { mounted.current = false }
-  }, [cartId, router])
+  }, [cartId, provider, router])
 
   if (!cartId) {
     return (
