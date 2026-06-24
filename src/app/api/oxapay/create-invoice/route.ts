@@ -56,10 +56,10 @@ export async function POST(req: NextRequest) {
     const payload: Record<string, unknown> = {
       amount: Number(amount),
       currency: currency.toUpperCase(),
-      order_id: orderId,
+      order_id: cartId,
       callback_url: `${NEXT_PUBLIC_BASE_URL}/api/oxapay/webhook`,
       return_url: `${NEXT_PUBLIC_BASE_URL}/payment/success?cart_id=${cartId}`,
-      description: cartId,
+      description: "Compra en El Reino Digital",
       lifetime: 60,
       fee_paid_by_payer: 1,
       under_paid_coverage: 0,

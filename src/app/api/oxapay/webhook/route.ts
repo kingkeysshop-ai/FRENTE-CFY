@@ -100,7 +100,7 @@ export async function POST(req: NextRequest) {
 
     console.log(`[Oxapay Webhook] Received status="${status}" order_id="${order_id}" track_id="${track_id}"`)
 
-    const cartId = description || order_id
+    const cartId = order_id || description
 
     if (status === "Paid") {
       if (!cartId) {
