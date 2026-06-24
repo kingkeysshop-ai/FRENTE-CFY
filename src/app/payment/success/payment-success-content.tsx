@@ -30,12 +30,18 @@ export default function PaymentSuccessContent() {
         for (let i = 0; i < 30; i++) {
           if (!mounted.current) return
           try {
-            const orderId = await getOrderIdByCartId(cartId)
+            await placeOrder(cartId)
+            return
+          } catch (err: any) {
+            if (!mounted.current) return
+            if (err?.digest === "NEXT_REDIRECT") throw err
+            // If webhook already completed it, try to find the order
+            const orderId = await getOrderIdByCartId(cartId).catch(() => null)
             if (orderId) {
               router.push(`/order/${orderId}/confirmed`)
               return
             }
-          } catch {}
+          }
           setStatus("retrying")
           await delay(3000)
         }
@@ -84,12 +90,17 @@ export default function PaymentSuccessContent() {
     for (let i = 0; i < 30; i++) {
       if (!mounted.current) return
       try {
-        const orderId = await getOrderIdByCartId(cartId)
+        await placeOrder(cartId)
+        return
+      } catch (err: any) {
+        if (!mounted.current) return
+        if (err?.digest === "NEXT_REDIRECT") throw err
+        const orderId = await getOrderIdByCartId(cartId).catch(() => null)
         if (orderId) {
           router.push(`/order/${orderId}/confirmed`)
           return
         }
-      } catch {}
+      }
       setStatus("retrying")
       await new Promise((r) => setTimeout(r, 3000))
     }
