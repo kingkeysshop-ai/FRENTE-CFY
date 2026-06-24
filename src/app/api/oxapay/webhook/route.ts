@@ -5,8 +5,6 @@ import { checkRateLimit } from "@lib/rate-limit"
 const OXAPAY_MERCHANT_API_KEY = process.env.OXAPAY_MERCHANT_API_KEY
 const MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
 const MEDUSA_API_KEY = process.env.MEDUSA_API_KEY || process.env.MEDUSA_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
-const MEDUSA_ADMIN_EMAIL = process.env.MEDUSA_ADMIN_EMAIL || "admin@elreino.digital"
-const MEDUSA_ADMIN_PASSWORD = process.env.MEDUSA_ADMIN_PASSWORD
 
 function verifyWebhookSignature(rawBody: string, receivedHmac: string, apiKey: string): boolean {
   try {
@@ -19,88 +17,6 @@ function verifyWebhookSignature(rawBody: string, receivedHmac: string, apiKey: s
   } catch {
     return false
   }
-}
-
-async function getCartRegion(cartId: string): Promise<string | null> {
-  try {
-    const res = await fetch(
-      `${MEDUSA_BACKEND_URL}/store/carts/${cartId}`,
-      { headers: { "x-publishable-api-key": MEDUSA_API_KEY! } }
-    )
-    if (res.ok) {
-      const { cart } = await res.json()
-      return cart?.region_id || null
-    }
-  } catch {}
-  return null
-}
-
-async function getAdminToken(): Promise<string | null> {
-  if (!MEDUSA_ADMIN_PASSWORD) return null
-  try {
-    const res = await fetch(`${MEDUSA_BACKEND_URL}/admin/auth/token`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: MEDUSA_ADMIN_EMAIL, password: MEDUSA_ADMIN_PASSWORD }),
-    })
-    if (res.ok) {
-      const { access_token } = await res.json()
-      return access_token || null
-    }
-  } catch {}
-  return null
-}
-
-async function ensurePaymentSession(cartId: string, regionId?: string): Promise<boolean> {
-  // Try each storefront provider first
-  for (const pid of ["system", "manual"]) {
-    try {
-      const res = await fetch(
-        `${MEDUSA_BACKEND_URL}/store/carts/${cartId}/payment-session`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-publishable-api-key": MEDUSA_API_KEY!,
-          },
-          body: JSON.stringify({ provider_id: pid }),
-        }
-      )
-      if (res.ok) return true
-    } catch {}
-  }
-
-  // Try registering manual provider via admin API (login first)
-  if (regionId) {
-    const token = await getAdminToken()
-    if (token) {
-      try {
-        await fetch(`${MEDUSA_BACKEND_URL}/admin/regions/${regionId}/payment-providers`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ provider_id: "manual" }),
-        })
-
-        const retryRes = await fetch(
-          `${MEDUSA_BACKEND_URL}/store/carts/${cartId}/payment-session`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "x-publishable-api-key": MEDUSA_API_KEY!,
-            },
-            body: JSON.stringify({ provider_id: "manual" }),
-          }
-        )
-        if (retryRes.ok) return true
-      } catch {}
-    }
-  }
-
-  return false
 }
 
 async function completeCart(cartId: string): Promise<{ ok: boolean; orderId?: string; alreadyCompleted?: boolean }> {
@@ -127,14 +43,6 @@ async function completeCart(cartId: string): Promise<{ ok: boolean; orderId?: st
     }
   } catch (e: any) {
     console.warn(`[Oxapay Webhook] Could not check cart status for ${cartId}: ${e.message}`)
-  }
-
-  // Ensure a payment session exists (try system/manual, or register via admin)
-  const regionId = await getCartRegion(cartId)
-  const hasSession = await ensurePaymentSession(cartId, regionId)
-  if (!hasSession) {
-    console.error(`[Oxapay Webhook] Could not create any payment session for cart ${cartId}`)
-    return { ok: false }
   }
 
   try {

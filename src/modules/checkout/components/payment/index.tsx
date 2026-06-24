@@ -102,15 +102,9 @@ const Payment = ({
     setError(null)
 
     try {
-      if (isOxapay(selectedPaymentMethod)) {
-        // For Oxapay, first ensure payment sessions then try to add manual/system provider
-        try { await ensurePaymentSessions(liveCart.id) } catch {}
-        try { await initiatePaymentSession(liveCart, { provider_id: "system" }) } catch (e1: any) {
-          try { await initiatePaymentSession(liveCart, { provider_id: "manual" }) } catch {}
-        }
-      } else {
-        await initiatePaymentSession(liveCart, { provider_id: selectedPaymentMethod })
-      }
+      await initiatePaymentSession(liveCart, {
+        provider_id: isOxapay(selectedPaymentMethod) ? "pp_cryptomus_cryptomus" : selectedPaymentMethod,
+      })
       const updatedCart = await retrieveCart(liveCart.id)
       if (updatedCart) setFreshCart(updatedCart)
       if (!isStripeLike(selectedPaymentMethod) || (paidByGiftcard)) {
