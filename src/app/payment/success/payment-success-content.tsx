@@ -2,7 +2,6 @@
 
 import { useSearchParams, useRouter } from "next/navigation"
 import { useEffect, useRef, useState, useCallback } from "react"
-import { placeOrder, getOrderIdByCartId } from "@lib/data/cart"
 
 export default function PaymentSuccessContent() {
   const searchParams = useSearchParams()
@@ -13,6 +12,16 @@ export default function PaymentSuccessContent() {
 
   const cartId = searchParams.get("cart_id") || searchParams.get("cartId") || searchParams.get("reference")
   const provider = searchParams.get("provider")
+
+  const checkOrder = useCallback(async (cid: string): Promise<string | null> => {
+    try {
+      const res = await fetch(`/api/oxapay/check-order?cart_id=${cid}`)
+      const data = await res.json()
+      return data.orderId || null
+    } catch {
+      return null
+    }
+  }, [])
 
   useEffect(() => {
     mounted.current = true
@@ -26,87 +35,45 @@ export default function PaymentSuccessContent() {
     const delay = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
     const attemptOrder = async () => {
-      if (provider === "oxapay") {
-        for (let i = 0; i < 30; i++) {
-          if (!mounted.current) return
-          try {
-            await placeOrder(cartId)
-            return
-          } catch (err: any) {
-            if (!mounted.current) return
-            if (err?.digest === "NEXT_REDIRECT") throw err
-            // If webhook already completed it, try to find the order
-            const orderId = await getOrderIdByCartId(cartId).catch(() => null)
-            if (orderId) {
-              router.push(`/order/${orderId}/confirmed`)
-              return
-            }
-          }
-          setStatus("retrying")
-          await delay(3000)
-        }
-        setStatus("error")
-        setErrorMessage("El pago no se confirmó. Si el problema persiste, contacta a soporte.")
-        return
-      }
-
-      // Otros proveedores: placeOrder directo
-      const maxRetries = 3
-      for (let i = 0; i <= maxRetries; i++) {
+      for (let i = 0; i < (provider === "oxapay" ? 30 : 3); i++) {
         if (!mounted.current) return
-        try {
-          await placeOrder(cartId)
+        const orderId = await checkOrder(cartId)
+        if (orderId) {
+          router.push(`/order/${orderId}/confirmed`)
           return
-        } catch (err: any) {
-          if (!mounted.current) return
-          if (err.message?.includes("completado") || err.message?.includes("already been completed")) {
-            const orderId = cartId ? await getOrderIdByCartId(cartId) : null
-            if (orderId) {
-              router.push(`/order/${orderId}/confirmed`)
-            } else {
-              router.push("/")
-            }
-            return
-          }
-          if (i < maxRetries) {
-            setStatus("retrying")
-            await delay(3000)
-          } else {
-            setStatus("error")
-            setErrorMessage(err.message || "Error al procesar el pago")
-          }
         }
+        setStatus("retrying")
+        await delay(3000)
       }
+      setStatus("error")
+      setErrorMessage(
+        provider === "oxapay"
+          ? "El pago no se confirmó. Si el problema persiste, contacta a soporte."
+          : "Error al procesar el pago"
+      )
     }
 
     attemptOrder()
 
     return () => { mounted.current = false }
-  }, [cartId, provider, router])
+  }, [cartId, provider, router, checkOrder])
 
   const handleRetry = useCallback(async () => {
     setStatus("loading")
     if (!cartId) return
     for (let i = 0; i < 30; i++) {
       if (!mounted.current) return
-      try {
-        await placeOrder(cartId)
+      const orderId = await checkOrder(cartId)
+      if (orderId) {
+        router.push(`/order/${orderId}/confirmed`)
         return
-      } catch (err: any) {
-        if (!mounted.current) return
-        if (err?.digest === "NEXT_REDIRECT") throw err
-        const orderId = await getOrderIdByCartId(cartId).catch(() => null)
-        if (orderId) {
-          router.push(`/order/${orderId}/confirmed`)
-          return
-        }
       }
       setStatus("retrying")
       await new Promise((r) => setTimeout(r, 3000))
     }
     setStatus("error")
     setErrorMessage("El pago no se confirmó. Si el problema persiste, contacta a soporte.")
-  }, [cartId, router])
+  }, [cartId, router, checkOrder])
 
   if (!cartId) {
     return (
