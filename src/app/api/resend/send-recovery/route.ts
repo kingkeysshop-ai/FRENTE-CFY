@@ -4,6 +4,7 @@ import { checkRateLimit } from "@lib/rate-limit"
 import { setResetToken } from "@lib/reset-token-store"
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY
+const RESEND_FROM = process.env.RESEND_FROM || "KING KEYS <noreply@elreino.digital>"
 const NEXT_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000"
 const DEFAULT_REGION = (process.env.NEXT_PUBLIC_DEFAULT_REGION || process.env.DEFAULT_REGION || "co").toLowerCase()
 
@@ -101,7 +102,7 @@ Si ten\u00e9s problemas con el bot\u00f3n, copi\u00e1 y peg\u00e1 este enlace:<b
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "KING KEYS <noreply@elreino.digital>",
+        from: RESEND_FROM,
         to: email,
         subject: "Recupera tu contraseña - KING KEYS",
         html: emailHtml,
