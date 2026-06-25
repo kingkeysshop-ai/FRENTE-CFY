@@ -250,7 +250,8 @@ export async function generatePasswordToken(
   if (!email) return { error: "El correo electrónico es obligatorio", submitted: true }
 
   try {
-    const res = await fetch("/api/resend/send-recovery", {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000"
+    const res = await fetch(`${baseUrl}/api/resend/send-recovery`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
@@ -284,7 +285,8 @@ export async function resetPassword(
   if (password !== passwordConfirm) return { error: "Las contraseñas no coinciden", submitted: true }
 
   try {
-    const res = await fetch("/api/resend/reset-password", {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000"
+    const res = await fetch(`${baseUrl}/api/resend/reset-password`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, token, password }),

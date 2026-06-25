@@ -5,6 +5,7 @@ import { setResetToken } from "@lib/reset-token-store"
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY
 const NEXT_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000"
+const DEFAULT_REGION = (process.env.NEXT_PUBLIC_DEFAULT_REGION || process.env.DEFAULT_REGION || "co").toLowerCase()
 
 export async function POST(req: NextRequest) {
   if (!RESEND_API_KEY) {
@@ -25,10 +26,10 @@ export async function POST(req: NextRequest) {
     const token = crypto.randomBytes(32).toString("hex")
     setResetToken(token, email.toLowerCase())
 
-    const countryCode = "co"
+    const countryCode = (req.headers.get("x-vercel-ip-country") || DEFAULT_REGION).toLowerCase()
     const resetUrl = `${NEXT_PUBLIC_BASE_URL}/${countryCode}/reset-password?token=${token}&email=${encodeURIComponent(email)}`
 
-    console.log(`[Resend] Sending recovery email to ${email}...`)
+    console.log(`[Resend] Sending recovery email to ${email}...`, { resetUrl, hasApiKey: !!RESEND_API_KEY, baseUrl: NEXT_PUBLIC_BASE_URL })
 
     const emailHtml = `<!DOCTYPE html>
 <html>

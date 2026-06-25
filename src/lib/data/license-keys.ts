@@ -16,6 +16,10 @@ const BACKEND_URL =
   process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL ||
   "http://localhost:9000"
 
+const PUBLISHABLE_API_KEY =
+  process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ||
+  process.env.MEDUSA_PUBLISHABLE_KEY
+
 async function apiFetch<T>(
   path: string,
   options: { method?: string; headers?: Record<string, string>; body?: unknown } = {}
@@ -24,6 +28,7 @@ async function apiFetch<T>(
   const authHeaders = await getAuthHeaders()
   const merged: Record<string, string> = {
     "Content-Type": "application/json",
+    ...(PUBLISHABLE_API_KEY ? { "x-publishable-api-key": PUBLISHABLE_API_KEY } : {}),
     ...authHeaders,
     ...headers,
   }
