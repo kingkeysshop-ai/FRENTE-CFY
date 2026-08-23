@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useCallback } from "react"
+import KingSelect from "@modules/common/components/king-select"
 
 const STATUS_OPTIONS = [
   { value: "", label: "Todos los estados" },
@@ -64,30 +65,18 @@ const OrderFilters = () => {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center gap-3">
-        <select
+        <KingSelect
+          options={STATUS_OPTIONS}
           value={currentStatus}
-          onChange={(e) => handleStatusChange(e.target.value)}
-          className="bg-[#1a1a1a] border border-[#2a2a2a] text-white text-sm rounded-xl px-4 py-2.5 appearance-none hover:bg-[#2a2a2a] transition-colors focus:outline-none focus:border-[#facc15] cursor-pointer"
-        >
-          {STATUS_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-
-        <select
+          onValueChange={handleStatusChange}
+          placeholder="Todos los estados"
+        />
+        <KingSelect
+          options={DATE_OPTIONS}
           value={currentDays}
-          onChange={(e) => handleDaysChange(e.target.value)}
-          className="bg-[#1a1a1a] border border-[#2a2a2a] text-white text-sm rounded-xl px-4 py-2.5 appearance-none hover:bg-[#2a2a2a] transition-colors focus:outline-none focus:border-[#facc15] cursor-pointer"
-        >
-          {DATE_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-
+          onValueChange={handleDaysChange}
+          placeholder="Todo"
+        />
         {hasActiveFilters && (
           <button
             onClick={clearFilters}

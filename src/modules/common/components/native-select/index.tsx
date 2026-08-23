@@ -1,64 +1,53 @@
-import { ChevronUpDown } from "@medusajs/icons"
+"use client"
+
+import KingSelect, { type SelectOption } from "@modules/common/components/king-select"
 import {
-  SelectHTMLAttributes,
   forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
+  type SelectHTMLAttributes,
 } from "react"
 
 export type NativeSelectProps = {
   placeholder?: string
   errors?: Record<string, unknown>
   touched?: Record<string, unknown>
-} & SelectHTMLAttributes<HTMLSelectElement>
+  children?: React.ReactNode
+} & Omit<SelectHTMLAttributes<HTMLSelectElement>, "size" | "children">
 
 const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
-  (
-    { placeholder = "Seleccionar...", defaultValue, className, children, ...props },
-    ref
-  ) => {
-    const innerRef = useRef<HTMLSelectElement>(null)
-    const [isPlaceholder, setIsPlaceholder] = useState(false)
-
-    useImperativeHandle<HTMLSelectElement | null, HTMLSelectElement | null>(
-      ref,
-      () => innerRef.current
-    )
-
-    useEffect(() => {
-      if (innerRef.current && innerRef.current.value === "") {
-        setIsPlaceholder(true)
-      } else {
-        setIsPlaceholder(false)
+  ({ placeholder = "Seleccionar...", className, children, ...props }) => {
+    const options: SelectOption[] = []
+    if (children) {
+      const childrenArray = Array.isArray(children) ? children : [children]
+      for (const child of childrenArray) {
+        if (child && typeof child === "object" && "props" in child) {
+          const c = child as any
+          if (c.props?.value !== undefined) {
+            options.push({
+              value: String(c.props.value),
+              label: c.props.children ?? String(c.props.value),
+              disabled: c.props.disabled ?? false,
+            })
+          }
+        }
       }
-    }, [innerRef.current?.value])
+    }
 
     return (
-      <div>
-        <div
-          onFocus={() => innerRef.current?.focus()}
-          onBlur={() => innerRef.current?.blur()}
-          className={`relative flex items-center text-sm border border-[#2a2a2a] bg-[#1a1a1a] rounded-xl hover:bg-[#2a2a2a] transition-colors ${className || ""} ${
-            isPlaceholder ? "text-[#888888]" : "text-white"
-          }`}
-        >
-          <select
-            ref={innerRef}
-            defaultValue={defaultValue}
-            {...props}
-            className="appearance-none flex-1 bg-transparent border-none px-4 py-2.5 transition-colors duration-150 outline-none text-white"
-          >
-            <option disabled value="">
-              {placeholder}
-            </option>
-            {children}
-          </select>
-          <span className="absolute right-4 inset-y-0 flex items-center pointer-events-none text-[#888888]">
-            <ChevronUpDown />
-          </span>
-        </div>
+      <div className={className}>
+        <KingSelect
+          options={options}
+          value={props.value != null ? String(props.value) : undefined}
+          defaultValue={props.defaultValue != null ? String(props.defaultValue) : undefined}
+          onValueChange={(val) => {
+            props.onChange?.({
+              target: { value: val, name: props.name },
+            } as React.ChangeEvent<HTMLSelectElement>)
+          }}
+          placeholder={placeholder}
+          name={props.name}
+          required={props.required}
+          data-testid={(props as Record<string, unknown>)["data-testid"] as string}
+        />
       </div>
     )
   }

@@ -23,7 +23,9 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
   const [updating, setUpdating] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const changeQuantity = async (quantity: number) => {
+  const handleQuantityChange = async (value: string) => {
+    const quantity = parseInt(value)
+    if (isNaN(quantity)) return
     setError(null)
     setUpdating(true)
     await updateLineItem({ lineId: item.id, quantity })
@@ -34,6 +36,14 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
   const maxQuantity = item.variant?.manage_inventory
     ? Math.min(item.variant.inventory_quantity ?? 10, 10)
     : 10
+
+  const quantityOptions = Array.from(
+    { length: Math.min(maxQuantity, 10) },
+    (_, i) => ({
+      value: String(i + 1),
+      label: String(i + 1),
+    })
+  )
 
   const imgUrl = item.thumbnail || item.variant?.product?.images?.[0]?.url
 
@@ -122,15 +132,12 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
         <div className="flex items-center gap-2">
           <DeleteButton id={item.id} data-testid="product-delete-button" />
           <CartItemSelect
-            value={item.quantity}
-            onChange={(value) => changeQuantity(parseInt(value.target.value))}
-            className="w-14 h-9 small:h-8 bg-[#1a1a1a] border border-[#2a2a2a] text-white text-xs rounded-lg text-center"
+            value={String(item.quantity)}
+            onValueChange={handleQuantityChange}
+            options={quantityOptions}
+            className="w-14 h-9 small:h-8"
             data-testid="product-select-button"
-          >
-            {Array.from({ length: Math.min(maxQuantity, 10) }, (_, i) => (
-              <option value={i + 1} key={i}>{i + 1}</option>
-            ))}
-          </CartItemSelect>
+          />
           {updating && <Spinner />}
         </div>
         <div className="flex flex-col items-end gap-0.5">

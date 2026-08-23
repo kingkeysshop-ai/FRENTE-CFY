@@ -1,72 +1,33 @@
 "use client"
 
-import { IconBadge, clx } from "@medusajs/ui"
-import {
-  SelectHTMLAttributes,
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react"
+import KingSelect, { type SelectOption } from "@modules/common/components/king-select"
 
-import ChevronDown from "@modules/common/icons/chevron-down"
+type CartItemSelectProps = {
+  value?: string
+  onValueChange?: (value: string) => void
+  options: SelectOption[]
+  className?: string
+  "data-testid"?: string
+}
 
-type NativeSelectProps = {
-  placeholder?: string
-  errors?: Record<string, unknown>
-  touched?: Record<string, unknown>
-} & Omit<SelectHTMLAttributes<HTMLSelectElement>, "size">
-
-const CartItemSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
-  ({ placeholder = "Select...", className, children, ...props }, ref) => {
-    const innerRef = useRef<HTMLSelectElement>(null)
-    const [isPlaceholder, setIsPlaceholder] = useState(false)
-
-    useImperativeHandle<HTMLSelectElement | null, HTMLSelectElement | null>(
-      ref,
-      () => innerRef.current
-    )
-
-    useEffect(() => {
-      if (innerRef.current && innerRef.current.value === "") {
-        setIsPlaceholder(true)
-      } else {
-        setIsPlaceholder(false)
-      }
-    }, [innerRef.current?.value])
-
-    return (
-      <div>
-        <IconBadge
-          onFocus={() => innerRef.current?.focus()}
-          onBlur={() => innerRef.current?.blur()}
-          className={clx(
-            "relative flex items-center txt-compact-small border text-ui-fg-base group",
-            className,
-            {
-              "text-ui-fg-subtle": isPlaceholder,
-            }
-          )}
-        >
-          <select
-            ref={innerRef}
-            {...props}
-            className="appearance-none bg-transparent border-none px-4 transition-colors duration-150 focus:border-[#2a2a2a] outline-none w-16 h-16 items-center justify-center"
-          >
-            <option disabled value="">
-              {placeholder}
-            </option>
-            {children}
-          </select>
-          <span className="absolute flex pointer-events-none justify-end w-8 group-hover:animate-pulse">
-            <ChevronDown />
-          </span>
-        </IconBadge>
-      </div>
-    )
-  }
-)
+const CartItemSelect = ({
+  value,
+  onValueChange,
+  options,
+  className,
+  "data-testid": dataTestId,
+}: CartItemSelectProps) => {
+  return (
+    <KingSelect
+      options={options}
+      value={value}
+      onValueChange={onValueChange}
+      className={className}
+      triggerClassName="w-14 h-9 small:h-8 bg-[#1a1a1a] border border-[#2a2a2a] text-white text-xs rounded-lg justify-center px-2"
+      data-testid={dataTestId}
+    />
+  )
+}
 
 CartItemSelect.displayName = "CartItemSelect"
 
