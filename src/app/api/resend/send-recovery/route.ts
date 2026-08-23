@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     const countryCode = (req.headers.get("x-vercel-ip-country") || DEFAULT_REGION).toLowerCase()
     const resetUrl = `${NEXT_PUBLIC_BASE_URL}/${countryCode}/reset-password?token=${token}&email=${encodeURIComponent(email)}`
 
-    console.log(`[Resend] Sending recovery email to ${email}...`, { resetUrl, hasApiKey: !!RESEND_API_KEY, baseUrl: NEXT_PUBLIC_BASE_URL })
+    console.log(`[Resend] Sending recovery email to ${email}...`, { hasApiKey: !!RESEND_API_KEY, baseUrl: NEXT_PUBLIC_BASE_URL })
 
     const emailHtml = `<!DOCTYPE html>
 <html>

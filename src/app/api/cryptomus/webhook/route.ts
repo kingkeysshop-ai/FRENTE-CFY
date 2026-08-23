@@ -19,7 +19,14 @@ function verifyWebhookSign(
     .createHash("md5")
     .update(base64 + apiKey)
     .digest("hex")
-  return expectedSign === receivedSign
+  try {
+    return crypto.timingSafeEqual(
+      Buffer.from(expectedSign),
+      Buffer.from(receivedSign)
+    )
+  } catch {
+    return false
+  }
 }
 
 async function completeCart(cartId: string): Promise<{ ok: boolean; orderId?: string; alreadyCompleted?: boolean }> {
@@ -99,7 +106,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 })
     }
 
-    const paidStatuses = ["paid", "paid_over", "wrong_amount_waiting", "confirm_check"]
+    const paidStatuses = ["paid", "paid_over", "confirm_check"]
 
     console.log(`[Cryptomus Webhook] Received payment status="${status}" order_id="${order_id}"`)
 

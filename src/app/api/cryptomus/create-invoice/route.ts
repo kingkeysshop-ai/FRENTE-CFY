@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (MEDUSA_BACKEND_URL && MEDUSA_API_KEY) {
+      let verified = false
       try {
         const cartRes = await fetch(
           `${MEDUSA_BACKEND_URL}/store/carts/${cartId}`,
@@ -48,14 +49,18 @@ export async function POST(req: NextRequest) {
           const expectedAmount = actualCart?.total != null
             ? (actualCart.total / 100).toFixed(2)
             : null
-          if (expectedAmount && Number(amount).toFixed(2) !== expectedAmount) {
-            return NextResponse.json(
-              { error: "Amount does not match cart total" },
-              { status: 400 }
-            )
+          if (expectedAmount && Number(amount).toFixed(2) === expectedAmount) {
+            verified = true
           }
         }
-      } catch {} // cart verification is optional
+      } catch {}
+
+      if (!verified) {
+        return NextResponse.json(
+          { error: "Could not verify amount against cart total" },
+          { status: 400 }
+        )
+      }
     }
 
     const payload: Record<string, unknown> = {

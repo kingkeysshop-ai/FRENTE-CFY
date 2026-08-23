@@ -105,12 +105,15 @@ export async function POST(req: NextRequest) {
     const signature = req.headers.get("x-bold-signature") || ""
     const secret = BOLD_WEBHOOK_SECRET || ""
 
-    if (signature) {
-      const isValid = verifyBoldSignature(rawBody, signature, secret)
-      if (!isValid) {
-        console.warn(`[Bold Webhook] Invalid signature`)
-        return NextResponse.json({ error: "Invalid signature" }, { status: 403 })
-      }
+    if (!signature || !secret) {
+      console.warn("[Bold Webhook] Missing signature or BOLD_WEBHOOK_SECRET — rejecting")
+      return NextResponse.json({ error: "Missing signature" }, { status: 403 })
+    }
+
+    const isValid = verifyBoldSignature(rawBody, signature, secret)
+    if (!isValid) {
+      console.warn(`[Bold Webhook] Invalid signature`)
+      return NextResponse.json({ error: "Invalid signature" }, { status: 403 })
     }
 
     const eventType = body.type || ""
