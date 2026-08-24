@@ -3,7 +3,7 @@ import FeaturedProducts from "@modules/home/components/featured-products"
 import Hero from "@modules/home/components/hero"
 import CategoriesSection from "@modules/home/components/categories-section"
 import WhyUs from "@modules/home/components/why-us"
-import StatsTerminal from "@components/StatsTerminal"
+import Trending from "@modules/home/components/trending"
 import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
 import { listProducts } from "@lib/data/products"
@@ -37,8 +37,8 @@ export default async function Home(props: {
       {/* Por que elegirnos */}
       <WhyUs />
 
-      {/* Terminal stats */}
-      <StatsTerminal />
+      {/* Trending — terminal products.sh */}
+      <Trending countryCode={countryCode} />
 
       {/* Categorias */}
       <CategoriesSection />
