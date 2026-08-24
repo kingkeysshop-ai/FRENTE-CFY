@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="34%" r="42%">
+      <stop offset="0%" stop-color="#facc15" stop-opacity="0.22"/>
+      <stop offset="60%" stop-color="#facc15" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#facc15" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="btn" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#e6b800"/>
+    </linearGradient>
+    <pattern id="dots" x="0" y="0" width="46" height="46" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.6" fill="#ffffff" opacity="0.07"/>
+    </pattern>
+    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="20"/>
+    </filter>
+  </defs>
+
+  <rect width="1080" height="1920" fill="#0a0a0a"/>
+  <rect width="1080" height="1920" fill="url(#dots)"/>
+  <rect width="1080" height="1920" fill="url(#glow)"/>
+
+  <!-- Logo -->
+  <g transform="translate(540,170)" text-anchor="middle">
+    <g transform="translate(-158,-26)">
+      <path d="M0 26 L11 0 L22 15 L33 0 L44 15 L55 0 L66 26 L66 40 L0 40 Z" fill="#facc15"/>
+    </g>
+    <text x="24" y="12" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="52" letter-spacing="4" fill="#ffffff">KING KEYS</text>
+    <text x="24" y="46" font-family="Arial, sans-serif" font-size="21" letter-spacing="10" fill="#888888">EL REINO DIGITAL</text>
+  </g>
+
+  <!-- Emblem -->
+  <circle cx="540" cy="620" r="215" fill="#111111" stroke="#2a2a2a" stroke-width="3"/>
+  <circle cx="540" cy="620" r="215" fill="none" stroke="#facc15" stroke-opacity="0.35" stroke-width="8" filter="url(#soft)"/>
+  <g transform="translate(540,620) rotate(-22) scale(1.3)">
+    <circle cx="-62" cy="0" r="52" fill="#facc15"/>
+    <circle cx="-62" cy="0" r="21" fill="#0a0a0a"/>
+    <rect x="-4" y="-13" width="128" height="26" rx="7" fill="#facc15"/>
+    <rect x="52" y="10" width="17" height="30" rx="4" fill="#facc15"/>
+    <rect x="88" y="10" width="15" height="23" rx="4" fill="#facc15"/>
+  </g>
+
+  <!-- Headline -->
+  <text x="540" y="1000" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="66" fill="#ffffff">CLAVES 100%</text>
+  <text x="540" y="1082" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="66" fill="#ffffff">ORIGINALES</text>
+  <text x="540" y="1196" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="84" fill="#facc15">ENTREGA</text>
+  <text x="540" y="1292" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="84" fill="#facc15">INMEDIATA</text>
+
+  <!-- Products con mini-iconos genéricos -->
+  <g transform="translate(244,1348)">
+    <g transform="scale(1.3333)"><path fill="#facc15" d="M0 0h11.377v11.372H0Zm12.623 0H24v11.372H12.623ZM0 12.623h11.377V24H0Zm12.623 0H24V24H12.623"/></g>
+    <text x="46" y="29" font-family="Arial, sans-serif" font-weight="bold" font-size="30" fill="#cccccc">Windows 11</text>
+  </g>
+  <g transform="translate(494,1348)">
+    <g transform="scale(1.3333)"><path fill="none" stroke="#facc15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 18V6l10.5-4L20 4v16l-5.5 2zm0 0l10 .5V6L8.5 7.5v8z"/></g>
+    <text x="48" y="29" font-family="Arial, sans-serif" font-weight="bold" font-size="30" fill="#cccccc">Office 2024</text>
+  </g>
+  <g transform="translate(755,1348)">
+    <g transform="scale(1.3333)" stroke="#facc15" fill="none" stroke-linecap="round">
+      <circle cx="12" cy="12" r="9" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke-width="1.5"/>
+      <path d="M14 10L16.5 7.5" stroke-width="1.2"/><circle cx="16.5" cy="7.5" r="1.5" stroke-width="1"/>
+    </g>
+    <text x="48" y="29" font-family="Arial, sans-serif" font-weight="bold" font-size="30" fill="#cccccc">Steam</text>
+  </g>
+
+  <g transform="translate(306,1418)">
+    <g transform="scale(1.3333)" stroke="#facc15" fill="none" stroke-linecap="round">
+      <circle cx="12" cy="12" r="9" stroke-width="1.5"/>
+      <path d="M8.5 8V16.5M12 7V17M15.5 9.5V15" stroke-width="1.5"/>
+    </g>
+    <text x="48" y="29" font-family="Arial, sans-serif" font-weight="bold" font-size="30" fill="#cccccc">PSN</text>
+  </g>
+  <g transform="translate(452,1418)">
+    <g transform="scale(1.3333)" stroke="#facc15" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9" stroke-width="1.5"/>
+      <path d="M7.5 7.5C7.5 7.5 10.5 10.5 12 12C13.5 10.5 16.5 7.5 16.5 7.5"/>
+      <path d="M7.5 16.5C7.5 16.5 10.5 13.5 12 12M16.5 16.5C16.5 16.5 13.5 13.5 12 12"/>
+    </g>
+    <text x="48" y="29" font-family="Arial, sans-serif" font-weight="bold" font-size="30" fill="#cccccc">Xbox</text>
+  </g>
+  <g transform="translate(641,1414)">
+    <path d="M14 2 L26 7 V16 C26 24 21 29.5 14 32.5 C7 29.5 2 24 2 16 V7 Z" fill="none" stroke="#facc15" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M9 16 l3.5 4 l6.5 -7" stroke="#facc15" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <text x="44" y="31" font-family="Arial, sans-serif" font-weight="bold" font-size="30" fill="#cccccc">Antivirus</text>
+  </g>
+
+  <!-- Trust row -->
+  <g font-family="Arial, sans-serif" font-weight="bold" font-size="28" fill="#cccccc">
+    <g transform="translate(150,1520)">
+      <path d="M14 0 L28 6 V17 C28 26 22 32 14 35 C6 32 0 26 0 17 V6 Z" fill="#facc15"/>
+      <path d="M8 16 l4 5 l8 -9" stroke="#0a0a0a" stroke-width="3.5" fill="none"/>
+      <text x="46" y="27">Garant&#237;a de reemplazo</text>
+    </g>
+    <g transform="translate(150,1600)">
+      <path d="M16 0 L0 22 H11 L9 36 L26 13 H15 Z" fill="#facc15"/>
+      <text x="40" y="27">Llega a tu email al instante</text>
+    </g>
+    <g transform="translate(150,1680)">
+      <rect x="4" y="14" width="26" height="20" rx="4" fill="#facc15"/>
+      <path d="M9 14 V9 a8 8 0 0 1 16 0 v5" stroke="#facc15" stroke-width="4" fill="none"/>
+      <text x="46" y="33">Pago seguro (crypto y Bold)</text>
+    </g>
+  </g>
+
+  <!-- CTA -->
+  <rect x="190" y="1770" width="700" height="98" rx="49" fill="url(#btn)"/>
+  <text x="540" y="1832" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="38" letter-spacing="1" fill="#0a0a0a">ESCR&#205;BENOS POR WHATSAPP</text>
+  <text x="540" y="1898" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" fill="#666666">wa.me/TUNUMERO</text>
+</svg>

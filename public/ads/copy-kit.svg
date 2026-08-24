@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1560" viewBox="0 0 1080 1560">
+  <defs>
+    <pattern id="dots" x="0" y="0" width="46" height="46" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.6" fill="#ffffff" opacity="0.06"/>
+    </pattern>
+  </defs>
+
+  <rect width="1080" height="1560" fill="#0a0a0a"/>
+  <rect width="1080" height="1560" fill="url(#dots)"/>
+
+  <!-- Header -->
+  <g transform="translate(540,86)" text-anchor="middle">
+    <g transform="translate(-158,-26)">
+      <path d="M0 26 L11 0 L22 15 L33 0 L44 15 L55 0 L66 26 L66 40 L0 40 Z" fill="#facc15"/>
+    </g>
+    <text x="24" y="12" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="46" letter-spacing="4" fill="#ffffff">KING KEYS</text>
+    <text x="24" y="44" font-family="Arial, sans-serif" font-size="20" letter-spacing="8" fill="#888888">KIT DE PUBLICIDAD</text>
+  </g>
+
+  <!-- S1 Feed -->
+  <rect x="70" y="150" width="940" height="416" rx="20" fill="#111111" stroke="#2a2a2a" stroke-width="2"/>
+  <rect x="70" y="150" width="940" height="58" rx="20" fill="#1a1a1a"/>
+  <text x="100" y="188" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="26" fill="#facc15">1 &#183; PUBLICACI&#211;N FEED (Facebook / Instagram)</text>
+  <g font-family="Arial, sans-serif" font-size="24" fill="#dddddd">
+    <text x="100" y="252">&#9656; TUS CLAVES DIGITALES EN MINUTOS</text>
+    <text x="100" y="296">&#10003; Windows 11 Pro &#183; Office 2024 &#183; Steam &#183; PSN &#183; Xbox</text>
+    <text x="100" y="340">&#10003; 100% originales con garant&#237;a de reemplazo</text>
+    <text x="100" y="384">&#10003; Llegan a tu email al instante</text>
+    <text x="100" y="428">&#10003; Paga seguro: crypto o Bold</text>
+    <text x="100" y="472" fill="#facc15" font-weight="bold">&#9656; Pide la tuya ahora &#8594; wa.me/TUNUMERO</text>
+    <text x="100" y="516" fill="#888888" font-size="21">#KingKeys #ElReinoDigital #ClavesOriginales #Steam #GamerDeals</text>
+  </g>
+
+  <!-- S2 Story -->
+  <rect x="70" y="592" width="940" height="256" rx="20" fill="#111111" stroke="#2a2a2a" stroke-width="2"/>
+  <rect x="70" y="592" width="940" height="58" rx="20" fill="#1a1a1a"/>
+  <text x="100" y="630" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="26" fill="#facc15">2 &#183; STORY / ESTADO DE WHATSAPP</text>
+  <g font-family="Arial, sans-serif" font-size="24" fill="#dddddd">
+    <text x="100" y="694">&#9656; &#191;Necesitabas tu clave HOY?</text>
+    <text x="100" y="738">&#9656; Escr&#237;benos y la tienes en minutos</text>
+    <text x="100" y="782">&#9656; Windows &#183; Office &#183; Steam &#183; PSN &#183; Xbox</text>
+    <text x="100" y="826" fill="#facc15" font-weight="bold">&#9656; wa.me/TUNUMERO</text>
+  </g>
+
+  <!-- S3 Oferta -->
+  <rect x="70" y="874" width="940" height="336" rx="20" fill="#111111" stroke="#2a2a2a" stroke-width="2"/>
+  <rect x="70" y="874" width="940" height="58" rx="20" fill="#1a1a1a"/>
+  <text x="100" y="912" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="26" fill="#facc15">3 &#183; VARIANTE CON OFERTA (promociones)</text>
+  <g font-family="Arial, sans-serif" font-size="24" fill="#dddddd">
+    <text x="100" y="976">&#9656; SOLO ESTA SEMANA</text>
+    <text x="100" y="1020">&#9656; Tu Windows 11 Pro + Office 2024 al mejor precio del mercado</text>
+    <text x="100" y="1064">&#9656; Entrega inmediata &#183; Garant&#237;a &#183; Soporte 24/7</text>
+    <text x="100" y="1108" fill="#facc15" font-weight="bold">&#9656; Escribe &#8220;QUIERO&#8221; y te atendemos ya &#8594; wa.me/TUNUMERO</text>
+    <text x="100" y="1176" fill="#888888" font-size="21">Tip: cambia marcas por &#8220;claves para juegos PC&#8221; si un anuncio es rechazado.</text>
+  </g>
+
+  <!-- S4 Checklist -->
+  <rect x="70" y="1236" width="940" height="264" rx="20" fill="#111111" stroke="#facc15" stroke-opacity="0.35" stroke-width="2"/>
+  <rect x="70" y="1236" width="940" height="58" rx="20" fill="#1a1a1a"/>
+  <text x="100" y="1274" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="26" fill="#facc15">CHECKLIST ANTES DE PUBLICAR</text>
+  <g font-family="Arial, sans-serif" font-size="23" fill="#dddddd">
+    <text x="100" y="1336">&#9679; Reemplaza TUNUMERO por tu n&#250;mero real (ej: 573001234567)</text>
+    <text x="100" y="1378">&#9679; Exporta los SVG a PNG antes de subirlos a Meta (no acepta SVG)</text>
+    <text x="100" y="1420">&#9679; Meta Ads: titular &#8220;Claves originales al instante&#8221; + CTA mensaje WhatsApp</text>
+    <text x="100" y="1462">&#9679; Nunca uses logos oficiales ni digas &#8220;distribuidor autorizado&#8221;</text>
+  </g>
+</svg>
